@@ -2,7 +2,7 @@
   earthshine
 </h1>
 <p align="center">
-  Detection and characterization of Sol d with TESS.
+  Detection and characterization of *Sol d* with TESS.
 </p>
 <p align="center">
   <a href="https://travis-ci.org/rodluger/earthshine/">
