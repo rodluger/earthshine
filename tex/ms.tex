@@ -3,6 +3,11 @@
 % Load the corTeX style definitions
 \input{cortex}
 
+\usepackage{xcolor}
+\usepackage{xspace}
+\newcommand{\TESS}{\emph{TESS}\xspace}
+\newcommand{\todo}[1]{\textcolor{red}{#1}}
+
 % Bibliography stuff
 \bibliographystyle{aasjournal}
 
@@ -10,7 +15,7 @@
 \begin{document}
 
 % Title
-\title{Detection of A Habitable Planet with \emph{TESS}}
+\title{Detection of Continents on a Habitable-Zone Terrestrial Planet with \TESS}
 
 % Author list
 \author[0000-0002-0296-3826]{Rodrigo Luger}
@@ -20,41 +25,27 @@
 \author[0000-0002-9328-5652]{Megan Bedell}
 \affil{Center~for~Computational~Astrophysics, Flatiron~Institute, New~York, NY}
 
+\begin{abstract}
+The Transiting Exoplanet Survey Satellite (\TESS) mission is a targeted effort to detect planets smaller than Neptune around bright, nearby stars \todo{(CITE)}. 
+While \TESS is already enjoying great success with the discovery of many new worlds, the strongest signal in its data is typically ignored, as it lurks in the background of every camera pixel. 
+In this work, we extract this signal and demonstrate that it corresponds to a terrestrial planet with a rotation period of 1 day \todo{(add error estimate!)}. 
+Using the STARRY package, we are able to reconstruct the surface features of this rocky world \citep{Luger2018}. 
+We find evidence for \todo{(clouds, some number of continents, whatever)}. 
+We argue that this planet represents the most promising detection of a habitable world to date, although the potential intelligence of any life on it is yet to be determined.
+\end{abstract}
+
+\keywords{ALIENS}
+
 % Introduction
-\section*{The Long and Short of it}
+\section{Introduction}
 \label{sec:intro}
 %
-\textsc{corTeX} is a very simple \textsf{GitHub} repository aimed at making
-it easy to make your scientific articles open source and reproducible.
-\textsc{corTeX} currently does two things. First, it defines the
-\textsf{\textbackslash oscaption} command, which adds
-links to all figure captions pointing to the exact script that generated it;
-see Figure~\ref{fig:pretty_function}.
-%
-\begin{figure}[h!]
-    \begin{centering}
-    \includegraphics[width=0.5\linewidth]{figures/pretty_function.pdf}
-    \oscaption{pretty_function}{%
-        This is a plot of a pretty function. And at the end of this
-        caption is a symbol with a link to the \emph{exact} script
-        that generated it, hosted on \textsf{GitHub}.
-        \label{fig:pretty_function}
-    }
-    \end{centering}
-\end{figure}
-%
 
-Second, it defines the \textsf{\textbackslash proof} environment, which
-adds a link to any equation pointing to a proof, derivation, or
-verification of the equation in the form of a \textsf{Jupyter} notebook:
-%
-\begin{proof}{euler}
-    \label{eq:euler}
-    e^{i\pi} + 1 = 0.
-\end{proof}
-%
-Check out \citet{Luger2018} for an example of a paper that uses these
-features.
+\section{Methods}
+
+\section{Discussion}
+
+\section{Conclusion}
 
 % Bibliography
 \pagebreak
