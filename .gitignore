@@ -3,6 +3,12 @@
 *.DS_Store
 *.ipynb_checkpoints
 *.pdf
+*.egg-info
+data/*
+*__pycache__*
+notebooks/tests
+*.gif
+*.png
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
