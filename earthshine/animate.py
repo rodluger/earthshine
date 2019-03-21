@@ -125,7 +125,7 @@ def animate(map, time, phase0=0.0, res=75, interval=75):
         # Rotate the earth to the current phase in the original frame
         map[:, :, :] = y
         map.axis = [0, 1, 0]
-        phase = (360. * time[i]) % 360. + phase0
+        phase = (360. * (time[i] - time[0])) % 360. + phase0
         map.rotate(phase)
 
         # Rotate the earth and the sun into tess' frame  

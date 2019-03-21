@@ -113,7 +113,7 @@ def design_matrix(time, ydeg=10, nt=2, period=1.0, phase0=0.0,
         # rotates the earth into phase and then rotates
         # the earth into view for tess
         tx, ty, tz = tess_hat[:, i]
-        phase = (2 * np.pi * time[i]) % (2 * np.pi) + phase0
+        phase = (2 * np.pi * (time[i] - time[0])) % (2 * np.pi) + phase0 * np.pi / 180
         ty2 = ty ** 2
         tx2 = tx ** 2
         cosp = np.cos(phase)

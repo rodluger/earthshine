@@ -8,3 +8,8 @@ From Roland Vanderspek. Earth/Moon interference table for Sector <X>.  Gives  el
 
 ## Full frame images from sectors 1 and 2
 Located at `/mnt/ceph/users/dforeman/tess/ffis/tess/ffi/`
+
+
+## VIIRS
+http://rammb.cira.colostate.edu/projects/npp/Beginner_Guide_to_VIIRS_Imagery_Data.pdf
+http://rammb.cira.colostate.edu/projects/npp/VIIRS_bands_and_bandwidths.pdf
