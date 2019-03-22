@@ -15,7 +15,8 @@
 \begin{document}
 
 % Title
-\title{Detection of Continents on a Habitable-Zone Terrestrial Planet with \TESS}
+\title{\TESS Photometric Mapping of Surface Features on a Habitable-Zone Terrestrial Planet: Clouds, Oceans, and Continents}
+%\title{Detection of Continents on a Habitable-Zone Terrestrial Planet with \TESS}
 
 % Author list
 \author[0000-0002-0296-3826]{Rodrigo Luger}
@@ -26,11 +27,11 @@
 \affil{Center~for~Computational~Astrophysics, Flatiron~Institute, New~York, NY}
 
 \begin{abstract}
-The Transiting Exoplanet Survey Satellite (\TESS) mission is a targeted effort to detect planets smaller than Neptune around bright, nearby stars \todo{(CITE)}. 
+The Transiting Exoplanet Survey Satellite (\TESS) mission is a targeted effort to detect planets smaller than Neptune around bright, nearby stars \citep{Ricker2015}. 
 While \TESS is already enjoying great success with the discovery of many new worlds, the strongest signal in its data is typically ignored, as it lurks in the background of every camera pixel. 
-In this work, we extract this signal and demonstrate that it corresponds to a terrestrial planet with a rotation period of 1 day \todo{(add error estimate!)}. 
-Using the STARRY package, we are able to reconstruct the surface features of this rocky world \citep{Luger2018}. 
-We find evidence for \todo{(clouds, some number of continents, whatever)}. 
+In this work, we extract this signal and demonstrate that it is consistent with a terrestrial planet with a rotation period of 1 day. 
+Using a spherical harmonic-based reflection model developed as an extension of the STARRY package \citep{Luger2018}, we are able to reconstruct the surface features of this rocky world. 
+We recover a time-variable albedo map of the planet including persistent regions which we interpret as continental features and cloud banks. 
 We argue that this planet represents the most promising detection of a habitable world to date, although the potential intelligence of any life on it is yet to be determined.
 \end{abstract}
 
@@ -39,14 +40,66 @@ We argue that this planet represents the most promising detection of a habitable
 % Introduction
 \section{Introduction}
 \label{sec:intro}
-%
+
+%Resolving the features of planetary atmospheres and surfaces with precise photometry is a crucial 
+Precise photometry obtained over long periods of time can reveal the atmospheric and surface features of an exoplanet through the method known as phase mapping. \todo{(literature background \& citations)}
+
+A new source of precise photometry is the Transiting Exoplanet Survey Satellite (\TESS). 
+Launched in April 2018, \TESS has... \todo{(summary of \TESS's capabilities, citations to planet discoveries etc)}
+
+One intriguing feature of the \TESS photometric data products is a highly time-variable signal represented in the diffuse background across virtually all camera pixels. 
+\todo{(talk abt Earthshine without naming it)} 
+The signal has been widely attributed to a planet which we will call Sol d.
+
+Previous attempts to map this planet from the exoplanet community have suggested the presence of localized surface features, but their resolving power has been severely limited by the duration of observations \citep{Cowan2009}. 
+\TESS offers precise 2-minute cadence data spanning a wide range of illumination phases, enabling a level of spatial and temporal resolving power that is unprecedented in the exoplanetary phase mapping literature. 
+
+Moreover, recent advances in fast analytic computation of spherical harmonics have made the reconstruction of such detailed maps more feasible than ever. 
+\todo{(STARRY)}
+
+In this work, we build on this methodological foundation to perform reflected-light mapping of planetary surface features on Sol d. 
+We give an overview of the \TESS data used in Section \ref{sec:data}. 
+In Section \ref{sec:methods}, we describe the methods employed to infer a map from these data, including the adaptation of the STARRY algorithm to reflection mapping, the modeling of spacecraft-related systematics, and the likelihood and priors used. 
+We present results in Section \ref{sec:results} and make comparison of these findings to state-of-the-art terrestrial planet maps from the literature in Section \ref{sec:discussion}. 
+Finally, we conclude in Section \ref{sec:conclusion} with a look at future prospects for phase-curve mapping of terrestrial exoplanets.
+
+\section{Data}
+\label{sec:data}
+
+\todo{(background extraction from 2-minute cadence targets)}
+
+\todo{(figure showing lightcurves for various targets)}
 
 \section{Methods}
+\label{sec:methods}
+
+\subsection{Systematics Modeling}
+
+\subsection{Reflected-Light Mapping with STARRY}
+\todo{(possibly make the gritty math details be an appendix?)}
+
+\subsection{Likelihood Function \& Inference}
+
+\section{Results}
+\label{sec:results}
+
+\todo{(present results with \& without time variability)}
 
 \section{Discussion}
+\label{sec:discussion}
+
+\todo{(comparison of inferred features to ``model'' (Earth))}
 
 \section{Conclusion}
+\label{sec:conclusion}
 
+\todo{(summarize)}
+
+\todo{(talk abt prospects for doing this analysis with exoplanets)}
+
+
+\acknowledgements{}
+\software{Astropy, Matplotlib, Numpy, STARRY \citep{Luger2018}, TensorFlow}
 % Bibliography
 \pagebreak
 \bibliography{bib}
