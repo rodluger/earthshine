@@ -15,7 +15,8 @@
 \begin{document}
 
 % Title
-\title{\TESS Photometric Mapping of Surface Features on a Habitable-Zone Terrestrial Planet: Clouds, Oceans, and Continents}
+\title{\TESS Photometric Mapping of a Terrestrial Planet in the Habitable Zone: 
+       Detection of Clouds, Oceans, and Continents}
 %\title{Detection of Continents on a Habitable-Zone Terrestrial Planet with \TESS}
 
 % Author list
@@ -27,55 +28,86 @@
 \affil{Center~for~Computational~Astrophysics, Flatiron~Institute, New~York, NY}
 %
 \author{Roland K. Vanderspek}
-\affil{Kavli Institute for Astrophysics and Space Research, Massachusetts Institute of Technology, Cambridge, MA}
+\affil{Kavli Institute for Astrophysics and Space Research, Massachusetts 
+       Institute of Technology, Cambridge, MA}
 %
 \author{Christopher J. Burke}
-\affil{Kavli Institute for Astrophysics and Space Research, Massachusetts Institute of Technology, Cambridge, MA}
+\affil{Kavli Institute for Astrophysics and Space Research, Massachusetts 
+       Institute of Technology, Cambridge, MA}
 
 \begin{abstract}
-\todo{[maybe change first sentences to focus on planet mapping \& give the game away less?]}
-The Transiting Exoplanet Survey Satellite (\TESS) mission is a targeted effort to detect planets smaller than Neptune around bright, nearby stars. 
-While \TESS is already enjoying great success with the discovery of many new worlds, the strongest signal in its data is typically ignored, as it lurks in the background of every camera pixel. 
-In this work, we extract this signal and demonstrate that it is consistent with a terrestrial planet with a rotation period of 1 day. 
-Using a spherical harmonic-based reflection model developed as an extension of the STARRY package, we are able to reconstruct the surface features of this rocky world. 
-We recover a time-variable albedo map of the planet including persistent regions which we interpret as continental features and cloud banks. 
-We argue that this planet represents the most promising detection of a habitable world to date, although the potential intelligence of any life on it is yet to be determined.
+\todo{[maybe change first sentences to focus on planet mapping \& give the game 
+away less?]} The Transiting Exoplanet Survey Satellite (\TESS) mission is a 
+targeted effort to detect planets smaller than Neptune around bright, nearby stars. 
+While \TESS is already enjoying great success with the discovery of many new worlds, 
+the strongest signal in its data is typically ignored, as it lurks in the background 
+of every camera pixel. In this work, we extract this signal and demonstrate that 
+it is consistent with a terrestrial planet with a rotation period of 1 day. 
+Using a spherical harmonic-based reflection model developed as an extension of 
+the \starry package, we are able to reconstruct the surface features of this rocky 
+world. We recover a time-variable albedo map of the planet including persistent 
+regions which we interpret as continental features and cloud banks. 
+We argue that this planet represents the most promising detection of a habitable 
+world to date, although the potential intelligence of any life on it is yet to 
+be determined.
 \end{abstract}
 
-\keywords{methods: data analysis, techniques: photometric, planets and satellites: oceans, planets and satellites: surfaces, planets and satellites: terrestrial planets}
+\keywords{methods: data analysis, techniques: photometric, planets and satellites: 
+          oceans, planets and satellites: surfaces, planets and satellites: 
+          terrestrial planets}
 
 % Introduction
 \section{Introduction}
 \label{sec:intro}
 
-%Resolving the features of planetary atmospheres and surfaces with precise photometry is a crucial 
-Precise photometry obtained over long periods of time can reveal the atmospheric and surface features of an exoplanet through the method known as phase mapping. \todo{(literature background \& citations)}
+%Resolving the features of planetary atmospheres and surfaces with precise 
+%photometry is a crucial 
+Precise photometry obtained over long periods of time can reveal the atmospheric 
+and surface features of an exoplanet through the method known as phase mapping. 
+\todo{(literature background \& citations)}
 
-A new source of precise photometry is the Transiting Exoplanet Survey Satellite \citep[\TESS; ][]{Ricker2015}. 
-Launched in April 2018, \TESS has... \todo{(summary of \TESS's capabilities, citations to planet discoveries etc)}
+A new source of precise photometry is the Transiting Exoplanet Survey Satellite 
+\citep[\TESS; ][]{Ricker2015}. 
+Launched in April 2018, \TESS has... \todo{(summary of \TESS's capabilities, 
+citations to planet discoveries etc)}
 
-One intriguing feature of the \TESS photometric data products is a highly time-variable signal represented in the diffuse background across virtually all camera pixels. 
+One intriguing feature of the \TESS photometric data products is a highly 
+time-variable signal represented in the diffuse background across virtually 
+all camera pixels. 
 \todo{(talk abt Earthshine without naming it)} 
 The signal has been widely attributed to a planet which we will call Sol d.
 
-Previous attempts to map this planet from the exoplanet community have suggested the presence of localized surface features, but their resolving power has been severely limited by the duration of observations \citep{Cowan2009}. 
-\TESS offers precise 2-minute cadence data spanning a wide range of illumination phases, enabling a level of spatial and temporal resolving power that is unprecedented in the exoplanetary phase mapping literature. 
+Previous attempts to map this planet from the exoplanet community have suggested 
+the presence of localized surface features, but their resolving power has been 
+severely limited by the duration of observations \citep{Cowan2009}. 
+\TESS offers precise 2-minute cadence data spanning a wide range of illumination 
+phases, enabling a level of spatial and temporal resolving power that is 
+unprecedented in the exoplanetary phase mapping literature. 
 
-Moreover, recent advances in fast analytic computation of spherical harmonics have made the reconstruction of such detailed maps more feasible than ever. 
+Moreover, recent advances in fast analytic computation of spherical harmonics 
+have made the reconstruction of such detailed maps more feasible than ever. 
 \todo{(STARRY)}
 
-In this work, we build on this methodological foundation to perform reflected-light mapping of planetary surface features on Sol d. 
+In this work, we build on this methodological foundation to perform 
+reflected-light mapping of planetary surface features on Sol d. 
 We give an overview of the \TESS data used in Section \ref{sec:data}. 
-In Section \ref{sec:methods}, we describe the methods employed to infer a map from these data, including the adaptation of the STARRY algorithm to reflection mapping, the modeling of spacecraft-related systematics, and the likelihood and priors used. 
-We present results in Section \ref{sec:results} and make comparison of these findings to state-of-the-art terrestrial planet maps from the literature in Section \ref{sec:discussion}. 
-Finally, we conclude in Section \ref{sec:conclusion} with a look at future prospects for phase-curve mapping of terrestrial exoplanets.
+In Section \ref{sec:methods}, we describe the methods employed to infer a map 
+from these data, including the adaptation of the \starry algorithm to reflection 
+mapping, the modeling of spacecraft-related systematics, and the likelihood and 
+priors used. 
+We present results in Section \ref{sec:results} and make comparison of these 
+findings to state-of-the-art terrestrial planet maps from the literature in 
+Section \ref{sec:discussion}. 
+Finally, we conclude in Section \ref{sec:conclusion} with a look at future 
+prospects for phase-curve mapping of terrestrial exoplanets.
 
 \section{Data}
 \label{sec:data}
 
 \todo{(background extraction from 2-minute cadence targets)}
 
-\todo{(outlier rejection method, trim down to x number of high-SNR lightcurves for computational tractability)}
+\todo{(outlier rejection method, trim down to x number of high-SNR lightcurves 
+for computational tractability)}
 
 \todo{(figure showing lightcurves for various targets)}
 
@@ -84,16 +116,22 @@ Finally, we conclude in Section \ref{sec:conclusion} with a look at future prosp
 
 \subsection{Systematics Modeling}
 
-While the astrophysical signal that we wish to analyze is present in all \todo{x} extracted lightcurves, its strength is modulated by time-variable systematics that are correlated but not identical across all sources. 
-\todo{The observed lightcurves can be represented as... (systematics x Earthshine equation)}
+While the astrophysical signal that we wish to analyze is present in all \todo{x} 
+extracted lightcurves, its strength is modulated by time-variable systematics 
+that are correlated but not identical across all sources. 
+\todo{The observed lightcurves can be represented as... (systematics x 
+Earthshine equation)}
 
-We choose to model this systematic component using Pixel Level Decorrelation (PLD). \todo{(details, math, and a figure of the bases (possibly two-panel with comparison to telescope housekeeping variables?)}
+We choose to model this systematic component using Pixel Level Decorrelation 
+(PLD). \todo{(details, math, and a figure of the bases (possibly two-panel with 
+comparison to telescope housekeeping variables?)}
 
-\subsection{Reflected-Light Mapping with STARRY}
+\subsection{Reflected-Light Mapping with \starry}
 
-\todo{(brief recap of STARRY)}
+\todo{(brief recap of \starry)}
 
-\todo{(adapting STARRY to reflected light/variable illumination phase - possibly make the gritty math details be an appendix?)}
+\todo{(adapting \starry to reflected light/variable illumination phase - 
+possibly make the gritty math details be an appendix?)}
 
 \todo{(time variability of surface features)}
 
@@ -105,6 +143,18 @@ We choose to model this systematic component using Pixel Level Decorrelation (PL
 
 \section{Results}
 \label{sec:results}
+
+\begin{figure}[t!]
+    \begin{centering}
+    \includegraphics[width=\linewidth]{figures/phases.pdf}
+    \caption{\label{fig:phases}
+             \tess view of Sol d on every date in Sectors 1
+             and 2 that was included in the regression. Each image is
+             labeled with the corresponding timestamp in TJD.
+             \codelink{EarthView}
+             }
+    \end{centering}
+\end{figure}
 
 \todo{(present results with \& without time variability)}
 
@@ -123,9 +173,13 @@ We choose to model this systematic component using Pixel Level Decorrelation (PL
 \todo{(talk abt prospects for doing this analysis with exoplanets)}
 
 
-\acknowledgements{\todo{(Artist acknowledgement)} The authors gratefully acknowledge Dan Foreman-Mackey, David W Hogg, Ben Pope, \todo{and ...} for useful conversations. Crucial parts of this work were carried out at the TESS Data Workshop, hosted by Space Telescope Science Institute, and the Building Early Science with TESS Workshop, hosted by the University of Chicago.}
+\acknowledgements{\todo{(Artist acknowledgement)} The authors gratefully 
+acknowledge Dan Foreman-Mackey, David W Hogg, Ben Pope, \todo{and ...} 
+for useful conversations. Crucial parts of this work were carried out at the 
+TESS Data Workshop, hosted by Space Telescope Science Institute, and the 
+Building Early Science with TESS Workshop, hosted by the University of Chicago.}
 \facility{TESS}
-\software{Astropy, Matplotlib, Numpy, STARRY \citep{Luger2019}, TensorFlow}
+\software{Astropy, Matplotlib, Numpy, \starry \citep{Luger2019}, TensorFlow}
 % Bibliography
 \pagebreak
 \bibliography{bib}

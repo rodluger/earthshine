@@ -9,4 +9,5 @@ rcParams["figure.figsize"] = 12, 4
 rcParams["font.size"] = 16
 rcParams["text.usetex"] = False
 rcParams["font.family"] = ["sans-serif"]
+rcParams["font.sans-serif"] = ["cmss10"]
 rcParams["axes.unicode_minus"] = False

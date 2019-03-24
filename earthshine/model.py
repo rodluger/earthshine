@@ -10,7 +10,7 @@ assert starry.__version__ == "1.0.0.dev0", \
 REARTH = 1.0 / 6371.0
 TJD0 = 2457000
 
-__all__ = ["design_matrix", "tess_vector"]
+__all__ = ["design_matrix", "tess_vector", "visibility"]
 
 
 def tess_earth_vector(time):
@@ -138,3 +138,118 @@ def design_matrix(time, ydeg=10, nt=2, period=1.0, phase0=0.0,
         X00 = np.array(X[:, 0])
         X = np.delete(X, [n * map.Ny for n in range(map.nt)], axis=1)
         return X, X00
+
+
+def visibility(time, phase0=0.0, res=100):
+    """
+
+    """
+    # Load the SPICE data
+    ephemFiles = glob.glob('../data/TESS_EPH_PRE_LONG_2018*.bsp')
+    tlsFile = '../data/tess2018338154046-41240_naif0012.tls'
+    solarSysFile = '../data/tess2018338154429-41241_de430.bsp'
+    #print(spice.tkvrsn('TOOLKIT'))
+    for ephFil in ephemFiles:
+        spice.furnsh(ephFil)
+    spice.furnsh(tlsFile)
+    spice.furnsh(solarSysFile)
+
+    # JD time range
+    allTJD = time + TJD0
+    nT = len(allTJD)
+    allET = np.zeros((nT,), dtype=np.float)
+    for i, t in enumerate(allTJD):
+        allET[i] = spice.unitim(t, 'JDTDB', 'ET')
+
+    # Calculate positions of TESS, the Earth, and the Sun
+    # Note that our reference frame is that of `starry`,
+    # where `y` points *north*.
+    # This is just the rotation {x, y, z} --> {z, x, y}
+    # relative to the J200 mean equatorial coordinates.
+    tess = np.zeros((3, len(allET)))
+    sun = np.zeros((3, len(allET)))
+    for i, et in enumerate(allET):
+        outTuple = spice.spkezr('Mgs Simulation', et, 'J2000', 'NONE', 'Earth')
+        tess[0, i] = outTuple[0][1] * REARTH
+        tess[1, i] = outTuple[0][2] * REARTH
+        tess[2, i] = outTuple[0][0] * REARTH
+        outTuple = spice.spkezr('Sun', et, 'J2000', 'NONE', 'Earth')
+        sun[0, i] = outTuple[0][1] * REARTH
+        sun[1, i] = outTuple[0][2] * REARTH
+        sun[2, i] = outTuple[0][0] * REARTH
+
+    north_pole = np.empty((len(time), 3))
+    vernal_eq = np.empty((len(time), 3))
+    tess_hat = tess / np.sqrt(np.sum(tess ** 2, axis=0))
+    sun_hat = sun / np.sqrt(np.sum(sun ** 2, axis=0))
+
+    # Northern hemisphere
+    lonN = np.linspace(-np.pi, np.pi, res)
+    latN = np.linspace(1e-2, np.pi / 2, res // 2)
+    lonN, latN = np.meshgrid(lonN, latN)
+    lonN = lonN.flatten()
+    latN = latN.flatten()
+    xN = np.sin(np.pi / 2 - latN) * np.cos(lonN - np.pi / 2)
+    yN = np.sin(np.pi / 2 - latN) * np.sin(lonN - np.pi / 2)
+    zN = np.sqrt(1 - xN ** 2 - yN ** 2)
+    R = starry.RAxisAngle([1, 0, 0], -90)
+    xN, yN, zN = np.dot(R, np.array([xN, yN, zN]))
+
+    # Southern hemisphere
+    lonS = np.linspace(-np.pi, np.pi, res)
+    latS = np.linspace(-np.pi / 2, -1e-2, res // 2)
+    lonS, latS = np.meshgrid(lonS, latS)
+    lonS = lonS.flatten()
+    latS = latS.flatten()
+    xS = np.sin(np.pi / 2 - latS) * np.cos(lonS - np.pi / 2)
+    yS = np.sin(np.pi / 2 - latS) * np.sin(lonS - np.pi / 2)
+    zS = np.sqrt(1 - xS ** 2 - yS ** 2)
+    R = starry.RAxisAngle([1, 0, 0], 90)
+    xS, yS, zS = np.dot(R, np.array([xS, yS, zS]))
+    grid = np.hstack((
+            np.append(xS, xN).reshape(-1, 1),
+            np.append(yS, yN).reshape(-1, 1),
+            np.append(zS, zN).reshape(-1, 1)
+    )).T
+    viz = np.zeros(grid.shape[1])
+    lat = np.append(latS, latN)
+    lon = np.append((np.pi - lonS), lonN)
+    lon[lon > np.pi] -= 2 * np.pi
+
+    for i in tqdm(range(len(time))):
+        # Rotate the earth to the current phase in the original frame
+        phase = (360. * (time[i] - time[0])) % 360. + phase0
+        R = starry.RAxisAngle([0, 1, 0], phase)
+        grid_i = np.dot(R, grid)
+
+        # Rotate the earth and the sun into tess' frame  
+        costheta = np.dot(tess_hat[:, i], [0, 0, 1])
+        axis = np.cross(tess_hat[:, i], [0, 0, 1])
+        sintheta = np.sqrt(np.sum(axis ** 2))
+        axis /= sintheta
+        theta = 180. / np.pi * np.arctan2(sintheta, costheta)
+        R = starry.RAxisAngle(axis, theta)
+        assert np.allclose(np.dot(R, tess_hat[:, i]), [0, 0, 1])
+        north_pole[i] = np.dot(R, [0, 1, 0])
+        vernal_eq[i] = np.dot(R, [0, 0, 1])
+        source = np.dot(R, sun_hat[:, i])
+        grid_i = np.dot(R, grid_i)
+
+        # Finally, rotate the image so that north always points up
+        # This doesn't actually change the integrated flux!
+        theta = 180. / np.pi * np.arctan2(north_pole[i, 0], north_pole[i, 1])
+        R = starry.RAxisAngle([0, 0, 1], theta)
+        north_pole[i] = np.dot(R, north_pole[i])
+        vernal_eq[i] = np.dot(R, vernal_eq[i])
+        source = np.dot(R, source)
+        grid_i = np.dot(R, grid_i)
+
+        # Update the visibility array
+        # Weight it by both the cosine of the observer angle
+        # and the cosine of the source angle
+        gx, gy, gz = grid_i
+        cos_s = np.dot(source, grid_i)
+        inds = (gz > 0) & (cos_s > 0)
+        viz[inds] += gz[inds] * cos_s[inds]
+
+    return lon * 180 / np.pi, lat * 180 / np.pi, viz

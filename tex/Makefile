@@ -27,7 +27,6 @@ ms.pdf: ms.tex bib.bib $(FIGURES)
 clean:
 	# Remove temporaries and output
 	$(RM_TMP)
-	rm -rf $(FIGURES)
 
 figures/%.pdf: figures/%.py
 	# Generate all figures

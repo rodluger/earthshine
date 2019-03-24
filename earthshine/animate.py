@@ -15,7 +15,83 @@ REARTH = 1.0 / 6371.0
 TJD0 = 2457000
 cmap = plt.get_cmap("plasma")
 
-__all__ = ["animate"]
+__all__ = ["animate", "render"]
+
+
+def render(map, time, time0, phase0=0.0, res=75):
+    """
+
+    """
+    # Load the SPICE data
+    ephemFiles = glob.glob('../data/TESS_EPH_PRE_LONG_2018*.bsp')
+    tlsFile = '../data/tess2018338154046-41240_naif0012.tls'
+    solarSysFile = '../data/tess2018338154429-41241_de430.bsp'
+    #print(spice.tkvrsn('TOOLKIT'))
+    for ephFil in ephemFiles:
+        spice.furnsh(ephFil)
+    spice.furnsh(tlsFile)
+    spice.furnsh(solarSysFile)
+
+    # JD time
+    et = spice.unitim(time + TJD0, 'JDTDB', 'ET')
+
+    # Calculate positions of TESS, the Earth, and the Sun
+    # Note that our reference frame is that of `starry`,
+    # where `y` points *north*.
+    # This is just the rotation {x, y, z} --> {z, x, y}
+    # relative to the J200 mean equatorial coordinates.
+    tess = np.zeros(3)
+    sun = np.zeros(3)
+    outTuple = spice.spkezr('Mgs Simulation', et, 'J2000', 'NONE', 'Earth')
+    tess[0] = outTuple[0][1] * REARTH
+    tess[1] = outTuple[0][2] * REARTH
+    tess[2] = outTuple[0][0] * REARTH
+    outTuple = spice.spkezr('Sun', et, 'J2000', 'NONE', 'Earth')
+    sun[0] = outTuple[0][1] * REARTH
+    sun[1] = outTuple[0][2] * REARTH
+    sun[2] = outTuple[0][0] * REARTH
+
+    north_pole = np.empty(3)
+    vernal_eq = np.empty(3)
+    tess_hat = tess / np.sqrt(np.sum(tess ** 2))
+    sun_hat = sun / np.sqrt(np.sum(sun ** 2))
+    y = np.array(map[:, :, :])
+
+    # Rotate the earth to the current phase in the original frame
+    map.axis = [0, 1, 0]
+    phase = (360. * (time - time0)) % 360. + phase0
+    R = starry.RAxisAngle([0, 1, 0], phase)
+    map.rotate(phase)
+
+    # Rotate the earth and the sun into tess' frame  
+    costheta = np.dot(tess_hat, [0, 0, 1])
+    axis = np.cross(tess_hat, [0, 0, 1])
+    sintheta = np.sqrt(np.sum(axis ** 2))
+    axis /= sintheta
+    theta = 180. / np.pi * np.arctan2(sintheta, costheta)
+    R = starry.RAxisAngle(axis, theta)
+    assert np.allclose(np.dot(R, tess_hat), [0, 0, 1])
+    north_pole = np.dot(R, [0, 1, 0])
+    vernal_eq = np.dot(R, [0, 0, 1])
+    source = np.dot(R, sun_hat)
+    map.axis = axis
+    map.rotate(theta)
+
+    # Finally, rotate the image so that north always points up
+    # This doesn't actually change the integrated flux!
+    map.axis = [0, 0, 1]
+    theta = 180. / np.pi * np.arctan2(north_pole[0], north_pole[1])
+    map.rotate(theta)
+    R = starry.RAxisAngle([0, 0, 1], theta)
+    north_pole = np.dot(R, north_pole)
+    vernal_eq = np.dot(R, vernal_eq)
+    source = np.dot(R, source)
+
+    # Render the image
+    Z = map.render(source=source, res=res)[0]
+    map.reset()
+    map[:, :, :] = y
+    return Z
 
 
 # Visualize the orbit
@@ -121,11 +197,13 @@ def animate(map, time, phase0=0.0, res=75, interval=75):
     tess_hat = tess / np.sqrt(np.sum(tess ** 2, axis=0))
     sun_hat = sun / np.sqrt(np.sum(sun ** 2, axis=0))
     y = np.array(map[:, :, :])
+
     for i in tqdm(range(len(time))):
         # Rotate the earth to the current phase in the original frame
         map[:, :, :] = y
         map.axis = [0, 1, 0]
         phase = (360. * (time[i] - time[0])) % 360. + phase0
+        R = starry.RAxisAngle([0, 1, 0], phase)
         map.rotate(phase)
 
         # Rotate the earth and the sun into tess' frame  
@@ -154,7 +232,7 @@ def animate(map, time, phase0=0.0, res=75, interval=75):
 
         # Render the image
         Z[i] = map.render(t=t[i], source=source, res=res)[0]
-    
+
     # Reset the map
     map[:, :, :] = y
     map.axis = [0, 1, 0]
