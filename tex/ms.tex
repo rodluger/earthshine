@@ -114,6 +114,33 @@ for computational tractability)}
 \section{Methods}
 \label{sec:methods}
 
+\begin{figure}[ht!]
+    \begin{centering}
+    \includegraphics[width=\linewidth]{figures/phases.pdf}
+    \caption{\label{fig:phases}
+             \tess view of Sol d on every date in Sectors 1
+             and 2 that was included in the regression. Each image is
+             labeled with the corresponding timestamp in TJD. 
+             \codelink{EarthView}
+             }
+    \end{centering}
+\end{figure}
+
+\begin{figure}[ht!]
+    \begin{centering}
+    \includegraphics[width=\linewidth]{figures/data.pdf}
+    \caption{\label{fig:data}
+             Normalized background flux in each of ten postage stamps
+             for each of Sectors 1 and 2. Cadences where Sol d was
+             below or very close to the edge of the sunshade were masked.
+             While the planet is in view for the majority of both orbits
+             in Sector 1, it is only visible in the data at the very end
+             of each orbit in Sector 2.
+             \codelink{earthshine_S1_S2}
+             }
+    \end{centering}
+\end{figure}
+
 \subsection{Systematics Modeling}
 
 While the astrophysical signal that we wish to analyze is present in all \todo{x} 
@@ -127,6 +154,18 @@ We choose to model this systematic component using Pixel Level Decorrelation
 comparison to telescope housekeeping variables?)}
 
 \subsection{Reflected-Light Mapping with \starry}
+
+\begin{figure}[ht!]
+    \begin{centering}
+    \includegraphics[width=\linewidth]{figures/starry_model.pdf}
+    \caption{\label{fig:starry_model}
+             Normalized surface reflectance versus time for the maximum
+             likelihood \starry model in each of the four orbits of \tess
+             in Sectors 1 and 2.
+             \codelink{earthshine_S1_S2}
+             }
+    \end{centering}
+\end{figure}
 
 \todo{(brief recap of \starry)}
 
@@ -146,17 +185,50 @@ possibly make the gritty math details be an appendix?)}
 
 \begin{figure}[t!]
     \begin{centering}
-    \includegraphics[width=\linewidth]{figures/phases.pdf}
-    \caption{\label{fig:phases}
-             \tess view of Sol d on every date in Sectors 1
-             and 2 that was included in the regression. Each image is
-             labeled with the corresponding timestamp in TJD.
-             \codelink{EarthView}
+    \includegraphics[width=\linewidth]{figures/model.pdf}
+    \caption{\label{fig:model}
+             \emph{Top:} Median flux across all postage stamps (black) and
+             the median maximum likelihood model (blue) across Sectors 1 and 2.
+             \emph{Bottom:} Median residuals about the maximum likelihood fit.
+             \codelink{earthshine_S1_S2}
              }
     \end{centering}
 \end{figure}
 
 \todo{(present results with \& without time variability)}
+
+\begin{figure}[t!]
+    \begin{centering}
+    \includegraphics[width=\linewidth]{figures/map.pdf}
+    \caption{\label{fig:map}
+             \emph{Top:} The maximum likelihood model for the surface albedo
+             of Sol d, weighted by the visibility across Sectors 1 and 2. The
+             dashed white lines indicate latitudes above/below which the
+             visibility drops below 50\%. Black contours indicate coastlines
+             derived from current state-of-the-art models of the surface geography 
+             of Sol d.
+             \emph{Bottom:} Actual corrected surface reflectance in the red band of the
+             \emph{VIIRS} imager, averaged over the same date range and weighted
+             by the same visibility function. This bandpass covers only about one
+             quarter of the \tess bandpass, so deviations between the two images
+             are to be expected.
+             \codelink{earthshine_S1_S2}
+             }
+    \end{centering}
+\end{figure}
+
+The bottom panel of Figure~\ref{fig:map} shows the corrected surface
+reflectance obtained from the
+Visible Infrared Imaging Radiometer Suite (\emph{VIIRS}) instrument aboard the 
+Suomi National Polar-orbiting Partnership (\emph{Suomi NPP}) satellite. The 
+image shows the corrected surface reflectance in the I1 band of the instrument,
+averaged over the 28 days of data analyzed in this work, and weighted by the
+\tess visibility as in the top panel.
+The I1 band extends from 0.6 to 0.68 $\mu\mathrm{m}$
+\footnote{\url{http://rammb.cira.colostate.edu/projects/npp/VIIRS_bands_and_bandwidths.pdf}},
+and therefore covers only about one-fourth of the bandpass of \tess
+(nominally 0.6 - 1.0 $\mu\mathrm{m}$).
+
 
 \section{Discussion}
 \label{sec:discussion}
