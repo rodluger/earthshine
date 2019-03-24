@@ -159,7 +159,13 @@ comparison to telescope housekeeping variables?)}
     \begin{centering}
     \includegraphics[width=0.5\linewidth]{figures/geometry.pdf}
     \caption{\label{fig:geometry}
-             Geometry of the \starry model.
+             Geometry of the \starry model. In this frame, the $y$ axis points up, 
+             the $x$ axis points to the right, and the $z$ axis points out of the page.
+             The planet has unit radius and sits at the origin, while
+             the illumination source is along the $y-z$ plane, with the sub-stellar point is
+             marked by a dot. The semi-major axis of the terminator is unity, and
+             the semi-minor axis of the terminator is denoted $b$. The night side
+             is colored black.
              \codelink{Geometry}
              }
     \end{centering}
@@ -179,29 +185,99 @@ comparison to telescope housekeeping variables?)}
 
 \todo{(brief recap of \starry)}
 
-\todo{(adapting \starry to reflected light/variable illumination phase - 
-possibly make the gritty math details be an appendix?)}
+In \cite{Luger2019} we described how to transform between spherical
+harmonic coefficients and coefficients in the polynomial basis $\tilde{p}$, whose
+terms are of the form $x^i y^j z^k$ for (non-negative) integer $i$ and $j$ 
+and $k = 0$ or $1$. Given a representation of a surface map in terms of
+a set of coefficients in $\tilde{p}$, we showed how to compute the visible
+flux by integrating each of the terms in $\tilde{p}$ across the visible
+surface of the projected disk. For unocculted spheres observed in emitted
+light, the area of integration was the full disk, which made the integration
+trivial: the flux contribution from each term in $\tilde{p}$ was a constant
+easily computed via recursion relations involving factorials.
 
-The illumination is
+In the present work, we are interested in \emph{reflected} light, so we must
+account for the illumination by the star, which varies smoothly
+across the dayside of the planet but whose derivative discontinuously changes at the 
+terminator, beyond which the illumination is zero everywhere. This requires
+two modifications to the \starry algorithm: we must (1) weight all integrands
+by the illumination function on the dayside, and (2) modify the integration
+limits to truncate the integrals at the day/night terminator.
+
+Let us consider a right-handed coordinate frame in which the planet has unit 
+radius and is located at the origin, the illumination source is along the $y-z$
+plane, and the sub-stellar point is on the $+y$ axis at $x = 0$
+(see Figure~\ref{fig:geometry}). In this frame, the terminator is a segment of
+an ellipse, with semi-major axis $a=1$ aligned with the $x$ axis and
+semi-minor axis $b$. It is straightforward to show that the sub-stellar point
+is located at $y=\sqrt{1 - b^2}$ and the illumination is given by
 %
 \begin{align}
-    I(b; x, y, z) = \sqrt{1 - b^2}y - bz
+    I(b; x, y) &= 
+    \begin{dcases}
+        \sqrt{1 - b^2}y - bz & 
+            \quad\quad\quad\quad\quad\quad\quad\quad\quad\quad 
+            y \geq -b \sqrt{1 - x^2}
+        \\
+        0 & 
+            \quad\quad\quad\quad\quad\quad\quad\quad\quad\quad 
+            \mathrm{otherwise}
+    \end{dcases}
+    \quad ,
     \label{eq:illum}
 \end{align}
 %
-
-The problem can then be reduced to solving integrals of the form
+where $z = \sqrt{1 - x^2 - y^2}$.
+%
+Since the illumination function is just a polynomial in $x$, $y$, and $z$,
+weighting the terms in $\tilde{p}$ by this function keeps all terms within the
+polynomial basis.
+Provided we always rotate the problem such that the
+sub-stellar point lies along the $+y$ axis as above, the limits of integration
+are $-1 \leq x \leq 1$ and $b\sqrt{1 - x^2} \leq y \leq \sqrt{1 - x^2}$.
+Computing the total reflected flux for any surface map is therefore a matter
+of solving integrals of the form
 %
 \begin{align}
-    \int_{-1}^{1} \int_{b\sqrt{1 - x^2}}^{\sqrt{1 - x^2}} x^i y^j z^k \mathrm{d} y \ \mathrm{d} x
+    J_{ijk}(b) &= \int_{-1}^{1} \int_{b\sqrt{1 - x^2}}^{\sqrt{1 - x^2}} x^i y^j z^k \mathrm{d} y \ \mathrm{d} x
+    \nonumber\\
+    &=
+    \frac{
+        \Gamma\left(\frac{i + 1}{2}\right) \Gamma\left(\frac{j + 1}{2}\right)
+    }{
+        2 \Gamma\left(\frac{i + j + k + 4}{2}\right)
+    }
+    \begin{dcases}
+        0
+        &
+        \quad\quad\quad\quad\quad\quad\quad\quad\quad\quad 
+        i \, \mathrm{odd}
+        %
+        \\
+        %
+            1 - b^{j + 1}
+        & 
+        \quad\quad\quad\quad\quad\quad\quad\quad\quad\quad 
+        k = 0
+        %
+        \\
+        %
+        \frac{\sqrt{\pi}}{2} - b^{j + 1}\Gamma\left(\frac{j + 4}{2}\right)
+        {_2\tilde{F}_1} \left( -\frac{1}{2}, \frac{j + 1}{2}; \frac{j + 3}{2}; b^2\right)
+        & 
+        \quad\quad\quad\quad\quad\quad\quad\quad\quad\quad 
+        k = 1
+    \end{dcases}
+    \quad ,
     \label{eq:integral}
 \end{align}
 %
-where $i$ and $j$ are non-negative integers and $k = 0$ or $1$.
-
-
-
-\todo{(time variability of surface features)}
+where ${_2\tilde{F}_1}$ is the regularized hypergeometric function. For all values
+of $i$, $j$, and $k$ in $\tilde{p}$, ${_2\tilde{F}_1}$ reduces to simple
+trigonometric functions involving $b$. Moreover, it is straightforward to
+derive recursion relations for $J_{ijk}(b)$, making its evaluation extremely fast.
+The algorithm for computing $J_{ijk}(b)$ is implemented in the development version
+of \starry and will be discussed further in upcoming work.
 
 \subsection{Likelihood Function \& Inference}
 
