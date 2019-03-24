@@ -157,6 +157,16 @@ comparison to telescope housekeeping variables?)}
 
 \begin{figure}[ht!]
     \begin{centering}
+    \includegraphics[width=0.5\linewidth]{figures/geometry.pdf}
+    \caption{\label{fig:geometry}
+             Geometry of the \starry model.
+             \codelink{Geometry}
+             }
+    \end{centering}
+\end{figure}
+
+\begin{figure}[ht!]
+    \begin{centering}
     \includegraphics[width=\linewidth]{figures/starry_model.pdf}
     \caption{\label{fig:starry_model}
              Normalized surface reflectance versus time for the maximum
@@ -171,6 +181,25 @@ comparison to telescope housekeeping variables?)}
 
 \todo{(adapting \starry to reflected light/variable illumination phase - 
 possibly make the gritty math details be an appendix?)}
+
+The illumination is
+%
+\begin{align}
+    I(b; x, y, z) = \sqrt{1 - b^2}y - bz
+    \label{eq:illum}
+\end{align}
+%
+
+The problem can then be reduced to solving integrals of the form
+%
+\begin{align}
+    \int_{-1}^{1} \int_{b\sqrt{1 - x^2}}^{\sqrt{1 - x^2}} x^i y^j z^k \mathrm{d} y \ \mathrm{d} x
+    \label{eq:integral}
+\end{align}
+%
+where $i$ and $j$ are non-negative integers and $k = 0$ or $1$.
+
+
 
 \todo{(time variability of surface features)}
 
@@ -220,7 +249,7 @@ possibly make the gritty math details be an appendix?)}
 The bottom panel of Figure~\ref{fig:map} shows the corrected surface
 reflectance obtained from the
 Visible Infrared Imaging Radiometer Suite (\emph{VIIRS}) instrument aboard the 
-Suomi National Polar-orbiting Partnership (\emph{Suomi NPP}) satellite
+Suomi National Polar-orbiting Partnership (\emph{S-NPP}) satellite
 \footnote{Data obtained via 
 \href{https://github.com/rodluger/earthshine/blob/master/tex/figures/viirs.sh}{this wget script}.}. 
 The image shows the corrected surface reflectance in the I1 band of the instrument,
