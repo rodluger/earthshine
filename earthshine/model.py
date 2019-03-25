@@ -2,6 +2,7 @@ import spiceypy as spice
 import glob
 from tqdm import tqdm
 import numpy as np
+import os
 import starry
 assert starry.__version__ == "1.0.0.dev0", \
     "This code requires the `starry` version 1.0.0.dev0."
@@ -9,6 +10,7 @@ assert starry.__version__ == "1.0.0.dev0", \
 # Constants
 REARTH = 1.0 / 6371.0
 TJD0 = 2457000
+path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/data/"
 
 __all__ = ["design_matrix", "tess_vector", "visibility"]
 
@@ -16,9 +18,9 @@ __all__ = ["design_matrix", "tess_vector", "visibility"]
 def tess_earth_vector(time):
     """Return the cartesian position of TESS relative to the Earth."""
     # Load the SPICE data
-    ephemFiles = glob.glob('../data/TESS_EPH_PRE_LONG_2018*.bsp')
-    tlsFile = '../data/tess2018338154046-41240_naif0012.tls'
-    solarSysFile = '../data/tess2018338154429-41241_de430.bsp'
+    ephemFiles = glob.glob(path + 'TESS_EPH_PRE_LONG_2018*.bsp')
+    tlsFile = path + 'tess2018338154046-41240_naif0012.tls'
+    solarSysFile = path + 'tess2018338154429-41241_de430.bsp'
     for ephFil in ephemFiles:
         spice.furnsh(ephFil)
     spice.furnsh(tlsFile)
@@ -60,9 +62,9 @@ def design_matrix(time, ydeg=10, nt=2, period=1.0, phase0=0.0,
     map = starry.Map(ydeg=ydeg, udeg=0, reflected=True, nt=nt)
 
     # Load the SPICE data
-    ephemFiles = glob.glob('../data/TESS_EPH_PRE_LONG_2018*.bsp')
-    tlsFile = '../data/tess2018338154046-41240_naif0012.tls'
-    solarSysFile = '../data/tess2018338154429-41241_de430.bsp'
+    ephemFiles = glob.glob(path + 'TESS_EPH_PRE_LONG_2018*.bsp')
+    tlsFile = path + 'tess2018338154046-41240_naif0012.tls'
+    solarSysFile = path + 'tess2018338154429-41241_de430.bsp'
     #print(spice.tkvrsn('TOOLKIT'))
     for ephFil in ephemFiles:
         spice.furnsh(ephFil)
@@ -145,9 +147,9 @@ def visibility(time, phase0=0.0, res=100):
 
     """
     # Load the SPICE data
-    ephemFiles = glob.glob('../data/TESS_EPH_PRE_LONG_2018*.bsp')
-    tlsFile = '../data/tess2018338154046-41240_naif0012.tls'
-    solarSysFile = '../data/tess2018338154429-41241_de430.bsp'
+    ephemFiles = glob.glob(path + 'TESS_EPH_PRE_LONG_2018*.bsp')
+    tlsFile = path + 'tess2018338154046-41240_naif0012.tls'
+    solarSysFile = path + 'tess2018338154429-41241_de430.bsp'
     #print(spice.tkvrsn('TOOLKIT'))
     for ephFil in ephemFiles:
         spice.furnsh(ephFil)

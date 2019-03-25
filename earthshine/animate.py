@@ -6,6 +6,7 @@ from matplotlib.patches import Wedge
 from IPython.display import HTML
 from tqdm import tqdm
 import glob
+import os
 import starry
 assert starry.__version__ == "1.0.0.dev0", \
     "This code requires the `starry` version 1.0.0.dev0."
@@ -14,6 +15,7 @@ assert starry.__version__ == "1.0.0.dev0", \
 REARTH = 1.0 / 6371.0
 TJD0 = 2457000
 cmap = plt.get_cmap("plasma")
+path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/data/"
 
 __all__ = ["animate", "render"]
 
@@ -23,9 +25,9 @@ def render(map, time, time0, phase0=0.0, res=75):
 
     """
     # Load the SPICE data
-    ephemFiles = glob.glob('../data/TESS_EPH_PRE_LONG_2018*.bsp')
-    tlsFile = '../data/tess2018338154046-41240_naif0012.tls'
-    solarSysFile = '../data/tess2018338154429-41241_de430.bsp'
+    ephemFiles = glob.glob(path + 'TESS_EPH_PRE_LONG_2018*.bsp')
+    tlsFile = path + 'tess2018338154046-41240_naif0012.tls'
+    solarSysFile = path + 'tess2018338154429-41241_de430.bsp'
     #print(spice.tkvrsn('TOOLKIT'))
     for ephFil in ephemFiles:
         spice.furnsh(ephFil)
@@ -100,9 +102,9 @@ def animate(map, time, phase0=0.0, res=75, interval=75):
 
     """
     # Load the SPICE data
-    ephemFiles = glob.glob('../data/TESS_EPH_PRE_LONG_2018*.bsp')
-    tlsFile = '../data/tess2018338154046-41240_naif0012.tls'
-    solarSysFile = '../data/tess2018338154429-41241_de430.bsp'
+    ephemFiles = glob.glob(path + 'TESS_EPH_PRE_LONG_2018*.bsp')
+    tlsFile = path + 'tess2018338154046-41240_naif0012.tls'
+    solarSysFile = path + 'tess2018338154429-41241_de430.bsp'
     #print(spice.tkvrsn('TOOLKIT'))
     for ephFil in ephemFiles:
         spice.furnsh(ephFil)

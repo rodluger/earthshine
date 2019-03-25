@@ -129,6 +129,38 @@ Figure showing lightcurves for various targets: Figure~\ref{fig:data}.
 \section{Methods}
 \label{sec:methods}
 
+\subsection{Orbital Modeling}
+
+We downloaded 
+\footnote{\url{https://archive.stsci.edu/missions/tess/models/}}
+the Solar System and \tess ephemeris data for
+Sectors 1 and 2 and used \spiceypy \citep{Acton1996, Acton2017, Annex2017}
+to convert the TDB timestamps to 
+ephemeris time (ET). We then used the \textsf{spkezr} utility to compute
+the relative positions of Sol, Sol d, and \tess for every cadence
+in our dataset in the J2000 equatorial reference frame. In this right-handed
+coordinate frame, Sol d is centered at the origin, the $y$ axis points along the 
+planet's spin axis, and the $x$ axis points toward the vernal equinox. We
+do not apply any light travel correction, as the expected delay is on the order
+of a few seconds.
+
+At any given cadence, we rotate Sol d about its spin axis to the correct phase,
+assuming a rotational period of $1.00$ day. We determine the initial rotation
+phase of Sol d by computing the Sol d Rotation Angle (ERA), given by \citep{Urban2013}
+%
+\begin{align}
+\mathrm{ERA} = 360^\circ(0.7790572732640 + 1.00273781191135448 \, t_U) \, \mathrm{mod} \, 360^\circ
+\end{align}
+%
+where $t_U = t - 2451545.0$. At $t = t_0 = 2458325.5$, the first timestamp in our dataset,
+we find $\mathrm{ERA} = 303.4^\circ$, meaning the vernal equinox will be aligned with
+the prime meridian $360^\circ - 303.4^\circ = 56.6^\circ = 3.77$ hours past $t_0$.
+%
+Finally, we rotate the frame to align
+\tess with the $+z$ axis, with the spin vector of Sol d along the $y-z$ plane.
+
+
+
 \begin{figure}[ht!]
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/phases.pdf}
@@ -352,6 +384,8 @@ and therefore covers only about one-fourth of the bandpass of \tess
 
 \todo{(comparison of inferred features to ``model'' (Earth))}
 
+No zonal cloud bands: prior.
+
 \section{Conclusion}
 \label{sec:conclusion}
 
@@ -368,7 +402,7 @@ for useful conversations. Crucial parts of this work were carried out at the
 TESS Data Workshop, hosted by Space Telescope Science Institute, and the 
 Building Early Science with TESS Workshop, hosted by the University of Chicago.}
 \facility{TESS}
-\software{Astropy, Matplotlib, Numpy, \starry \citep{Luger2019}, TensorFlow}
+\software{Astropy, Matplotlib, Numpy, \starry \citep{Luger2019}, TensorFlow, \spiceypy \citep{Annex2019}}
 % Bibliography
 \pagebreak
 \bibliography{bib}
