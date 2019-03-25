@@ -106,6 +106,8 @@ prospects for phase-curve mapping of terrestrial exoplanets.
 
 \todo{(background extraction from 2-minute cadence targets)}
 
+\todo{TJD = BJD - 2457000}
+
 \todo{(outlier rejection method, trim down to x number of high-SNR lightcurves 
 for computational tractability)}
 
@@ -135,7 +137,7 @@ We downloaded
 \footnote{\url{https://archive.stsci.edu/missions/tess/models/}}
 the Solar System and \tess ephemeris data for
 Sectors 1 and 2 and used \spiceypy \citep{Acton1996, Acton2017, Annex2017}
-to convert the TDB timestamps to 
+to convert the TJD timestamps to 
 ephemeris time (ET). We then used the \textsf{spkezr} utility to compute
 the relative positions of Sol, Sol d, and \tess for every cadence
 in our dataset in the J2000 equatorial reference frame. In this right-handed
@@ -159,16 +161,6 @@ the prime meridian $360^\circ - 303.4^\circ = 56.6^\circ = 3.77$ hours past $t_0
 Finally, we rotate the frame to align
 \tess with the $+z$ axis, with the spin vector of Sol d along the $y-z$ plane.
 
-Figure~\ref{fig:phases} shows the view \tess has of Sol d on each of the dates
-in our dataset; these images were produced by applying the sequences of rotations
-described above. The planet is illuminated by Sol assuming it is a point source,
-and the night side is shaded black. The map of Sol d shown in this figure is 
-based on current models of the actual distribution of continents on the planet.
-Note that although the images are computed an integer number of rotation periods
-apart, the planet appears to slowly rotate over the course of the observation.
-This is because of the orbit of \tess, which changes its vantage point relative
-to Sol d over the course of its 13 day orbit.
-
 \begin{figure}[ht!]
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/phases.pdf}
@@ -183,25 +175,86 @@ to Sol d over the course of its 13 day orbit.
     \end{centering}
 \end{figure}
 
+Figure~\ref{fig:phases} shows the view \tess has of Sol d on each of the dates
+in our dataset; these images were produced by applying the sequences of rotations
+described above. The planet is illuminated by Sol assuming it is a point source,
+and the night side is shaded black. The map of Sol d shown in this figure is 
+based on current models of the actual distribution of continents on the planet.
+Note that although the images are computed an integer number of rotation periods
+apart, the planet appears to slowly rotate over the course of the observation.
+This is because of the orbit of \tess, which changes its vantage point relative
+to Sol d over the course of its 13 day orbit.
+
 \subsection{Systematics Modeling}
+\label{sec:systematics}
 
-While the astrophysical signal that we wish to analyze is present in all \todo{x} 
+While the astrophysical signal that we wish to analyze is present in all 
 extracted lightcurves, its strength is modulated by time-variable systematics 
-that are correlated but not identical across all sources. 
-\todo{The observed lightcurves can be represented as... (systematics x 
-Earthshine equation)}
+that are correlated but not identical across all postage stamps, since the
+illumination of the CCD by Sol d is strongly inhomogeneous. A physical
+model of the reflections and scattering that gives rise to the
+signal of Sol d on the \tess detector is beyond the scope of this work. Instead,
+we treat this as a de-trending problem, where the signal we wish to fit is
+shared by all postage stamps, but multiplied by a systematic signal that is
+different for each target. This problem is precisely what the technique of
+pixel-level decorelation \citep[PLD;][]{Deming2015, Luger2016, Luger2018a}
+seeks to address. In PLD, one computes the sum over all light curves at each
+point in time, and uses this quantity to normalize each of the individual
+light curves. Since (by assumption) each light curve is the product of the astrophysical
+signal and the systematics signal, this procedure divides out the astrophysical
+signal, producing a basis of vectors that contain \emph{only} functions of the
+systematics. This now serves as a ``clean'' basis one can then use to fit the
+data, with minimal risk of fitting out astrophysical signals.
 
-We choose to model this systematic component using Pixel Level Decorrelation 
-(PLD). \todo{(details, math, and a figure of the bases (possibly two-panel with 
-comparison to telescope housekeeping variables?)}
+We therefore construct a design matrix $\mathbf{B}$ out of the PLD basis. To
+increase the flexibility of the systematics model, we append to $\mathrm{B}$ 5 orthogonal
+polynomials in time for each of the two orbits of \tess in each sector.
+The systematics model $\mathbf{b}$ for the $n^\mathrm{th}$ signal is thus
+%
+\begin{align}
+\mathbf{b}_n = \mathbf{B} \mathbf{w}_n
+\end{align}
+%
+where $\mathbf{w}_n$ are the weights of each regressor.
+Since we solve for different weights for each of the 75 light curves in Sector 1
+and 20 light curves in Sector 2, our systematics model has
+$75 \times (75 + 2 \times 5) + 20 \times (20 + 2 \times 5) = 6,975$ free parameters.
+Since the total number of data points is $912,605$, overfitting is not particularly
+concerning, but we nevertheless impose an L2 prior on the weights with
+standard deviation $\sigma_B = 0.1$.
 
 \subsection{Reflected-Light Mapping with \starry}
+\label{sec:starry}
+
+We model the astrophysical component of the signal---the rotational modulation
+of Sol d in reflected light---using the \starry code package \citep{Luger2019}.
+\starry computes phase curves and occultation light curves for bodies whose
+surfaces are expressed as a sum of spherical harmonics. 
+The algorithm works by first transforming
+from spherical harmonic coefficients to coefficients in the polynomial basis $\tilde{p}$, whose
+terms are of the form $x^i y^j z^k$ for (non-negative) integer $i$ and $j$ 
+and $k = 0$ or $1$. \citet{Luger2019} showed how to compute the visible
+flux by integrating each of the terms in $\tilde{p}$ across the visible
+surface of the projected disk. For unocculted spheres observed in emitted
+light, the area of integration is the full disk, which makes the integration
+trivial: the flux contribution from each term in $\tilde{p}$ is a constant
+easily computed via recursion relations involving factorials. The algorithm is
+thus extremely fast and very precise.
+
+However, in the present work, we are interested in \emph{reflected} light, so we must
+account for the illumination by the star, which varies smoothly
+across the dayside of the planet but whose derivative discontinuously changes at the 
+terminator, beyond which the illumination is zero everywhere. This requires
+two modifications to the \starry algorithm: we must (1) weight all integrands
+by the illumination function on the dayside, and (2) modify the integration
+limits to truncate the integrals at the day/night terminator.
 
 \begin{figure}[ht!]
     \begin{centering}
-    \includegraphics[width=0.5\linewidth]{figures/geometry.pdf}
+    \includegraphics[width=0.4\linewidth]{figures/geometry.pdf}
     \caption{\label{fig:geometry}
-             Geometry of the \starry model. In this frame, the $y$ axis points up, 
+             Geometry of the \starry model in reflected light. In this frame, 
+             the $y$ axis points up, 
              the $x$ axis points to the right, and the $z$ axis points out of the page.
              The planet has unit radius and sits at the origin, while
              the illumination source is along the $y-z$ plane, with the sub-stellar point is
@@ -212,39 +265,6 @@ comparison to telescope housekeeping variables?)}
              }
     \end{centering}
 \end{figure}
-
-\begin{figure}[ht!]
-    \begin{centering}
-    \includegraphics[width=\linewidth]{figures/starry_model.pdf}
-    \caption{\label{fig:starry_model}
-             Normalized surface reflectance versus time for the maximum
-             likelihood \starry model in each of the four orbits of \tess
-             in Sectors 1 and 2.
-             \codelink{earthshine_S1_S2}
-             }
-    \end{centering}
-\end{figure}
-
-\todo{(brief recap of \starry)}
-
-In \cite{Luger2019} we described how to transform between spherical
-harmonic coefficients and coefficients in the polynomial basis $\tilde{p}$, whose
-terms are of the form $x^i y^j z^k$ for (non-negative) integer $i$ and $j$ 
-and $k = 0$ or $1$. Given a representation of a surface map in terms of
-a set of coefficients in $\tilde{p}$, we showed how to compute the visible
-flux by integrating each of the terms in $\tilde{p}$ across the visible
-surface of the projected disk. For unocculted spheres observed in emitted
-light, the area of integration was the full disk, which made the integration
-trivial: the flux contribution from each term in $\tilde{p}$ was a constant
-easily computed via recursion relations involving factorials.
-
-In the present work, we are interested in \emph{reflected} light, so we must
-account for the illumination by the star, which varies smoothly
-across the dayside of the planet but whose derivative discontinuously changes at the 
-terminator, beyond which the illumination is zero everywhere. This requires
-two modifications to the \starry algorithm: we must (1) weight all integrands
-by the illumination function on the dayside, and (2) modify the integration
-limits to truncate the integrals at the day/night terminator.
 
 Let us consider a right-handed coordinate frame in which the planet has unit 
 radius and is located at the origin, the illumination source is along the $y-z$
@@ -318,10 +338,46 @@ where ${_2\tilde{F}_1}$ is the regularized hypergeometric function. For all valu
 of $i$, $j$, and $k$ in $\tilde{p}$, ${_2\tilde{F}_1}$ reduces to simple
 trigonometric functions involving $b$. Moreover, it is straightforward to
 derive recursion relations for $J_{ijk}(b)$, making its evaluation extremely fast.
-The algorithm for computing $J_{ijk}(b)$ is implemented in the development version
-of \starry and will be discussed further in upcoming work.
+We implemented the algorithm for computing $J_{ijk}(b)$ in the development version
+of \starry
+\footnote{\url{https://github.com/rodluger/starry/tree/linear}}
+and will be discussed in detail in upcoming work.
+
+\begin{figure}[ht!]
+    \begin{centering}
+    \includegraphics[width=\linewidth]{figures/starry_model.pdf}
+    \caption{\label{fig:starry_model}
+             Normalized surface reflectance versus time for the maximum
+             likelihood \starry model in each of the four orbits of \tess
+             in Sectors 1 and 2.
+             \codelink{earthshine_S1_S2}
+             }
+    \end{centering}
+\end{figure}
+
+As with the systematics model (\S\ref{sec:systematics}), the model
+for the astrophysical signal is \emph{linear}: the total signal $\mathbf{a}$ 
+is a linear operation on the vector of spherical harmonic coefficients 
+that describes the body's surface:
+%
+\begin{align}
+    \mathbf{a} = \mathbf{A} \mathbf{y}
+\end{align}
+%
+where $\mathbf{A}$ is the design matrix \citep[equal to the quantity 
+$\mathbf{s}^\top\mathcal{A}\mathbf{R}'\mathbf{R}$ in][]{Luger2019}
+and $\mathbf{y}$ is the vector of spherical harmonic coefficients. As we will
+see next, the linearity of the problem makes it easily invertible.
 
 \subsection{Likelihood Function \& Inference}
+
+Our full model for the flux in the $n^\mathrm{th}$ postage stamp is thus
+%
+\begin{align}
+\mathbf{m}_n = (\mathbf{r}^{-2}) \circ (\mathbf{B} \mathbf{w}_n) \circ (\mathbf{A} \mathbf{y})
+\end{align}
+%
+where $\circ$ denotes the element-wise product of two vectors.
 
 \todo{(priors, regularization, equation for the likelihood)}
 
