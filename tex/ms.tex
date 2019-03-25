@@ -215,10 +215,10 @@ data, with minimal risk of fitting out astrophysical signals.
 We therefore construct a design matrix $\mathbf{B}$ out of the PLD basis. To
 increase the flexibility of the systematics model, we append to $\mathbf{B}$ 5 orthogonal
 polynomials in time for each of the two orbits of \tess in each sector.
-The systematics model $\mathbf{b}$ for the $n^\mathrm{th}$ signal is thus
+The systematics model $\mathbf{p}$ for the $n^\mathrm{th}$ signal is thus
 %
 \begin{align}
-\mathbf{b}_n = \mathbf{B} \mathbf{w}_n
+\mathbf{p}_n = \mathbf{B} \mathbf{w}_n
 \end{align}
 %
 where $\mathbf{w}_n$ are the weights of each regressor.
@@ -362,20 +362,21 @@ and will be discussed in detail in upcoming work.
 \end{figure}
 
 As with the systematics model (\S\ref{sec:systematics}), the model
-for the astrophysical signal is \emph{linear}: the total signal $\mathbf{a}$ 
+for the astrophysical signal is \emph{linear}: the signal $\mathbf{s}$ 
 is a linear operation on the vector of spherical harmonic coefficients 
 that describes the body's surface:
 %
 \begin{align}
-    \mathbf{a} = \mathbf{A} \mathbf{y}
+    \mathbf{s} = \mathbf{A} \mathbf{y}
 \end{align}
 %
-where $\mathbf{A}$ is the design matrix \citep[equal to the quantity 
-$\mathbf{s}^\top\mathcal{A}\mathbf{R}'\mathbf{R}$ in][]{Luger2019}
-and $\mathbf{y}$ is the vector of spherical harmonic coefficients. 
+where $\mathbf{A}$ is the design matrix and $\mathbf{y}$ is the vector of spherical harmonic coefficients. 
 Note that in \cite{Luger2019}, $\mathbf{y}$ describes the emissivity of the surface,
 but here we will use it to represent the \emph{albedo} of the planet.
-As we will see below, the linearity of the problem makes it easily invertible.
+We choose a maximum spherical harmonics degree $l_{max} = 15$ for our fits,
+noting that increasing $l_{max}$ above this value does not significantly
+improve the quality of our fits. At the equator, $l = 15$ corresponds to
+a resolution on the order of $180^\circ/15 = 12^\circ$.
 
 Finally, for reference, in Figure~\ref{fig:starry_model} we plot the
 \starry model for our maximum likelihood fit (\S\ref{sec:results}). The
@@ -386,8 +387,8 @@ vantage point of \tess as Sol d transitions from a thin crescent to full phase.
 \label{sec:model}
 
 Our full model for each light curve is simply the product of the 
-systematics model $\mathbf{b}_n$ (different for each target) and
-the \starry model $\mathbf{a}$ (shared by all targets). Since we happen
+systematics model $\mathbf{p}_n$ (different for each target) and
+the \starry model $\mathbf{s}$ (shared by all targets). Since we happen
 to know the exact distance $\mathbf{r}$ between \tess and Sol d at all times
 (\S\ref{sec:orbit}), we also include the inverse square of $\mathbf{r}$ 
 as a multiplicative term. The model for the flux timeseries
@@ -448,12 +449,33 @@ at this stage has minimal impact on our results.
 
 In general, we find that the iterative scheme converges within about 50 
 iterations. However, since it is strongly regularized, the model significantly
-underfits the data. In the next step, we remove our L2 prior on the spherical
+underfits the data. In the second step, we remove our L2 prior on the spherical
 harmonic coefficients and instead regularize the actual surface albedo, which
 we compute on a uniform spherical grid with 50,000 points. We enforce a 
 uniform prior in the range $[0, 1]$, with an exponential drop on either 
-side. This constraint breaks the linearity of the problem, so we must
-now use a non-linear optimizer.
+side. We additionally impose a constraint on the power spectrum of the
+inferred map, \todo{bla bla}.
+
+
+Our full negative log likelihood function in this step is therefore
+%
+\begin{align}
+    -\log\mathcal{L} \, = \, 
+        &\frac{1}{2}(\mathbf{f} - \mathbf{m})^\top \Sigma^{-1} (\mathbf{f} - \mathbf{m}) \, + \nonumber \\
+        &\frac{1}{2}\mathbf{w}^\top \Lambda_w^{-1} \mathbf{w} \, + \nonumber \\
+        &\frac{1}{2}(\mathbf{a_-} + 1 - \mathbf{a_+})^\top \Lambda_a^{-1} (\mathbf{a_-} + 1 - \mathbf{a_+}) \, + \nonumber \\
+        &\frac{1}{2}(\rho - l^{-\gamma})^\top \Lambda_\rho^{-1} (\rho - l^{-\gamma}) \, + \nonumber \\
+        &\frac{1}{2} \frac{\gamma^2}{\sigma_\gamma^2}
+        \quad,
+\end{align}
+%
+where \todo{explain all this stuff.}
+
+All of these constraint break the linearity of the problem, so we must
+now use a non-linear optimizer. We use the 
+\textsf{AdamOptimizer} method in the \tf package \citep{Abadi2015}
+to maximize the negative log likelihood.
+
 
 
 
@@ -549,7 +571,8 @@ for useful conversations. Crucial parts of this work were carried out at the
 TESS Data Workshop, hosted by Space Telescope Science Institute, and the 
 Building Early Science with TESS Workshop, hosted by the University of Chicago.}
 \facility{TESS}
-\software{Astropy, Matplotlib, Numpy, \starry \citep{Luger2019}, TensorFlow, \spiceypy \citep{Annex2019}}
+\software{Astropy, Matplotlib, Numpy, \starry \citep{Luger2019}, 
+TensorFlow \citep{Abadi2015}, \spiceypy \citep{Annex2019}}
 % Bibliography
 \pagebreak
 \bibliography{bib}
