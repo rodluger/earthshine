@@ -108,8 +108,13 @@ prospects for phase-curve mapping of terrestrial exoplanets.
 
 \todo{TJD = BJD - 2457000}
 
+\todo{75 light curves in S1, 20 in S2}
+\todo{912,605 data points in total}
+
 \todo{(outlier rejection method, trim down to x number of high-SNR lightcurves 
 for computational tractability)}
+
+We subtract the estimated background from each signal.
 
 Figure showing lightcurves for various targets: Figure~\ref{fig:data}.
 
@@ -132,6 +137,7 @@ Figure showing lightcurves for various targets: Figure~\ref{fig:data}.
 \label{sec:methods}
 
 \subsection{Orbital Modeling}
+\label{sec:orbit}
 
 We downloaded 
 \footnote{\url{https://archive.stsci.edu/missions/tess/models/}}
@@ -207,7 +213,7 @@ systematics. This now serves as a ``clean'' basis one can then use to fit the
 data, with minimal risk of fitting out astrophysical signals.
 
 We therefore construct a design matrix $\mathbf{B}$ out of the PLD basis. To
-increase the flexibility of the systematics model, we append to $\mathrm{B}$ 5 orthogonal
+increase the flexibility of the systematics model, we append to $\mathbf{B}$ 5 orthogonal
 polynomials in time for each of the two orbits of \tess in each sector.
 The systematics model $\mathbf{b}$ for the $n^\mathrm{th}$ signal is thus
 %
@@ -219,9 +225,9 @@ where $\mathbf{w}_n$ are the weights of each regressor.
 Since we solve for different weights for each of the 75 light curves in Sector 1
 and 20 light curves in Sector 2, our systematics model has
 $75 \times (75 + 2 \times 5) + 20 \times (20 + 2 \times 5) = 6,975$ free parameters.
-Since the total number of data points is $912,605$, overfitting is not particularly
-concerning, but we nevertheless impose an L2 prior on the weights with
-standard deviation $\sigma_B = 0.1$.
+The total number of data points is $912,605$, so overfitting is not particularly
+concerning; nevertheless, we impose an L2 prior on the weights with
+standard deviation $\sigma_B = 0.1$ (see \S\ref{sec:model}).
 
 \subsection{Reflected-Light Mapping with \starry}
 \label{sec:starry}
@@ -366,8 +372,10 @@ that describes the body's surface:
 %
 where $\mathbf{A}$ is the design matrix \citep[equal to the quantity 
 $\mathbf{s}^\top\mathcal{A}\mathbf{R}'\mathbf{R}$ in][]{Luger2019}
-and $\mathbf{y}$ is the vector of spherical harmonic coefficients. As we will
-see below, the linearity of the problem makes it easily invertible.
+and $\mathbf{y}$ is the vector of spherical harmonic coefficients. 
+Note that in \cite{Luger2019}, $\mathbf{y}$ describes the emissivity of the surface,
+but here we will use it to represent the \emph{albedo} of the planet.
+As we will see below, the linearity of the problem makes it easily invertible.
 
 Finally, for reference, in Figure~\ref{fig:starry_model} we plot the
 \starry model for our maximum likelihood fit (\S\ref{sec:results}). The
@@ -375,16 +383,79 @@ sharp rise at the beginning of each orbit in Sector 1 is due to the changing
 vantage point of \tess as Sol d transitions from a thin crescent to full phase.
 
 \subsection{Full Model and Likelihood Function}
+\label{sec:model}
 
-Our full model for the flux in the $n^\mathrm{th}$ postage stamp is
+Our full model for each light curve is simply the product of the 
+systematics model $\mathbf{b}_n$ (different for each target) and
+the \starry model $\mathbf{a}$ (shared by all targets). Since we happen
+to know the exact distance $\mathbf{r}$ between \tess and Sol d at all times
+(\S\ref{sec:orbit}), we also include the inverse square of $\mathbf{r}$ 
+as a multiplicative term. The model for the flux timeseries
+in the $n^\mathrm{th}$ postage stamp is therefore
 %
 \begin{align}
-\mathbf{m}_n = (\mathbf{r}^{-2}) \circ (\mathbf{B} \mathbf{w}_n) \circ (\mathbf{A} \mathbf{y})
+    \label{eq:model}
+    \mathbf{m}_n = (\mathbf{r}^{-2}) \circ (\mathbf{B} \mathbf{w}_n) \circ (\mathbf{A} \mathbf{y})
 \end{align}
 %
 where $\circ$ denotes the element-wise product of two vectors.
 
-\todo{(priors, regularization, equation for the likelihood)}
+We solve Equation~(\ref{eq:model}) for the weights $\mathbf{w}_n$ and $\mathbf{y}$
+by maximizing the negative log likelihood function in two separate steps. In the
+first step, we take advantage of the linearity of the problem to perform a fast,
+semi-analytical optimization to obtain a starting guess for the weights. In the
+second step, we apply additional constraints to prevent overfitting and ensure
+an albedo in the range $[0, 1]$ everywhere on the surface.
+
+In the first step, we initialize the \starry model to unity and iteratively
+solve for $\mathbf{w}_n$ and $\mathbf{y}$ by solving the L2-regularized
+least squares problem \citep[see, e.g., \S2.1 in][]{Luger2018a}.
+We assume zero-mean Gaussian priors for the weights:
+%
+\begin{equation}
+    \begin{aligned}
+        \mathbf{w}_n \sim \mathcal{N}(0, \sigma_w^2)
+    \end{aligned}
+    \qquad\qquad\qquad\qquad
+    \begin{aligned}
+        \mathbf{y} \sim \mathcal{N}(0, \sigma_y(l)^2)
+    \end{aligned}\, ,
+\end{equation}
+%
+with $\sigma_w = 0.1$ and 
+%
+\begin{align}
+    \sigma_y(l) &=
+    \begin{dcases}
+        1.75\times 10^{-5} \, l^\frac{3}{2} & 
+            \quad\quad\quad\quad\quad\quad\quad\quad\quad\quad 
+            l < 2
+        \\
+        1.40\times 10^{-4} \, l^{-\frac{3}{2}} & 
+            \quad\quad\quad\quad\quad\quad\quad\quad\quad\quad 
+            l \geq 2
+    \end{dcases}
+    \, ,
+\end{align}
+%
+where $l$ is the spherical harmonic degree. The latter prior was chosen
+by trial-and-error and was adjusted to keep the albedo positive
+everywhere on the surface. Note, importantly, that we do
+not fit for the coefficient of the constant $Y_{0,0}$ spherical harmonic,
+but instead fix it to unity. Since the solutions obtained in this step are merely
+used as a starting point for the second step (see below), the choice of prior 
+at this stage has minimal impact on our results.
+
+In general, we find that the iterative scheme converges within about 50 
+iterations. However, since it is strongly regularized, the model significantly
+underfits the data. In the next step, we remove our L2 prior on the spherical
+harmonic coefficients and instead regularize the actual surface albedo, which
+we compute on a uniform spherical grid with 50,000 points. We enforce a 
+uniform prior in the range $[0, 1]$, with an exponential drop on either 
+side. This constraint breaks the linearity of the problem, so we must
+now use a non-linear optimizer.
+
+
 
 \todo{(details of TensorFlow optimization)}
 
@@ -414,7 +485,8 @@ where $\circ$ denotes the element-wise product of two vectors.
              derived from current state-of-the-art models of the surface geography 
              of Sol d.
              \emph{Bottom:} Actual corrected surface reflectance in the red band of the
-             \emph{VIIRS} imager, averaged over the same date range and weighted
+             \emph{VIIRS} imager, averaged over the same date range, band limited
+             to $l_\mathrm{max} = 15$, and weighted
              by the same visibility function. This bandpass covers only about one
              quarter of the \tess bandpass, so deviations between the two images
              are to be expected.
