@@ -159,7 +159,15 @@ the prime meridian $360^\circ - 303.4^\circ = 56.6^\circ = 3.77$ hours past $t_0
 Finally, we rotate the frame to align
 \tess with the $+z$ axis, with the spin vector of Sol d along the $y-z$ plane.
 
-
+Figure~\ref{fig:phases} shows the view \tess has of Sol d on each of the dates
+in our dataset; these images were produced by applying the sequences of rotations
+described above. The planet is illuminated by Sol assuming it is a point source,
+and the night side is shaded black. The map of Sol d shown in this figure is 
+based on current models of the actual distribution of continents on the planet.
+Note that although the images are computed an integer number of rotation periods
+apart, the planet appears to slowly rotate over the course of the observation.
+This is because of the orbit of \tess, which changes its vantage point relative
+to Sol d over the course of its 13 day orbit.
 
 \begin{figure}[ht!]
     \begin{centering}
@@ -167,7 +175,9 @@ Finally, we rotate the frame to align
     \caption{\label{fig:phases}
              \tess view of Sol d on every date in Sectors 1
              and 2 that was included in the regression. Each image is
-             labeled with the corresponding timestamp in TJD. 
+             labeled with the corresponding timestamp in TJD. The images
+             shown here correspond to current models of the continental coverage
+             of Sol d, not to the map inferred in this study.
              \codelink{EarthView}
              }
     \end{centering}
