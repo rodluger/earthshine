@@ -367,11 +367,16 @@ that describes the body's surface:
 where $\mathbf{A}$ is the design matrix \citep[equal to the quantity 
 $\mathbf{s}^\top\mathcal{A}\mathbf{R}'\mathbf{R}$ in][]{Luger2019}
 and $\mathbf{y}$ is the vector of spherical harmonic coefficients. As we will
-see next, the linearity of the problem makes it easily invertible.
+see below, the linearity of the problem makes it easily invertible.
 
-\subsection{Likelihood Function \& Inference}
+Finally, for reference, in Figure~\ref{fig:starry_model} we plot the
+\starry model for our maximum likelihood fit (\S\ref{sec:results}). The
+sharp rise at the beginning of each orbit in Sector 1 is due to the changing
+vantage point of \tess as Sol d transitions from a thin crescent to full phase.
 
-Our full model for the flux in the $n^\mathrm{th}$ postage stamp is thus
+\subsection{Full Model and Likelihood Function}
+
+Our full model for the flux in the $n^\mathrm{th}$ postage stamp is
 %
 \begin{align}
 \mathbf{m}_n = (\mathbf{r}^{-2}) \circ (\mathbf{B} \mathbf{w}_n) \circ (\mathbf{A} \mathbf{y})
@@ -398,8 +403,6 @@ where $\circ$ denotes the element-wise product of two vectors.
     \end{centering}
 \end{figure}
 
-\todo{(present results with \& without time variability)}
-
 \begin{figure}[t!]
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/map.pdf}
@@ -419,6 +422,11 @@ where $\circ$ denotes the element-wise product of two vectors.
              }
     \end{centering}
 \end{figure}
+
+Figure~\ref{fig:model} shows the median model.  \todo{More on this here.}
+
+The top panel of Figure~\ref{fig:map} shows the maximum likelihood map of Sol d.
+\todo{More on this here.}
 
 The bottom panel of Figure~\ref{fig:map} shows the corrected surface
 reflectance obtained from the
@@ -442,7 +450,8 @@ and therefore covers only about one-fourth of the bandpass of \tess
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/map_labels.pdf}
     \caption{\label{fig:map_labels}
-             Labeled map of Sol d.
+             Map of Sol d with the major features indicated with suggested
+             names.
              \codelink{earthshine_S1_S2}
              }
     \end{centering}
@@ -450,7 +459,7 @@ and therefore covers only about one-fourth of the bandpass of \tess
 
 \todo{(comparison of inferred features to ``model'' (Earth))}
 
-No zonal cloud bands: prior.
+\todo{No zonal cloud bands: prior.}
 
 \section{Conclusion}
 \label{sec:conclusion}
