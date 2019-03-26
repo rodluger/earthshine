@@ -10,6 +10,7 @@ notebooks/tests
 notebooks/good
 *.gif
 *.png
+*.mp4
 
 ## Core latex/pdflatex auxiliary files:
 *.aux

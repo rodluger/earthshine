@@ -20,7 +20,7 @@ path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/data/"
 __all__ = ["animate", "render"]
 
 
-def render(map, time, time0, phase0=0.0, res=75):
+def render(map, time, time0, phase0=0.0, res=75, period=0.9972696):
     """
 
     """
@@ -61,7 +61,7 @@ def render(map, time, time0, phase0=0.0, res=75):
 
     # Rotate the earth to the current phase in the original frame
     map.axis = [0, 1, 0]
-    phase = (360. * (time - time0)) % 360. + phase0
+    phase = (360. * (time - time0) / period) % 360. + phase0
     R = starry.RAxisAngle([0, 1, 0], phase)
     map.rotate(phase)
 
@@ -97,7 +97,7 @@ def render(map, time, time0, phase0=0.0, res=75):
 
 
 # Visualize the orbit
-def animate(map, time, phase0=0.0, res=75, interval=75):
+def animate(map, time, phase0=0.0, res=75, interval=75, period=0.9972696):
     """
 
     """
@@ -204,7 +204,7 @@ def animate(map, time, phase0=0.0, res=75, interval=75):
         # Rotate the earth to the current phase in the original frame
         map[:, :, :] = y
         map.axis = [0, 1, 0]
-        phase = (360. * (time[i] - time[0])) % 360. + phase0
+        phase = (360. * (time[i] - time[0]) / period) % 360. + phase0
         R = starry.RAxisAngle([0, 1, 0], phase)
         map.rotate(phase)
 

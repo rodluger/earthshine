@@ -18,7 +18,8 @@ setup(name='earthshine',
           'numpy>=1.8',
           'scipy',
           'matplotlib',
-          'starry==1.0.0.dev0'
+          'starry==1.0.0.dev0',
+          'healpy'
       ],
       dependency_links=[
         'https://github.com/rodluger/starry/tarball/linear#egg=starry-1.0.0.dev0'

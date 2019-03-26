@@ -153,7 +153,7 @@ do not apply any light travel correction, as the expected delay is on the order
 of a few seconds.
 
 At any given cadence, we rotate Sol d about its spin axis to the correct phase,
-assuming a rotational period of $1.00$ day. We determine the initial rotation
+assuming a rotational period of $0.9972696$ day. We determine the initial rotation
 phase of Sol d by computing the Sol d Rotation Angle (ERA), given by \citep{Urban2013}
 %
 \begin{align}
@@ -166,6 +166,11 @@ the prime meridian $360^\circ - 303.4^\circ = 56.6^\circ = 3.77$ hours past $t_0
 %
 Finally, we rotate the frame to align
 \tess with the $+z$ axis, with the spin vector of Sol d along the $y-z$ plane.
+We verified our rotations by comparing our results on several days to the
+ephemerides provided by the JPL HORIZONS Web interface
+\footnote{See \url{https://ssd.jpl.nasa.gov/horizons.cgi} and 
+\href{https://github.com/rodluger/earthshine/blob/master/notebooks/SanitCheck.ipynb}{this
+Jupyter notebook.}}.
 
 \begin{figure}[ht!]
     \begin{centering}
@@ -375,8 +380,8 @@ Note that in \cite{Luger2019}, $\mathbf{y}$ describes the emissivity of the surf
 but here we will use it to represent the \emph{albedo} of the planet.
 We choose a maximum spherical harmonics degree $l_{max} = 15$ for our fits,
 noting that increasing $l_{max}$ above this value does not significantly
-improve the quality of our fits. At the equator, $l = 15$ corresponds to
-a resolution on the order of $180^\circ/15 = 12^\circ$.
+improve the quality of our fits. Note that $l = 15$ corresponds to
+a maximum surface resolution on the order of $180^\circ/15 = 12^\circ$.
 
 Finally, for reference, in Figure~\ref{fig:starry_model} we plot the
 \starry model for our maximum likelihood fit (\S\ref{sec:results}). The
@@ -491,7 +496,7 @@ For simplicity, all our prior covariances are diagonal and
 homoscedastic with variances equal to $10^{-2}$ for $\mathbf{w}$, and
 $10^{-8}$ for $\mathbf{a}$, $10^{-1}$ for $\mathbf{\rho}$.
 
-Unfortunately, all of the constraints outlined above break the linearity 
+Unfortunately, the constraints outlined above break the linearity 
 of the problem, and we must turn to a non-linear optimizer. We use the 
 \textsf{AdamOptimizer} method in the \tf package \citep{Abadi2015}
 to maximize Equation~(\ref{eq:nll}). Starting with the values of the
@@ -571,8 +576,11 @@ and therefore covers only about one-fourth of the bandpass of \tess
 \section{Discussion}
 \label{sec:discussion}
 
+We expect the brightest features to be ice, clouds, and forest canopy. Deserts
+to a lesser extent. Bare soil / rock and oceans are the darkest \citep{Jedlovec2009}.
+
 Residuals in Figure~\ref{fig:model} display significant correlated
-structure. Talk about their power spectrum.
+structure. Talk about their power spectrum. Talk about how S2 is worse fit.
 
 \begin{figure}[t!]
     \begin{centering}

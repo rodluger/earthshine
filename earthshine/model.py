@@ -3,6 +3,7 @@ import glob
 from tqdm import tqdm
 import numpy as np
 import os
+import healpy as hp
 import starry
 assert starry.__version__ == "1.0.0.dev0", \
     "This code requires the `starry` version 1.0.0.dev0."
@@ -12,7 +13,54 @@ REARTH = 1.0 / 6371.0
 TJD0 = 2457000
 path = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "/data/"
 
-__all__ = ["design_matrix", "tess_vector", "visibility"]
+__all__ = ["design_matrix", "tess_vector", "visibility", "smooth"]
+
+
+def alm_to_ylm(alm, lmax):
+    # Convert the alms to real coefficients
+    ylm = np.zeros(lmax ** 2 + 2 * lmax + 1, dtype='float')
+    i = 0
+    for l in range(0, lmax + 1):
+        for m in range(-l, l + 1):
+            j = hp.sphtfunc.Alm.getidx(lmax, l, np.abs(m))
+            if m < 0:
+                ylm[i] = np.sqrt(2) * (-1) ** m * alm[j].imag
+            elif m == 0:
+                ylm[i] = alm[j].real
+            else:
+                ylm[i] = np.sqrt(2) * (-1) ** m * alm[j].real
+            i += 1
+    return ylm
+
+
+def ylm_to_alm(ylm, lmax):
+    # Convert the ylms to complex coefficients
+    alm = np.zeros(lmax ** 2 + 2 * lmax + 1, dtype='complex128') * np.nan
+    i = 0
+    for l in range(0, lmax + 1):
+        for m in range(-l, l + 1):
+            j = hp.sphtfunc.Alm.getidx(lmax, l, np.abs(m))
+            if np.isnan(alm[j]):
+                alm[j] = 0.0
+            if m < 0:
+                alm[j] += 1j * (ylm[i] / (np.sqrt(2) * (-1) ** m))
+            elif m == 0:
+                alm[j] += ylm[i]
+            else:
+                alm[j] += ylm[i] / (np.sqrt(2) * (-1) ** m)
+            i += 1
+    alm = alm[:np.argmax(np.isnan(alm))]
+    return alm
+
+
+def smooth(map, sigma):
+    """Smooth a map in place with a Gaussian kernel."""
+    lmax = map.ydeg
+    alm = ylm_to_alm(map.y, lmax)
+    hp.sphtfunc.smoothalm(alm, sigma=sigma, inplace=True)
+    ylm = alm_to_ylm(alm, lmax)
+    map[:, :] = ylm
+    return
 
 
 def tess_earth_vector(time):
@@ -47,7 +95,7 @@ def tess_earth_vector(time):
     return tess
 
 
-def design_matrix(time, ydeg=10, nt=2, period=1.0, phase0=0.0, 
+def design_matrix(time, ydeg=10, nt=2, period=0.9972696, phase0=0.0, 
                   fit_linear_term=False):
     """
     Compute and return the design matrix.
@@ -115,7 +163,7 @@ def design_matrix(time, ydeg=10, nt=2, period=1.0, phase0=0.0,
         # rotates the earth into phase and then rotates
         # the earth into view for tess
         tx, ty, tz = tess_hat[:, i]
-        phase = (2 * np.pi * (time[i] - time[0])) % (2 * np.pi) + phase0 * np.pi / 180
+        phase = (2 * np.pi * (time[i] - time[0]) / period) % (2 * np.pi) + phase0 * np.pi / 180
         ty2 = ty ** 2
         tx2 = tx ** 2
         cosp = np.cos(phase)
@@ -142,7 +190,7 @@ def design_matrix(time, ydeg=10, nt=2, period=1.0, phase0=0.0,
         return X, X00
 
 
-def visibility(time, phase0=0.0, res=100):
+def visibility(time, phase0=0.0, res=100, period=0.9972696):
     """
 
     """
@@ -220,7 +268,7 @@ def visibility(time, phase0=0.0, res=100):
 
     for i in tqdm(range(len(time))):
         # Rotate the earth to the current phase in the original frame
-        phase = (360. * (time[i] - time[0])) % 360. + phase0
+        phase = (360. * (time[i] - time[0]) / period) % 360. + phase0
         R = starry.RAxisAngle([0, 1, 0], phase)
         grid_i = np.dot(R, grid)
 
