@@ -414,6 +414,7 @@ least squares problem \citep[see, e.g., \S2.1 in][]{Luger2018a}.
 We assume zero-mean Gaussian priors for the weights:
 %
 \begin{equation}
+    \label{eq:wprior}
     \begin{aligned}
         \mathbf{w}_n \sim \mathcal{N}(0, \sigma_w^2)
     \end{aligned}
@@ -452,29 +453,47 @@ iterations. However, since it is strongly regularized, the model significantly
 underfits the data. In the second step, we remove our L2 prior on the spherical
 harmonic coefficients and instead regularize the actual surface albedo, which
 we compute on a uniform spherical grid with 50,000 points. We enforce a 
-uniform prior in the range $[0, 1]$, with an exponential drop on either 
+uniform prior in the range $[0, 1]$, with a small amount of Gaussian smoothing on either 
 side. We additionally impose a constraint on the power spectrum of the
-inferred map, \todo{bla bla}.
-
-
+inferred map, requiring that it be drawn from a distribution whose mean
+is a decaying power law in the spherical harmonic degree $l$ in order
+to suppress ringing and spurious high order features.
 Our full negative log likelihood function in this step is therefore
 %
 \begin{align}
+    \label{eq:nll}
     -\log\mathcal{L} \, = \, 
-        &\frac{1}{2}(\mathbf{f} - \mathbf{m})^\top \Sigma^{-1} (\mathbf{f} - \mathbf{m}) \, + \nonumber \\
-        &\frac{1}{2}\mathbf{w}^\top \Lambda_w^{-1} \mathbf{w} \, + \nonumber \\
-        &\frac{1}{2}(\mathbf{a_-} + 1 - \mathbf{a_+})^\top \Lambda_a^{-1} (\mathbf{a_-} + 1 - \mathbf{a_+}) \, + \nonumber \\
-        &\frac{1}{2}(\rho - l^{-\gamma})^\top \Lambda_\rho^{-1} (\rho - l^{-\gamma}) \, + \nonumber \\
-        &\frac{1}{2} \frac{\gamma^2}{\sigma_\gamma^2}
+        &\frac{1}{2}(\mathbf{f} - \mathbf{m})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{f} - \mathbf{m}) \, + \nonumber \\
+        &\frac{1}{2}\mathbf{w}^\top \boldsymbol{\Lambda}_w^{-1} \mathbf{w} \, + \nonumber \\
+        &\frac{1}{2}(\mathbf{a_-} + 1 - \mathbf{a_+})^\top \boldsymbol{\Lambda}_a^{-1} (\mathbf{a_-} + 1 - \mathbf{a_+}) \, + \nonumber \\
+        &\frac{1}{2}(\boldsymbol{\rho} - \boldsymbol{l}^{-\gamma})^\top \boldsymbol{\Lambda}_\rho^{-1} (\boldsymbol{\rho} - \boldsymbol{l}^{-\gamma}) \, + \nonumber \\
+        &\frac{1}{2} \frac{(\gamma - \gamma_0)^2}{\sigma_\gamma^2}
         \quad,
 \end{align}
 %
-where \todo{explain all this stuff.}
+where $\mathbf{f}$ is the measured flux across all targets,
+$\mathbf{m}$ is the full model (Equation~\ref{eq:model}),
+$\boldsymbol{\Sigma}$ is the (diagonal) data covariance, 
+$\mathbf{w}$ are the systematics model weights for all targets,
+$\boldsymbol{\Lambda}_w$ is the prior covariance of the weights
+(Equation~\ref{eq:wprior}), $\mathbf{a_-}$ and $\mathbf{a_+}$ are
+vectors containing the values of the albedo that are below zero and above one, 
+respectively, $\boldsymbol{\Lambda}_a$ is the covariance of the Gaussian
+used to smooth the edges of the top-hat prior on $\mathbf{a}$,
+$\boldsymbol{\rho}$ is the power spectrum of the inferred spherical harmonic map
+(equal to the sum of the squares of the coefficients at each degree $\boldsymbol{l}$),
+$\gamma$ is the power law index of the power spectrum prior, $\boldsymbol{\Lambda}_\rho$ is the
+covariance of that prior, $\gamma_0 = 1.5$ is the mean of the prior on $\gamma$
+and $\sigma_\gamma^2 = 10^{-2}$ is the corresponding variance.
+%
+For simplicity, all our prior covariances are diagonal and
+homoscedastic with variances equal to $10^{-2}$ for $\mathbf{w}$, and
+$10^{-8}$ for $\mathbf{a}$, $10^{-1}$ for $\mathbf{\rho}$.
 
-All of these constraint break the linearity of the problem, so we must
-now use a non-linear optimizer. We use the 
+Unfortunately, all of the constraints outlined above break the linearity 
+of the problem, and we must turn to a non-linear optimizer. We use the 
 \textsf{AdamOptimizer} method in the \tf package \citep{Abadi2015}
-to maximize the negative log likelihood.
+to maximize Equation~(\ref{eq:nll}).
 
 
 
@@ -522,7 +541,8 @@ to maximize the negative log likelihood.
     \includegraphics[width=\linewidth]{figures/map_temporal.pdf}
     \caption{\label{fig:map_temporal}
              Compare to Figure~\ref{fig:model}. An animated version
-             of this figure is available \href{https://github.com/rodluger/earthshine/blob/master/tex/figures/map_temporal.mp4}{here}.
+             of this figure is available 
+             \href{https://github.com/rodluger/earthshine/blob/master/tex/figures/map_temporal.mp4}{here}.
              \codelink{earthshine_S1_S2}
              }
     \end{centering}
