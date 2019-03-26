@@ -104,17 +104,22 @@ prospects for phase-curve mapping of terrestrial exoplanets.
 \section{Data}
 \label{sec:data}
 
-\todo{(background extraction from 2-minute cadence targets)}
-
+The \TESS pipeline produces processed lightcurves for all short-cadence targets. 
+Part of this processing is the determination of the localized background flux within each postage stamp, which is provided as an ancillary time series. 
 \todo{TJD = BJD - 2457000}
+We use these background flux measurements as our primary data source in this work. 
 
-\todo{75 light curves in S1, 20 in S2}
-\todo{912,605 data points in total}
+For each of the two sectors considered (Sector 1 and Sector 2), we downloaded a randomized subsample of 1000 short-cadence lightcurve files corresponding to postage stamps located across all four \TESS cameras and extracted the background flux time series from each. 
+Not all postage stamps are equally informative, since the desired signal from Sol d is inhomogenously spread across the \TESS detectors and manifests differently in different regions (see Section \ref{sec:systematics}). 
+We down-selected our pool of 1000 targets to 75 maximally useful background lightcurves from Sector 1 and 20 from Sector 2. 
+This down-selection was done with several criteria in mind: each lightcurve should contain a significant signal from Sol d; they should be representative of the general background flux modulation seen across the \TESS cameras, rather than containing any truly localized signals from astrophysical background sources; and the sample as a whole should contain the full range of typical behaviors of background across the entire \TESS field of view. 
+To accomplish this, we... \todo{(decide whether it's outlier rejection only or full-on categorization)}
 
-\todo{(outlier rejection method, trim down to x number of high-SNR lightcurves 
-for computational tractability)}
+\todo{(masking out epochs without Sol d shine, subtraction of baseline background flux)}
 
-We subtract the estimated background from each signal.
+The final data set to be used consists of 75 Sector 1 background lightcurves and 20 Sector 2 background lightcurves corresponding to the epochs at which Sol d signal was clearly registered by \TESS. 
+This is 912,605 data points in total.
+
 
 Figure showing lightcurves for various targets: Figure~\ref{fig:data}.
 
@@ -208,7 +213,7 @@ signal of Sol d on the \tess detector is beyond the scope of this work. Instead,
 we treat this as a de-trending problem, where the signal we wish to fit is
 shared by all postage stamps, but multiplied by a systematic signal that is
 different for each target. This problem is precisely what the technique of
-pixel-level decorelation \citep[PLD;][]{Deming2015, Luger2016, Luger2018a}
+pixel-level decorrelation \citep[PLD;][]{Deming2015, Luger2016, Luger2018a}
 seeks to address. In PLD, one computes the sum over all light curves at each
 point in time, and uses this quantity to normalize each of the individual
 light curves. Since (by assumption) each light curve is the product of the astrophysical
