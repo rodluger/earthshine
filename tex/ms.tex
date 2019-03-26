@@ -449,7 +449,8 @@ used as a starting point for the second step (see below), the choice of prior
 at this stage has minimal impact on our results.
 
 In general, we find that the iterative scheme converges within about 50 
-iterations. However, since it is strongly regularized, the model significantly
+iterations, taking about three minutes on a laptop computer. However, since it 
+is strongly regularized, the model significantly
 underfits the data. In the second step, we remove our L2 prior on the spherical
 harmonic coefficients and instead regularize the actual surface albedo, which
 we compute on a uniform spherical grid with 50,000 points. We enforce a 
@@ -493,12 +494,11 @@ $10^{-8}$ for $\mathbf{a}$, $10^{-1}$ for $\mathbf{\rho}$.
 Unfortunately, all of the constraints outlined above break the linearity 
 of the problem, and we must turn to a non-linear optimizer. We use the 
 \textsf{AdamOptimizer} method in the \tf package \citep{Abadi2015}
-to maximize Equation~(\ref{eq:nll}).
-
-
-
-
-\todo{(details of TensorFlow optimization)}
+to maximize Equation~(\ref{eq:nll}). Starting with the values of the
+weights obtained in the first step, we run the \textsf{AdamOptimizer}
+for 1000 iterations, well past convergence. Since \tf automatically
+computes and propagates gradient information, this step is similarly fast
+and also finishes in under three minutes on a standard computer.
 
 \section{Results}
 \label{sec:results}
@@ -515,7 +515,19 @@ to maximize Equation~(\ref{eq:nll}).
     \end{centering}
 \end{figure}
 
-\begin{figure}[t!]
+The top panel of Figure~\ref{fig:model} shows the median of the maximum likelihood model
+across all 95 targets (blue) overplotted on the median flux across
+the same targets (black). The median residuals are shown in the bottom panel; these have
+standard deviation of about one percent. While there is significant correlated
+structure in the residuals, their power spectrum displays a broad peak extending 
+between about 0.1 and 10 days, with a significant dip at exactly 1 day. This
+suggests our model is fitting the rotational variability of Sol d quite well, but
+additional temporal variations---most likely due to cloud movement---cause aperiodic
+changes to the reflectivity of the surface. We revisit this point in \S\ref{sec:discussion}.
+
+\todo{More on this here.}
+
+\begin{figure}[p!]
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/map.pdf}
     \caption{\label{fig:map}
@@ -536,20 +548,7 @@ to maximize Equation~(\ref{eq:nll}).
     \end{centering}
 \end{figure}
 
-\begin{figure}[t!]
-    \begin{centering}
-    \includegraphics[width=\linewidth]{figures/map_temporal.pdf}
-    \caption{\label{fig:map_temporal}
-             Compare to Figure~\ref{fig:model}. An animated version
-             of this figure is available 
-             \href{https://github.com/rodluger/earthshine/blob/master/tex/figures/map_temporal.mp4}{here}.
-             \codelink{earthshine_S1_S2}
-             }
-    \end{centering}
-\end{figure}
 
-
-Figure~\ref{fig:model} shows the median model.  \todo{More on this here.}
 
 The top panel of Figure~\ref{fig:map} shows the maximum likelihood map of Sol d.
 \todo{More on this here.}
@@ -571,6 +570,21 @@ and therefore covers only about one-fourth of the bandpass of \tess
 
 \section{Discussion}
 \label{sec:discussion}
+
+Residuals in Figure~\ref{fig:model} display significant correlated
+structure. Talk about their power spectrum.
+
+\begin{figure}[t!]
+    \begin{centering}
+    \includegraphics[width=\linewidth]{figures/map_temporal.pdf}
+    \caption{\label{fig:map_temporal}
+             Compare to Figure~\ref{fig:model}. An animated version
+             of this figure is available 
+             \href{https://github.com/rodluger/earthshine/blob/master/tex/figures/map_temporal.mp4}{here}.
+             \codelink{earthshine_S1_S2}
+             }
+    \end{centering}
+\end{figure}
 
 \begin{figure}[t!]
     \begin{centering}
