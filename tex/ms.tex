@@ -106,10 +106,10 @@ prospects for phase-curve mapping of terrestrial exoplanets.
 
 The \TESS pipeline produces processed lightcurves for all short-cadence targets. 
 Part of this processing is the determination of the localized background flux within each postage stamp, which is provided as an ancillary time series. 
-\todo{TJD = BJD - 2457000}
-We use these background flux measurements as our primary data source in this work. 
+As with all \TESS time series data products, the time is given in \TESS Julian Days (TJD), defined as BJD - 2457000, and the data are delivered in 27-day parcels corresponding to the varying pointing sectors of \TESS. 
+We use these background flux measurements from Sectors 1 and 2 as our primary data source in this work. 
 
-For each of the two sectors considered (Sector 1 and Sector 2), we downloaded a randomized subsample of 1000 short-cadence lightcurve files corresponding to postage stamps located across all four \TESS cameras and extracted the background flux time series from each. 
+For each of the two sectors considered, we downloaded a randomized subsample of 1000 short-cadence lightcurve files corresponding to postage stamps located across the full \TESS field of view and extracted the background flux time series from each. 
 Not all postage stamps are equally informative, since the desired signal from Sol d is inhomogenously spread across the \TESS detectors and manifests differently in different regions (see Section \ref{sec:systematics}). 
 We down-selected our pool of 1000 targets to 75 maximally useful background lightcurves from Sector 1 and 20 from Sector 2. 
 This down-selection was done with several criteria in mind: each lightcurve should contain a significant signal from Sol d; they should be representative of the general background flux modulation seen across the \TESS cameras, rather than containing any truly localized signals from astrophysical background sources; and the sample as a whole should contain the full range of typical behaviors of background across the entire \TESS field of view. 
@@ -118,10 +118,8 @@ To accomplish this, we... \todo{(decide whether it's outlier rejection only or f
 \todo{(masking out epochs without Sol d shine, subtraction of baseline background flux)}
 
 The final data set to be used consists of 75 Sector 1 background lightcurves and 20 Sector 2 background lightcurves corresponding to the epochs at which Sol d signal was clearly registered by \TESS. 
-This is 912,605 data points in total.
-
-
-Figure showing lightcurves for various targets: Figure~\ref{fig:data}.
+This is 912,605 data points in total. 
+A representative sample of these signals is shown in Figure~\ref{fig:data}.
 
 \begin{figure}[t!]
     \begin{centering}
