@@ -123,7 +123,7 @@ This is 912,605 data points in total.
 
 Figure showing lightcurves for various targets: Figure~\ref{fig:data}.
 
-\begin{figure}[ht!]
+\begin{figure}[t!]
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/data.pdf}
     \caption{\label{fig:data}
@@ -158,7 +158,8 @@ do not apply any light travel correction, as the expected delay is on the order
 of a few seconds.
 
 At any given cadence, we rotate Sol d about its spin axis to the correct phase,
-assuming a rotational period of $0.9972696$ day. We determine the initial rotation
+assuming a rotation period of $0.9972696$ day, the sidereal rotation period
+of the planet. We determine the initial rotation
 phase of Sol d by computing the Sol d Rotation Angle (ERA), given by \citep{Urban2013}
 %
 \begin{align}
@@ -172,12 +173,12 @@ the prime meridian $360^\circ - 303.4^\circ = 56.6^\circ = 3.77$ hours past $t_0
 Finally, we rotate the frame to align
 \tess with the $+z$ axis, with the spin vector of Sol d along the $y-z$ plane.
 We verified our rotations by comparing our results on several days to the
-ephemerides provided by the JPL HORIZONS Web interface
+ephemerides provided by the JPL HORIZONS Web interface%
 \footnote{See \url{https://ssd.jpl.nasa.gov/horizons.cgi} and 
 \href{https://github.com/rodluger/earthshine/blob/master/notebooks/SanitCheck.ipynb}{this
 Jupyter notebook.}}.
 
-\begin{figure}[ht!]
+\begin{figure}[t!]
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/phases.pdf}
     \caption{\label{fig:phases}
@@ -239,7 +240,7 @@ The total number of data points is $912,605$, so overfitting is not particularly
 concerning; nevertheless, we impose an L2 prior on the weights with
 standard deviation $\sigma_B = 0.1$ (see \S\ref{sec:model}).
 
-\subsection{Reflected-Light Mapping with \starry}
+\subsection{Reflected Light Mapping with \starry}
 \label{sec:starry}
 
 We model the astrophysical component of the signal---the rotational modulation
@@ -265,7 +266,7 @@ two modifications to the \starry algorithm: we must (1) weight all integrands
 by the illumination function on the dayside, and (2) modify the integration
 limits to truncate the integrals at the day/night terminator.
 
-\begin{figure}[ht!]
+\begin{figure}[t!]
     \begin{centering}
     \includegraphics[width=0.4\linewidth]{figures/geometry.pdf}
     \caption{\label{fig:geometry}
@@ -359,7 +360,7 @@ of \starry
 \footnote{\url{https://github.com/rodluger/starry/tree/linear}};
 the details will be discussed in more detail in upcoming work.
 
-\begin{figure}[ht!]
+\begin{figure}[t!]
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/starry_model.pdf}
     \caption{\label{fig:starry_model}
@@ -384,10 +385,11 @@ that describes the body's surface:
 where $\mathbf{A}$ is the design matrix and $\mathbf{y}$ is the vector of spherical harmonic coefficients. 
 Note that in \cite{Luger2019}, $\mathbf{y}$ describes the emissivity of the surface,
 but here we will use it to represent the \emph{albedo} of the planet.
-We choose a maximum spherical harmonic degree $l_{max} = 25$ for our fits,
-noting that increasing $l_{max}$ above this value does not significantly
-improve the quality of our fits. Note that $l = 25$ corresponds to
-a maximum surface resolution on the order of $180^\circ/25 \approx 7^\circ$.
+We choose a maximum spherical harmonic degree $l_{max} = 10$ for our fits,
+noting that increasing $l_{max}$ above this value 
+leads to a quick rise in the amount of ``ringing'' without substantially
+increasing the quality of our fits. Note that $l = 10$ corresponds to
+a maximum surface resolution on the order of $180^\circ/10 \approx 18^\circ$.
 
 Finally, for reference, in Figure~\ref{fig:starry_model} we plot the
 \starry model for our maximum likelihood fit (\S\ref{sec:results}). The
@@ -516,6 +518,40 @@ and also finishes in under five minutes on a standard computer.
 
 \begin{figure}[t!]
     \begin{centering}
+    \includegraphics[width=\linewidth]{figures/map_L2.pdf}
+    \caption{\label{fig:map_L2}
+             Maximum likelihood map of Sol d obtained during the first
+             stage of our optimization procedure, in which an iterative
+             analytic approach was used to solve the bilinear model, 
+             subject to very conservative regularization. Despite the low
+             resolution of this map, the bright features appear to track
+             land masses which for specificity we will refer to as (from left to right)
+             ``South America,'' ``Africa,'' and ``Asia.''
+             The two dark features are associated with the planet's
+             two purported oceans, which we call the ``Pacific'' and the ``Atlantic.''
+             }
+    \end{centering}
+\end{figure}
+
+Figure~\ref{fig:map_L2} shows the maximum likelihood map inferred
+during the first stage of our optimization procedure. Since the map
+coefficients were heavily regularized, the dynamic range of the albedo
+variations was less than 10\%; we scaled it to span the range [0, 1]
+for better visualization. Furthermore, although the resolution is on 
+the order of $12^\circ$, features typically span ${\sim}45^\circ$; this is
+also an artefact of our regularization. However, broad features are already
+visible in the map: three bright regions and two dark regions (one of which
+wraps around the antimeridian). Overplotted on the inferred map are
+coastal outlines corresponding to our current best understanding of 
+the geography of Sol d. One can see that the three bright regions roughly
+track, from left to right, continents we shall refer to as ``South America,''
+``Africa,'' and ``Asia,'' in keeping with the literature. The dark regions
+are associated with the two major purported oceans on the planet, the
+``Pacific'' (centered at longitude $\pm180^\circ$) and ``Atlantic''
+(centered at longitude $\-45^\circ$).
+
+\begin{figure}[t!]
+    \begin{centering}
     \includegraphics[width=\linewidth]{figures/model.pdf}
     \caption{\label{fig:model}
              \emph{Top:} Median flux across all postage stamps (black) and
@@ -526,12 +562,14 @@ and also finishes in under five minutes on a standard computer.
     \end{centering}
 \end{figure}
 
+
+As expected, we obtain a much better fit
 The top panel of Figure~\ref{fig:model} shows the median of the maximum likelihood model
 across all 95 targets (blue) overplotted on the median flux across
 the same targets (black). The median residuals are shown in the bottom panel; these have
-standard deviation of about one percent. While there is significant correlated
+standard deviation of less than one percent. While there is significant correlated
 structure in the residuals, their power spectrum displays a broad peak extending 
-between about 0.1 and 10 days, with a significant dip at exactly 1 day. This
+between about 0.1 and 10 days, with a significant dip at 1.00 day. This
 suggests our model is fitting the rotational variability of Sol d quite well, but
 additional temporal variations---most likely due to cloud movement---cause aperiodic
 changes to the reflectivity of the surface. We revisit this point in \S\ref{sec:discussion}.
@@ -559,18 +597,35 @@ changes to the reflectivity of the surface. We revisit this point in \S\ref{sec:
 
 
 
-The top panel of Figure~\ref{fig:map} shows the maximum likelihood map of Sol d.
+The top panel of Figure~\ref{fig:map} shows the maximum likelihood albedo map of Sol d,
+weighted by a visibility function, which we computed as the average of the product of the 
+cosine of the illumination angle and the cosine of the angle between the 
+observer vector and the vector normal to the surface of Sol d. This normalization
+has the effect of downweighting regions that are either seldom illuminated (such
+as regions near the southern pole of Sol d, as the observations were taken during
+southern winter) or seldom in view (such as regions near the north pole of the planet,
+which during Sectors 1 and 2 were mostly on the opposite side of Sol d than \tess).
+Because there is little data in these regions, their albedo is prior-dominated
+and tends to fluctuate substantially with small changes to the choices we make
+when fitting the data. Conversely, we find that the large scale features close to
+the equator of Sol d are mostly insensitive to our choices of prior. In the Figure,
+we use dashed lines to delineate the regions whose average visibility is larger
+than 0.5.
+
 \todo{More on this here.}
 
 The bottom panel of Figure~\ref{fig:map} shows an approximate average
 cloud cover map of Sol d based on imagery taken by the
 Visible Infrared Imaging Radiometer Suite (\emph{VIIRS}) instrument aboard the 
-Suomi National Polar-orbiting Partnership (\emph{S-NPP}) satellite
+Suomi National Polar-orbiting Partnership (\emph{S-NPP}) satellite%
 \footnote{Data obtained via 
 \href{https://github.com/rodluger/earthshine/blob/master/tex/figures/viirs.sh}{this wget script}.}. 
-The image was produced by \todo{explain...}
-averaged over the 28 days of data analyzed in this work, smoothed with a Gaussian
-filter, and weighted by the \tess visibility as in the top panel.
+The image was produced by analyzing the corrected true color reflectance in the
+I1 (red), M4 (blue), and M3 (green) bands and masking
+all pixels that were either dark or had significant variance among the three
+bands (i.e., inconsistent with a grey spectrum). We then averaged the images
+averaged over the 28 days of data analyzed in this work, smoothed it, 
+and weighted by the \tess visibility as in the top panel.
 
 
 \section{Discussion}
@@ -588,9 +643,7 @@ structure. Talk about their power spectrum. Talk about how S2 is worse fit.
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/map_temporal.pdf}
     \caption{\label{fig:map_temporal}
-             Compare to Figure~\ref{fig:model}. An animated version
-             of this figure is available 
-             \href{https://github.com/rodluger/earthshine/blob/master/tex/figures/map_temporal.mp4}{here}.
+             Something.
              \codelink{earthshine_S1_S2}
              }
     \end{centering}
