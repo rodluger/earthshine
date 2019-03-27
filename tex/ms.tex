@@ -149,7 +149,7 @@ We downloaded
 the Solar System and \tess ephemeris data for
 Sectors 1 and 2 and used \spiceypy \citep{Acton1996, Acton2017, Annex2017}
 to convert the TJD timestamps to 
-ephemeris time (ET). We then used the \textsf{spkezr} utility to compute
+ephemeris time (ET). We then used the \textsf{spkezr} utility of \spiceypy to compute
 the relative positions of Sol, Sol d, and \tess for every cadence
 in our dataset in the J2000 equatorial reference frame. In this right-handed
 coordinate frame, Sol d is centered at the origin, the $y$ axis points along the 
@@ -356,8 +356,8 @@ trigonometric functions involving $b$. Moreover, it is straightforward to
 derive recursion relations for $J_{ijk}(b)$, making its evaluation extremely fast.
 We implemented the algorithm for computing $J_{ijk}(b)$ in the development version
 of \starry
-\footnote{\url{https://github.com/rodluger/starry/tree/linear}}
-and will be discussed in detail in upcoming work.
+\footnote{\url{https://github.com/rodluger/starry/tree/linear}};
+the details will be discussed in more detail in upcoming work.
 
 \begin{figure}[ht!]
     \begin{centering}
@@ -374,6 +374,7 @@ and will be discussed in detail in upcoming work.
 As with the systematics model (\S\ref{sec:systematics}), the model
 for the astrophysical signal is \emph{linear}: the signal $\mathbf{s}$ 
 is a linear operation on the vector of spherical harmonic coefficients 
+$\mathbf{y}$
 that describes the body's surface:
 %
 \begin{align}
@@ -383,10 +384,10 @@ that describes the body's surface:
 where $\mathbf{A}$ is the design matrix and $\mathbf{y}$ is the vector of spherical harmonic coefficients. 
 Note that in \cite{Luger2019}, $\mathbf{y}$ describes the emissivity of the surface,
 but here we will use it to represent the \emph{albedo} of the planet.
-We choose a maximum spherical harmonics degree $l_{max} = 15$ for our fits,
+We choose a maximum spherical harmonic degree $l_{max} = 25$ for our fits,
 noting that increasing $l_{max}$ above this value does not significantly
-improve the quality of our fits. Note that $l = 15$ corresponds to
-a maximum surface resolution on the order of $180^\circ/15 = 12^\circ$.
+improve the quality of our fits. Note that $l = 25$ corresponds to
+a maximum surface resolution on the order of $180^\circ/25 \approx 7^\circ$.
 
 Finally, for reference, in Figure~\ref{fig:starry_model} we plot the
 \starry model for our maximum likelihood fit (\S\ref{sec:results}). The
@@ -397,8 +398,8 @@ vantage point of \tess as Sol d transitions from a thin crescent to full phase.
 \label{sec:model}
 
 Our full model for each light curve is simply the product of the 
-systematics model $\mathbf{p}_n$ (different for each target) and
-the \starry model $\mathbf{s}$ (shared by all targets). Since we happen
+systematics model $\mathbf{p}_n = \mathbf{B}\mathbf{w}_n$ (different for each target) and
+the \starry model $\mathbf{s} = \mathbf{A}\mathbf{y}$ (shared by all targets). Since we happen
 to know the exact distance $\mathbf{r}$ between \tess and Sol d at all times
 (\S\ref{sec:orbit}), we also include the inverse square of $\mathbf{r}$ 
 as a multiplicative term. The model for the flux timeseries
@@ -459,7 +460,7 @@ used as a starting point for the second step (see below), the choice of prior
 at this stage has minimal impact on our results.
 
 In general, we find that the iterative scheme converges within about 50 
-iterations, taking about three minutes on a laptop computer. However, since it 
+iterations, taking about fifteen minutes on a laptop computer. However, since it 
 is strongly regularized, the model significantly
 underfits the data. In the second step, we remove our L2 prior on the spherical
 harmonic coefficients and instead regularize the actual surface albedo, which
@@ -499,7 +500,7 @@ and $\sigma_\gamma^2 = 10^{-2}$ is the corresponding variance.
 %
 For simplicity, all our prior covariances are diagonal and
 homoscedastic with variances equal to $10^{-2}$ for $\mathbf{w}$, and
-$10^{-8}$ for $\mathbf{a}$, $10^{-1}$ for $\mathbf{\rho}$.
+$10^{-8}$ for $\mathbf{a}$, $10^{-1}$ for $\boldsymbol{\rho}$.
 
 Unfortunately, the constraints outlined above break the linearity 
 of the problem, and we must turn to a non-linear optimizer. We use the 
@@ -507,8 +508,8 @@ of the problem, and we must turn to a non-linear optimizer. We use the
 to maximize Equation~(\ref{eq:nll}). Starting with the values of the
 weights obtained in the first step, we run the \textsf{AdamOptimizer}
 for 1000 iterations, well past convergence. Since \tf automatically
-computes and propagates gradient information, this step is similarly fast
-and also finishes in under three minutes on a standard computer.
+computes and propagates gradient information, this step is fast
+and also finishes in under five minutes on a standard computer.
 
 \section{Results}
 \label{sec:results}
@@ -547,12 +548,10 @@ changes to the reflectivity of the surface. We revisit this point in \S\ref{sec:
              visibility drops below 50\%. Black contours indicate coastlines
              derived from current state-of-the-art models of the surface geography 
              of Sol d.
-             \emph{Bottom:} Actual corrected surface reflectance in the red band of the
-             \emph{VIIRS} imager, averaged over the same date range, band limited
-             to $l_\mathrm{max} = 15$, and weighted
-             by the same visibility function. This bandpass covers only about one
-             quarter of the \tess bandpass, so deviations between the two images
-             are to be expected.
+             \emph{Bottom:} Approximate cloud coverage map based on corrected
+             surface reflectance obtained by the
+             \emph{VIIRS} imager, averaged over the same date range and weighted
+             by the same visibility function.
              \codelink{earthshine_S1_S2}
              }
     \end{centering}
@@ -563,19 +562,15 @@ changes to the reflectivity of the surface. We revisit this point in \S\ref{sec:
 The top panel of Figure~\ref{fig:map} shows the maximum likelihood map of Sol d.
 \todo{More on this here.}
 
-The bottom panel of Figure~\ref{fig:map} shows the corrected surface
-reflectance obtained from the
+The bottom panel of Figure~\ref{fig:map} shows an approximate average
+cloud cover map of Sol d based on imagery taken by the
 Visible Infrared Imaging Radiometer Suite (\emph{VIIRS}) instrument aboard the 
 Suomi National Polar-orbiting Partnership (\emph{S-NPP}) satellite
 \footnote{Data obtained via 
 \href{https://github.com/rodluger/earthshine/blob/master/tex/figures/viirs.sh}{this wget script}.}. 
-The image shows the corrected surface reflectance in the I1 band of the instrument,
+The image was produced by \todo{explain...}
 averaged over the 28 days of data analyzed in this work, smoothed with a Gaussian
 filter, and weighted by the \tess visibility as in the top panel.
-The I1 band extends from 0.6 to 0.68 $\mu\mathrm{m}$
-\footnote{\url{http://rammb.cira.colostate.edu/projects/npp/VIIRS_bands_and_bandwidths.pdf}},
-and therefore covers only about one-fourth of the bandpass of \tess
-(nominally 0.6 - 1.0 $\mu\mathrm{m}$).
 
 
 \section{Discussion}
@@ -583,6 +578,8 @@ and therefore covers only about one-fourth of the bandpass of \tess
 
 We expect the brightest features to be ice, clouds, and forest canopy. Deserts
 to a lesser extent. Bare soil / rock and oceans are the darkest \citep{Jedlovec2009}.
+
+\subsection{Temporal Evolution}
 
 Residuals in Figure~\ref{fig:model} display significant correlated
 structure. Talk about their power spectrum. Talk about how S2 is worse fit.
@@ -598,6 +595,36 @@ structure. Talk about their power spectrum. Talk about how S2 is worse fit.
              }
     \end{centering}
 \end{figure}
+
+\subsection{Sources of Bias}
+
+In our analysis, we neglected the effects of limb darkening. Because of
+atmospheric attenuation, features near the limb of the planet should in
+reality contribute less to the flux than our model predicts. This could
+bias our results particularly in cases where the planet is seen at half
+phase (for instance, during days 1326 and 1341 in Figure~\ref{fig:phases}).
+In the absence of limb darkening, the brightest regions on the planet are those
+close to the sub-stellar point, which is on the limb. Limb darkening should
+shift the regions of peak brightness closer to the center of the planet, adding
+an east-west bias in the location of the features we identify.
+
+We also ignored the finite angular size of Sol at Sol d (about $0.5^\circ$),
+treating it instead as a point source. Regions immediately nightward of the 
+terminator should therefore contribute a small amount of flux, which we neglect.
+The effect, however, is below the resolution of our inferred map, so we expect
+it does not introduce significant bias.
+
+Finally, we implicitly assumed an isotropic prior on the spherical harmonic
+coefficients by imposing a power spectrum in only the degree $l$. This has the
+effect of lessening the extent to which features can be confined to certain
+latitudes. In particular, our prior implicitly disfavors banded cloud structure,
+which one may \emph{a priori} expect on a rapidly rotating planet such as 
+Sol d. The bottom panel of Figure~\ref{fig:map} shows such banded structure
+at the equator and at mid-latitudes due to the combined effects of 
+north-south circulation and deflection by the Coriolis force.
+
+
+
 
 \begin{figure}[t!]
     \begin{centering}

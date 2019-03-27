@@ -57,7 +57,7 @@ def smooth(map, sigma):
     """Smooth a map in place with a Gaussian kernel."""
     lmax = map.ydeg
     alm = ylm_to_alm(map.y, lmax)
-    hp.sphtfunc.smoothalm(alm, sigma=sigma, inplace=True)
+    hp.sphtfunc.smoothalm(alm, sigma=sigma, inplace=True, verbose=False)
     ylm = alm_to_ylm(alm, lmax)
     map[:, :] = ylm
     return
@@ -95,8 +95,8 @@ def tess_earth_vector(time):
     return tess
 
 
-def design_matrix(time, ydeg=10, nt=2, period=0.9972696, phase0=0.0, 
-                  fit_linear_term=False):
+def design_matrix(time, ydeg=10, nt=2, period=0.9972696, phase0=-56.5, 
+                  time0=1325.5, fit_linear_term=False):
     """
     Compute and return the design matrix.
 
@@ -104,7 +104,8 @@ def design_matrix(time, ydeg=10, nt=2, period=0.9972696, phase0=0.0,
         time: The time array in TJD.
         ydeg: The maximum spherical harmonic degree.
         nt: The number of map temporal components.
-        phase0: The phase of the map at `t = 0` in degrees.
+        phase0: The phase of the map at `t = time0` in degrees.
+        time0: The time at which the phase is defined in days.
     """
     # Instantiate a `starry` map
     map = starry.Map(ydeg=ydeg, udeg=0, reflected=True, nt=nt)
@@ -163,7 +164,7 @@ def design_matrix(time, ydeg=10, nt=2, period=0.9972696, phase0=0.0,
         # rotates the earth into phase and then rotates
         # the earth into view for tess
         tx, ty, tz = tess_hat[:, i]
-        phase = (2 * np.pi * (time[i] - time[0]) / period) % (2 * np.pi) + phase0 * np.pi / 180
+        phase = (2 * np.pi * (time[i] - time0) / period) % (2 * np.pi) + phase0 * np.pi / 180
         ty2 = ty ** 2
         tx2 = tx ** 2
         cosp = np.cos(phase)
@@ -190,7 +191,7 @@ def design_matrix(time, ydeg=10, nt=2, period=0.9972696, phase0=0.0,
         return X, X00
 
 
-def visibility(time, phase0=0.0, res=100, period=0.9972696):
+def visibility(time, phase0=-56.5, time0=1325.5, res=100, period=0.9972696):
     """
 
     """
@@ -268,7 +269,7 @@ def visibility(time, phase0=0.0, res=100, period=0.9972696):
 
     for i in tqdm(range(len(time))):
         # Rotate the earth to the current phase in the original frame
-        phase = (360. * (time[i] - time[0]) / period) % 360. + phase0
+        phase = (360. * (time[i] - time0) / period) % 360. + phase0
         R = starry.RAxisAngle([0, 1, 0], phase)
         grid_i = np.dot(R, grid)
 
