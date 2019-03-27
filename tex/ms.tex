@@ -624,7 +624,8 @@ and weighted by the \tess visibility as in the top panel.
 While the two panels display fundamentally different quantities---an albedo
 and a cloudiness factor---we expect that the signal of Sol d in the \tess
 bandpass is dominated by cloud reflectivity, as water clouds have an albedo
-higher than soil, vegetation, or ocean in the optical/near infrared. We therefore
+higher than soil, vegetation, or ocean in the optical/near infrared
+\citep[e.g.,][]{Jedlovec2009}. We therefore
 expect large, coherent cloud structures to show up as the brightest regions 
 in our inferred map, and in fact we find that this is generally the case. The
 dominant feature in our inferred map is a bright region spanning longitudes
@@ -642,8 +643,38 @@ is not exact.
 \section{Discussion}
 \label{sec:discussion}
 
-We expect the brightest features to be ice, clouds, and forest canopy. Deserts
-to a lesser extent. Bare soil / rock and oceans are the darkest \citep{Jedlovec2009}.
+The problem of inferring a two-dimensional map from a one-dimensional
+timeseries is famously ill-posed given its large null space and many complex
+degeneracies \citep[e.g.,][]{CowanFuentesHaggard2013}. In fact, for a 
+uniformly illuminated body, its rotational light curve encodes at most
+$2l_\mathrm{max}$ modes (one sine term and one cosine term per frequency), 
+where $l_\mathrm{max}$ is the highest spherical
+harmonic degree of features on the surface of the body. The number of modes
+\emph{on the surface of the body}, however, increases quadratically 
+as $(l_\mathrm{max} + 1)^2$. This means that for a body whose surface is
+perfectly described by a spherical harmonic map of degree $l_\mathrm{max} = 10$,
+which is described by 121 coefficients, only 20 linear combinations
+of those coefficients are actually projected onto the light curve. The
+problem is fundamentally non-invertible, since most of the information
+one wishes to extract lies in the null space.
+
+Fortunately, there are two aspects of the problem at hand that facilitate
+this (seemingly impossible) inversion. First, the surface of Sol d is
+not uniformly illuminated; instead, different parts of the surface are weighted
+by different amounts as the planet rotates and as the angle of incident starlight
+moves over the course of the year. This weighting is sufficient to break many
+of the degeneracies, which are rooted in the anti-symmetry of many of the spherical
+harmonic modes. Moreover, the discontinuous day/night terminator further
+breaks these degeneracies, as only modes that are anti-symmetric about
+the visible lune of the planet strictly remain in the null space. Second, 
+the changing vantage point of \tess relative to Sol d (and our exact knowledge of it)
+break degeneracies that are viewpoint-dependent. In particular, the motion of
+\tess changes the position and shape of the terminator on the projected disk
+of Sol d, enhancing the effect discussed above.
+
+In fact, because of these points, there should formally be \emph{no} null space 
+in this particular problem. In practice, however, it is evident from
+Figure~\ref{fig:map} that degenaricies still abound. \todo{bla bla bla.}
 
 \subsection{Temporal Evolution}
 
