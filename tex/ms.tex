@@ -180,7 +180,7 @@ Finally, we rotate the frame to align
 We verified our rotations by comparing our results on several days to the
 ephemerides provided by the JPL HORIZONS Web interface%
 \footnote{See \url{https://ssd.jpl.nasa.gov/horizons.cgi} and 
-\href{https://github.com/rodluger/earthshine/blob/master/notebooks/SanitCheck.ipynb}{this
+\href{https://github.com/rodluger/earthshine/blob/master/notebooks/SanityCheck.ipynb}{this
 Jupyter notebook.}}.
 
 \begin{figure}[t!]
@@ -243,7 +243,7 @@ and 20 light curves in Sector 2, our systematics model has
 $75 \times (75 + 2 \times 5) + 20 \times (20 + 2 \times 5) = 6,975$ free parameters.
 The total number of data points is $912,605$, so overfitting is not particularly
 concerning; nevertheless, we impose an L2 prior on the weights with
-standard deviation $\sigma_B = 0.1$ (see \S\ref{sec:model}).
+standard deviation $\sigma_w = 0.05$ (see \S\ref{sec:model}).
 
 \subsection{Reflected Light Mapping with \starry}
 \label{sec:starry}
@@ -442,7 +442,7 @@ We assume zero-mean Gaussian priors for the weights:
     \end{aligned}\, ,
 \end{equation}
 %
-with $\sigma_w = 0.1$ and 
+with $\sigma_w = 0.05$ and 
 %
 \begin{align}
     \sigma_y(l) &=
@@ -506,8 +506,8 @@ covariance of that prior, $\gamma_0 = 1.5$ is the mean of the prior on $\gamma$
 and $\sigma_\gamma^2 = 10^{-2}$ is the corresponding variance.
 %
 For simplicity, all our prior covariances are diagonal and
-homoscedastic with variances equal to $2.5\times 10^{-3}$ for $\mathbf{w}$, and
-$10^{-8}$ for $\mathbf{a}$, $10^{-1}$ for $\boldsymbol{\rho}$.
+homoscedastic with variances equal to $2.5\times 10^{-3}$ for $\mathbf{w}$,
+$10^{-8}$ for $\mathbf{a}$, and $10^{-1}$ for $\boldsymbol{\rho}$.
 
 Unfortunately, the constraints outlined above break the linearity 
 of the problem, and we must turn to a non-linear optimizer. We use the 
@@ -666,7 +666,7 @@ perfectly described by a spherical harmonic map of degree $l_\mathrm{max} = 10$,
 which is described by 121 coefficients, only 20 linear combinations
 of those coefficients are actually projected onto the light curve. The
 problem is fundamentally non-invertible, since most of the information
-one wishes to extract lies in the null space.
+one wishes to extract never makes it into the light curve in the first place.
 
 Fortunately, there are two aspects of the problem at hand that facilitate
 this (seemingly impossible) inversion. First, the surface of Sol d is
@@ -678,27 +678,27 @@ harmonic modes. Moreover, the discontinuous day/night terminator further
 breaks these degeneracies, as only modes that are anti-symmetric about
 the visible lune of the planet strictly remain in the null space. Second, 
 the changing vantage point of \tess relative to Sol d (and our exact knowledge of it)
-break degeneracies that are viewpoint-dependent. In particular, the motion of
+breaks degeneracies that are viewpoint-dependent. In particular, the motion of
 \tess changes the position and shape of the terminator on the projected disk
 of Sol d, enhancing the effect discussed above.
 
-In fact, because of these points, there should formally be \emph{no} null space 
+In fact, because of these points, there should actually be \emph{no} null space 
 in this particular problem. In practice, however, it is evident from
 Figure~\ref{fig:map} that degenaricies still abound. While we infer a few of the
 dominant features of the cloud map of Sol d, several of them are skewed, 
 shifted, or entirely out of place. This is the case, for instance, with
 the cloud bank west of South America, which extends too far westward, and
-the northern Atlantic Ocean, which appears to extends into the east coast of
-North America. We identify three broad reasons for this.
+the northern Atlantic Ocean, which appears to extend into the east coast of
+North America. We identify four broad reasons for this.
 
 First, many of the issues arise because
 of the finite signal-to-noise of our measurements and various biases in
 our adopted model. While the measurement errors on our data points are
 quite small---since the signal of Sol d is both quite strong and independently
 measured at 95 different positions on the detector---our lack of understanding
-of the complex optics that give rise to the signal in the first place, and our
-attempt to na{\"i}vely model it with pixel-level decorrelation, likely
-introduces significant correlated noise into the problem. We discuss this
+of the complex optics (and our
+attempt to na{\"i}vely model it with pixel-level decorrelation) likely
+introduces significant correlated noise when we de-trend. We discuss this
 and other sources of bias in more detail in \S\ref{sec:bias} below.
 
 Second, while we attempted to adopt agnostic priors on the map coefficients---i.e.,
@@ -712,7 +712,16 @@ South America, and dark regions associated with the three major oceans) persist
 regardless of the choice of prior, their exact shapes and contrast varied
 significantly under different assumptions.
 
-Third, and most importantly, we have not performed actual inference: that is, 
+Third, inspection of Figure~\ref{fig:phases} shows that most of the time, Sol
+d is close to full phase as seen by \tess.
+With the terminator close to the limb
+of the planet, its ability to break degeneracies is considerably lessened.
+We are therefore somewhat limited in our ability to infer in particular the
+latitudinal position of features. Observations of Sol d in upcoming
+sectors may contain longer segments in which Sol d is seen in crescent,
+which should help mitigate these degeneracies.
+
+Fourth, and most importantly, we have not performed actual inference: that is, 
 we simply found the maximum likelihood solution (subject to our constraints),
 with no estimate of the uncertainty anywhere on our map. A much better
 approach than simply maximizing the likelihood function is to marginalize
@@ -747,7 +756,7 @@ real imaging data. Moreover, the broad features in the strongly
 regularized map (Figure~\ref{fig:map_L2})---and in particular the monsoon clouds
 over southeast Asia---are insensitive to most of our model choices.
 
-\subsection{Sources of Bias}
+\subsection{Other Kinds of Bias}
 \label{sec:bias}
 
 One of the largest sources of bias is the fact that we assumed our
@@ -802,7 +811,7 @@ north-south circulation and deflection by the Coriolis force.
 Finally, and perhaps more importantly, our model assumed a \emph{static}
 map for the surface of Sol d. We also know this to be incorrect, since
 clouds form and move on timescales of hours to days. We discuss this in
-detail next.
+detail in the following section.
 
 \subsection{Temporal Evolution}
 \label{sec:temporal}
@@ -811,7 +820,7 @@ As we mentioned in \S\ref{sec:results}, the residuals about our maximum
 likelihood fit show correlated structure with power at a large range
 of periods ranging from 0.1 up to 10 days. This is likely due to 
 the fact that rotational variability is not the sole source of the
-signal of Sol d: additionally, there is likely temporal variation in the 
+signal of Sol d: additionally, there is temporal variation in the 
 albedo of certain parts of the map, most probably due to cloud movement.
 In order to test this, we used \starry to construct a time-variable
 spherical harmonic map, defined by a vector of spherical harmonic coefficients
@@ -829,10 +838,10 @@ solved in the same way as before.
 
 We choose the $c_n$ vectors to be an orthogonal polynomial basis in time of 
 degree 6 spanning all of Sector 1. Under this basis, one can 
-approximately interpret
+interpret
 $\mathbf{y}_0$ as the static component of the map, $\mathbf{y}_1$ as the
-component that varies quasi-linearly in time, $\mathbf{y}_2$ as the component
-that varies quasi-quadratically, and so forth. In all, we fit for six
+component that varies (quasi-)linearly in time, $\mathbf{y}_2$ as the component
+that varies (quasi-)quadratically, and so forth. In all, we fit for six
 of these map components.
 
 We neglect the data taken in Sector 2, focusing instead on the portion of the data for which
