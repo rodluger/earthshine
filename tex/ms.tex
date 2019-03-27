@@ -69,6 +69,10 @@ The discovery of surface features including continents and oceans will be a crit
 Such mapping can be done by constructing a phase map of the planet using precise photometry obtained over long periods of time. 
 \todo{(literature background \& citations)}
 
+\todo{We need to cite} \citep{Berdyugina2017,Cowan2009,Cowan2018,Haggard2018,Kawahara2010,Fujii2012,Lustig-Yaeger2018} and others.
+
+\todo{We need to cite}\citep{Knutson2007,Majeau2012,deWit2012} on the first maps of an exoplanet.
+
 A new source of precise photometry is the Transiting Exoplanet Survey Satellite 
 \citep[\TESS; ][]{Ricker2015}. 
 Launched in April 2018, \TESS has... \todo{(summary of \TESS's capabilities, 
@@ -800,24 +804,44 @@ map for the surface of Sol d. We also know this to be incorrect, since
 clouds form and move on timescales of hours to days. We discuss this in
 detail next.
 
-% \begin{figure}[t!]
-%     \begin{centering}
-%     \includegraphics[width=\linewidth]{figures/map_labels.pdf}
-%     \caption{\label{fig:map_labels}
-%             Map of Sol d with the major features indicated with suggested
-%             names.
-%             \codelink{earthshine_S1_S2}
-%             }
-%     \end{centering}
-% \end{figure}
-
-
 \subsection{Temporal Evolution}
 \label{sec:temporal}
 
-\todo{Residuals in Figure~\ref{fig:model} display significant correlated
-structure. Talk about their power spectrum. Temporal fit helps. Discuss
-Figure~\ref{fig:map_temporal} and argue we have evidence for clouds.}
+As we mentioned in \S\ref{sec:results}, the residuals about our maximum
+likelihood fit show correlated structure with power at a large range
+of periods ranging from 0.1 up to 10 days. This is likely due to 
+the fact that rotational variability is not the sole source of the
+signal of Sol d: additionally, there is likely temporal variation in the 
+albedo of certain parts of the map, most probably due to cloud movement.
+In order to test this, we used \starry to construct a time-variable
+spherical harmonic map, defined by a vector of spherical harmonic coefficients
+that varies slowly over time:
+%
+\begin{align}
+    \mathbf{y}(t) = \sum_{n=0}^N \mathbf{y}_n c_n(t)
+\end{align}
+%
+where the $\mathbf{y}_n$ are the $N$ spherical harmonic coefficient
+vectors that describe the temporal variability and the $c_n$ are the components
+of the basis in time. Since this is a linear operation on the spherical
+harmonic coefficients, the \starry model is still linear, and may be
+solved in the same way as before. 
+
+We choose the $c_n$ vectors to be an orthogonal polynomial basis in time of 
+degree 6 spanning all of Sector 1. Under this basis, one can 
+approximately interpret
+$\mathbf{y}_0$ as the static component of the map, $\mathbf{y}_1$ as the
+component that varies quasi-linearly in time, $\mathbf{y}_2$ as the component
+that varies quasi-quadratically, and so forth. In all, we fit for six
+of these map components.
+
+We neglect the data taken in Sector 2, focusing instead on the portion of the data for which
+we have good temporal coverage. In order to mitigate overfitting due to
+the larger number of variables we are solving for,
+we add a term to our likelihood function that forces the coefficients
+of the $n > 0$ maps to remain small. We further evaluate the albedo of the map
+on a grid at six equally spaced points in time, enforcing our albedo and
+power spectrum priors separately at each of these points.
 
 \begin{figure}[p!]
     \begin{centering}
@@ -833,19 +857,28 @@ Figure~\ref{fig:map_temporal} and argue we have evidence for clouds.}
     \end{centering}
 \end{figure}
 
-\subsection{Application to Other Planets}
+The mean of the temporal solution is shown in Figure~\ref{fig:map_temporal},
+and a link to an animated version is provided in the caption. No significant
+differences are evident, although the residuals improved by ${\sim}30\%$
+and contain significantly less power on timescales longer than 1 day.
+We conclude that while this is evidence for cloud variability on these
+timescales, a more detailed investigation is warranted to say anything
+meaningful about the dynamics of clouds on Sol d.
+
+\subsection{Implication for Future Observations}
 \label{sec:otherplanets}
 
-\todo{Discuss how we would we do this for an actual exoplanet, and
-all the homework we need to do before that happens.}
+Observed in the \tess band, Sol d is a planet dominated by
+clouds. \todo{Discuss how this problem is *hard* and how we need
+large time baseline to disentangle clouds from continents, and even
+then there are cloud features that are stationary, so hard to
+tell apart. What we really need is multi-band photometry,
+as suggested in \cite{Cowan2009}.}
 
 \section{Conclusion}
 \label{sec:conclusion}
 
 \todo{(summarize)}
-
-\todo{(utility for \TESS background removal)}
-
 \todo{(talk abt prospects for doing this analysis with exoplanets)}
 
 
