@@ -499,7 +499,7 @@ covariance of that prior, $\gamma_0 = 1.5$ is the mean of the prior on $\gamma$
 and $\sigma_\gamma^2 = 10^{-2}$ is the corresponding variance.
 %
 For simplicity, all our prior covariances are diagonal and
-homoscedastic with variances equal to $10^{-2}$ for $\mathbf{w}$, and
+homoscedastic with variances equal to $2.5\times 10^{-3}$ for $\mathbf{w}$, and
 $10^{-8}$ for $\mathbf{a}$, $10^{-1}$ for $\boldsymbol{\rho}$.
 
 Unfortunately, the constraints outlined above break the linearity 
@@ -561,10 +561,12 @@ are associated with the two major purported oceans on the planet, the
 \end{figure}
 
 
-As expected, we obtain a much better fit
-The top panel of Figure~\ref{fig:model} shows the median of the maximum likelihood model
-across all 95 targets (blue) overplotted on the median flux across
-the same targets (black). The median residuals are shown in the bottom panel; these have
+As expected, the second, non-linear step in our optimization procedure
+yields a much better fit to the data.
+The top panel of Figure~\ref{fig:model} shows the median of the 
+maximum likelihood model in this second step
+across all 95 targets (blue) overplotted on the median flux (black). 
+The median residuals are shown in the bottom panel; these have
 standard deviation of less than one percent. While there is significant correlated
 structure in the residuals, their power spectrum displays a broad peak extending 
 between about 0.1 and 10 days, with a significant dip at 1.00 day. This
@@ -641,7 +643,11 @@ structure. Talk about their power spectrum. Talk about how S2 is worse fit.
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/map_temporal.pdf}
     \caption{\label{fig:map_temporal}
-             Something.
+             The inferred mean map when allowing for slight temporal
+             variations in the spherical harmonic coefficients. Compare
+             to Figure~\ref{fig:map}. An animated version of this figure
+             is available on 
+             \href{https://github.com/rodluger/earthshine/blob/master/tex/figures/map_temporal.mp4}{GitHub}.
              \codelink{earthshine_S1_S2}
              }
     \end{centering}
@@ -677,16 +683,16 @@ north-south circulation and deflection by the Coriolis force.
 
 
 
-\begin{figure}[t!]
-    \begin{centering}
-    \includegraphics[width=\linewidth]{figures/map_labels.pdf}
-    \caption{\label{fig:map_labels}
-             Map of Sol d with the major features indicated with suggested
-             names.
-             \codelink{earthshine_S1_S2}
-             }
-    \end{centering}
-\end{figure}
+% \begin{figure}[t!]
+%     \begin{centering}
+%     \includegraphics[width=\linewidth]{figures/map_labels.pdf}
+%     \caption{\label{fig:map_labels}
+%             Map of Sol d with the major features indicated with suggested
+%             names.
+%             \codelink{earthshine_S1_S2}
+%             }
+%     \end{centering}
+% \end{figure}
 
 \todo{(comparison of inferred features to ``model'' (Earth))}
 
