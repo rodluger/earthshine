@@ -460,7 +460,7 @@ used as a starting point for the second step (see below), the choice of prior
 at this stage has minimal impact on our results.
 
 In general, we find that the iterative scheme converges within about 50 
-iterations, taking about fifteen minutes on a laptop computer. However, since it 
+iterations, taking about three minutes on a laptop computer. However, since it 
 is strongly regularized, the model significantly
 underfits the data. In the second step, we remove our L2 prior on the spherical
 harmonic coefficients and instead regularize the actual surface albedo, which
@@ -509,7 +509,7 @@ to maximize Equation~(\ref{eq:nll}). Starting with the values of the
 weights obtained in the first step, we run the \textsf{AdamOptimizer}
 for 1000 iterations, well past convergence. Since \tf automatically
 computes and propagates gradient information, this step is fast
-and also finishes in under five minutes on a standard computer.
+and also finishes in under three minutes on a laptop.
 
 \section{Results}
 \label{sec:results}
@@ -536,7 +536,7 @@ during the first stage of our optimization procedure. Since the map
 coefficients were heavily regularized, the dynamic range of the albedo
 variations was less than 10\%; we scaled it to span the range [0, 1]
 for better visualization. Furthermore, although the resolution is on 
-the order of $12^\circ$, features typically span ${\sim}45^\circ$; this is
+the order of $18^\circ$, features typically span ${\sim}45^\circ$; this is
 also an artefact of our regularization. However, broad features are already
 visible in the map: three bright regions and two dark regions (one of which
 wraps around the antimeridian). Overplotted on the inferred map are
@@ -643,6 +643,9 @@ is not exact.
 \section{Discussion}
 \label{sec:discussion}
 
+\subsection{An Ill-Posed Problem}
+\label{sec:illposed}
+
 The problem of inferring a two-dimensional map from a one-dimensional
 timeseries is famously ill-posed given its large null space and many complex
 degeneracies \citep[e.g.,][]{CowanFuentesHaggard2013}. In fact, for a 
@@ -674,9 +677,22 @@ of Sol d, enhancing the effect discussed above.
 
 In fact, because of these points, there should formally be \emph{no} null space 
 in this particular problem. In practice, however, it is evident from
-Figure~\ref{fig:map} that degenaricies still abound. \todo{bla bla bla.}
+Figure~\ref{fig:map} that degenaricies still abound. This is likely because
+of the finite signal-to-noise of our measurements and various biases in
+our adopted model. While the measurement errors on our data points are
+quite small---since the signal of Sol d is both quite strong and independently
+measured at 95 different positions on the detector---our lack of understanding
+of the complex optics that give rise to the signal in the first place, and our
+attempt to na{\"i}vely model it with pixel-level decorrelation, likely
+introduces significant correlated noise into the problem. We discuss
+sources of bias in more detail in \S\ref{sec:bias} below
+
+\subsection{Confirmation Bias}
+\label{sec:confirmation}
+\todo{bla bla bla}
 
 \subsection{Temporal Evolution}
+\label{sec:temporal}
 
 Residuals in Figure~\ref{fig:model} display significant correlated
 structure. Talk about their power spectrum. Talk about how S2 is worse fit.
@@ -696,6 +712,9 @@ structure. Talk about their power spectrum. Talk about how S2 is worse fit.
 \end{figure}
 
 \subsection{Sources of Bias}
+\label{sec:bias}
+
+\todo{PLD, moon background, etc.}
 
 In our analysis, we neglected the effects of limb darkening. Because of
 atmospheric attenuation, features near the limb of the planet should in
@@ -722,9 +741,6 @@ Sol d. The bottom panel of Figure~\ref{fig:map} shows such banded structure
 at the equator and at mid-latitudes due to the combined effects of 
 north-south circulation and deflection by the Coriolis force.
 
-
-
-
 % \begin{figure}[t!]
 %     \begin{centering}
 %     \includegraphics[width=\linewidth]{figures/map_labels.pdf}
@@ -736,9 +752,10 @@ north-south circulation and deflection by the Coriolis force.
 %     \end{centering}
 % \end{figure}
 
-\todo{(comparison of inferred features to ``model'' (Earth))}
+\subsection{Application to Other Planets}
+\label{sec:otherplanets}
 
-\todo{No zonal cloud bands: prior.}
+\todo{For realz, how would we do this.}
 
 \section{Conclusion}
 \label{sec:conclusion}
