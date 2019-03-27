@@ -677,19 +677,68 @@ of Sol d, enhancing the effect discussed above.
 
 In fact, because of these points, there should formally be \emph{no} null space 
 in this particular problem. In practice, however, it is evident from
-Figure~\ref{fig:map} that degenaricies still abound. This is likely because
+Figure~\ref{fig:map} that degenaricies still abound. While we infer a few of the
+dominant features of the cloud map of Sol d, several of them are skewed, 
+shifted, or entirely out of place. This is the case, for instance, with
+the cloud bank west of South America, which extends too far westward, and
+the northern Atlantic Ocean, which appears to extends into the east coast of
+North America. We identify three broad reasons for this.
+
+First, many of the issues arise because
 of the finite signal-to-noise of our measurements and various biases in
 our adopted model. While the measurement errors on our data points are
 quite small---since the signal of Sol d is both quite strong and independently
 measured at 95 different positions on the detector---our lack of understanding
 of the complex optics that give rise to the signal in the first place, and our
 attempt to na{\"i}vely model it with pixel-level decorrelation, likely
-introduces significant correlated noise into the problem. We discuss
-sources of bias in more detail in \S\ref{sec:bias} below
+introduces significant correlated noise into the problem. We discuss this
+and other sources of bias in more detail in \S\ref{sec:bias} below.
+
+Second, while we attempted to adopt agnostic priors on the map coefficients---i.e.,
+we fit for a spectral slope rather than impose one---our inferred map is still 
+heavily prior-dependent. Our choice of regularization strength for the systematics
+was based on trial-and-error and what ``looked good'', as was the choice for the 
+hyperprior on the spectral
+slope and the maximum spherical harmonic degree of the map. Although the main
+features of the map (the monsoon over south Asia, the clouds over Africa and
+South America, and dark regions associated with the three major oceans) persist
+regardless of the choice of prior, their exact shapes and contrast varied
+significantly under different assumptions.
+
+Third, and most importantly, we have not performed actual inference: that is, 
+we simply found the maximum likelihood solution (subject to our constraints),
+with no estimate of the uncertainty anywhere on our map. A much better
+approach than simply maximizing the likelihood function is to marginalize
+over the nuisance parameters---such as the systematic model weights and the spectral
+slope. This is more costly, but certainly not intractable, and we will
+pursue this in upcoming work.
 
 \subsection{Confirmation Bias}
 \label{sec:confirmation}
-\todo{bla bla bla}
+
+It is difficult to avoid being disingenuous in one's solution
+when the answer (or the expected answer)
+to a problem is known ahead of time. Since we had access to 
+``ground truth'' from the beginning, many of the de-trending/processing/fitting
+choices we made were (however inadvertently) driven by the desire to
+come as close as possible to the correct answer. While many of these choices
+correspond to numbers we have explicitly quoted here, such as the prior
+variances on our model terms, several of them are implicit decisions on
+\emph{how} we performed the analysis. For instance, in an early version of 
+the project we used as regressors actual \tess housekeeping variables---such as the angle 
+and elevation of the Earth and the Moon relative to each of the four camera 
+boresights---instead of the PLD basis. However, the systematics model constructed from these quantities
+proved to be too inflexible, judging in part from the poor fidelity of the recovered
+maps. The results in this work
+must therefore be taken with a grain of salt. That said, we have attempted to
+offset the possibility of confirmation bias by making our model
+(Equation~\ref{eq:model}) as simple as possible in the end (a multiplicative baseline
+and a linear reflectance model) and thus limiting
+the number of knobs we could turn. We also opted to fit for the spectral
+slope of the map rather than use the power spectrum inferred from 
+real imaging data. Moreover, the broad features in the strongly
+regularized map (Figure~\ref{map_L2})---and in particular the monsoon clouds
+over southeast Asia---are insensitive to most of our model choices.
 
 \subsection{Temporal Evolution}
 \label{sec:temporal}
