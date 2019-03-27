@@ -560,7 +560,6 @@ are associated with the two major purported oceans on the planet, the
     \end{centering}
 \end{figure}
 
-
 As expected, the second, non-linear step in our optimization procedure
 yields a much better fit to the data.
 The top panel of Figure~\ref{fig:model} shows the median of the 
@@ -573,8 +572,6 @@ between about 0.1 and 10 days, with a significant dip at 1.00 day. This
 suggests our model is fitting the rotational variability of Sol d quite well, but
 additional temporal variations---most likely due to cloud movement---cause aperiodic
 changes to the reflectivity of the surface. We revisit this point in \S\ref{sec:discussion}.
-
-\todo{More on this here.}
 
 \begin{figure}[p!]
     \begin{centering}
@@ -595,24 +592,21 @@ changes to the reflectivity of the surface. We revisit this point in \S\ref{sec:
     \end{centering}
 \end{figure}
 
-
-
-The top panel of Figure~\ref{fig:map} shows the maximum likelihood albedo map of Sol d,
-weighted by a visibility function, which we computed as the average of the product of the 
+In the top panel of Figure~\ref{fig:map} we show the final,
+maximum likelihood albedo map inferred for Sol d weighted by a visibility function.
+The visibiluty function is computed as the average of the product of the 
 cosine of the illumination angle and the cosine of the angle between the 
 observer vector and the vector normal to the surface of Sol d. This normalization
 has the effect of downweighting regions that are either seldom illuminated (such
 as regions near the southern pole of Sol d, as the observations were taken during
 southern winter) or seldom in view (such as regions near the north pole of the planet,
 which during Sectors 1 and 2 were mostly on the opposite side of Sol d than \tess).
-Because there is little data in these regions, their albedo is prior-dominated
+Because there is little data from these regions, their albedo is prior-dominated
 and tends to fluctuate substantially with small changes to the choices we make
 when fitting the data. Conversely, we find that the large scale features close to
 the equator of Sol d are mostly insensitive to our choices of prior. In the Figure,
 we use dashed lines to delineate the regions whose average visibility is larger
 than 0.5.
-
-\todo{More on this here.}
 
 The bottom panel of Figure~\ref{fig:map} shows an approximate average
 cloud cover map of Sol d based on imagery taken by the
@@ -627,6 +621,23 @@ bands (i.e., inconsistent with a grey spectrum). We then averaged the images
 averaged over the 28 days of data analyzed in this work, smoothed it, 
 and weighted by the \tess visibility as in the top panel.
 
+While the two panels display fundamentally different quantities---an albedo
+and a cloudiness factor---we expect that the signal of Sol d in the \tess
+bandpass is dominated by cloud reflectivity, as water clouds have an albedo
+higher than soil, vegetation, or ocean in the optical/near infrared. We therefore
+expect large, coherent cloud structures to show up as the brightest regions 
+in our inferred map, and in fact we find that this is generally the case. The
+dominant feature in our inferred map is a bright region spanning longitudes
+of $+50^\circ$ to $+100^\circ$ just northward of the equator. This is also the
+dominant feature in the VIIRS map, corresponding to the persistent weather system
+associated with summertime monsoons in the south of Asia.
+
+Secondary features common to both maps are a permanent cloudy region over
+central Africa with a westward spur over the Atlantic Ocean, a veneer of clouds
+over the north Pacific, and a pile up of clouds on the western coast of
+northern South America. The dark regions in the inferred map rather loosely
+track the Pacific, Atlantic, and Indian Oceans, although the correspondence
+is not exact.
 
 \section{Discussion}
 \label{sec:discussion}
@@ -639,7 +650,7 @@ to a lesser extent. Bare soil / rock and oceans are the darkest \citep{Jedlovec2
 Residuals in Figure~\ref{fig:model} display significant correlated
 structure. Talk about their power spectrum. Talk about how S2 is worse fit.
 
-\begin{figure}[t!]
+\begin{figure}[p!]
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/map_temporal.pdf}
     \caption{\label{fig:map_temporal}
