@@ -51,6 +51,7 @@ regions which we interpret as oceans and cloud banks indicative of continental f
 We argue that this planet represents the most promising detection of a habitable 
 world to date, although the potential intelligence of any life on it is yet to 
 be determined.
+\href{https://github.com/rodluger/earthshine}{\color{linkcolor}\faGithub}
 \end{abstract}
 
 \keywords{methods: data analysis, techniques: photometric, planets and satellites: 
@@ -104,7 +105,7 @@ planets in the habitable zone
 for a review, see \cite{Cowan2018}.
 
 In this work, we show how we can harness photometric data collected by the \TESS mission
-to construct a map of Sol d, a rocky planet âwith a radius of $6.4\times 10^6$~m
+to construct a map of Sol d, a rocky planet ï¿½with a radius of $6.4\times 10^6$~m
 orbiting near the inner edge of the habitable zone of its star, a nearby G2 main sequence
 star \citep{Sagan1993}. Although the \TESS mission promised to deliver a handful of terrestrial planets in 
 the habitable zone for follow-up with other missions, it came as a great surprise
@@ -127,7 +128,7 @@ have made the reconstruction of detailed maps more feasible than ever.
 inverting---light curves of stars and planets whose surface emission is
 described in terms of spherical harmonics, dubbed \starry. The analyticity of this
 method makes the computation of the model both fast and precise.
-In turn, \cite{Haggard2018} derived similar analytic expressions for the
+In turn, \cite{Haggard2018} derived analytic expressions for the
 analogous case in reflected light, packaged into the 
 \textsf{EARL} code. In this work, we derive similar expressions within
 the \starry framework to perform fast, analytical inversion of the light curve
@@ -142,11 +143,17 @@ We present results in \S\ref{sec:results} and make a comparison of these
 findings to other state-of-the-art maps of Sol d in 
 \S\ref{sec:discussion}. 
 Finally, we conclude with a summary of our major findings in \S\ref{sec:conclusions}.
+The code used to generate all the figures in this paper is open source
+and available on GitHub%
+\footnote{\url{https://github.com/rodluger/earthshine}}. Clickable icons
+\href{https://github.com/rodluger/starry}{\color{linkcolor}\faFileCodeO}
+next to each figure caption 
+link to the source code used to generate them.
 
 \section{Data}
 \label{sec:data}
 
-The \TESS pipeline produces processed light curves for all short-cadence targets. 
+The \TESS pipeline produces processed light curves for all short-cadence (2 minute) targets. 
 Part of this processing is the determination of the localized background flux 
 within each postage stamp, which is provided as an ancillary time series. 
 As with all \TESS time series data products, the time is given in units of \TESS Julian 
@@ -217,12 +224,14 @@ A representative sample of these signals is shown in Figure~\ref{fig:data}.
     \end{centering}
 \end{figure}
 
-\section{Methods}
-\label{sec:methods}
+\pagebreak
 
-\subsection{Orbital Modeling}
-\label{sec:orbit}
-
+\section{Methods}%
+\label{sec:methods}%
+%
+\subsection{Orbital Modeling}%
+\label{sec:orbit}%
+%
 We downloaded%
 \footnote{\url{https://archive.stsci.edu/missions/tess/models/}}
 the Solar System and \TESS ephemeris data for
@@ -305,7 +314,7 @@ systematics component of the data, with minimal risk of fitting out astrophysica
 We use PLD to determine a systematics basis set for each \TESS sector, and
 from this basis we construct a separate design matrix $\mathbf{B}$ for each sector. To
 increase the flexibility of the systematics model, we append to $\mathbf{B}$ a basis of
-fifth order orthogonal polynomials in time.
+fifth order orthogonal polynomials in time for each of the two orbits in each sector.
 The systematics model $\mathbf{p}$ for the $n^\mathrm{th}$ signal is thus
 %
 \begin{align}
@@ -317,8 +326,8 @@ Since we solve for different weights for each of the 75 light curves in Sector 1
 and 20 light curves in Sector 2, our systematics model has
 $75 \times (75 + 2 \times 5) + 20 \times (20 + 2 \times 5) = 6,975$ free parameters.
 The total number of data points is $912,605$, so overfitting is not particularly
-concerning; nevertheless, we impose an L2 prior on the weights with
-standard deviation $\sigma_w = 0.05$ (see \S\ref{sec:model}).
+concerning; nevertheless, we impose an L2 prior on the weights to minimize this risk
+(see \S\ref{sec:model}).
 
 \subsection{Reflected Light Mapping with \starry}
 \label{sec:starry}
@@ -541,10 +550,10 @@ everywhere on the surface. Note, importantly, that we do
 not fit for the coefficient of the constant $Y_{0,0}$ spherical harmonic,
 but instead fix it to unity. Since the solutions obtained in this step are merely
 used as a starting point for the second step (see below), the choice of prior 
-at this stage has minimal impact on our results.
+at this stage does not significantly impact on our results.
 
 In general, we find that the iterative scheme converges within about 50 
-iterations, taking about three minutes on a laptop computer. However, since it 
+iterations, taking about two minutes on a laptop computer. However, since it 
 is strongly regularized, the model significantly
 underfits the data. In the second step, we remove our L2 prior on the spherical
 harmonic coefficients and instead regularize the actual surface albedo, which
@@ -593,7 +602,7 @@ to maximize Equation~(\ref{eq:nll}). Starting with the values of the
 weights obtained in the first step, we run the \textsf{AdamOptimizer}
 for 1000 iterations, well past convergence. Since \tf automatically
 computes and propagates gradient information, this step is fast, 
-finishing in under three minutes on a laptop.
+finishing in under one minute on a laptop.
 
 \section{Results}
 \label{sec:results}
@@ -659,7 +668,7 @@ structure in the residuals, their power spectrum displays a broad peak extending
 between about 0.1 and 10 days, with a significant dip at 1.00 day. This
 suggests our model is fitting the rotational variability of Sol d quite well, but
 additional temporal variations---most likely due to cloud movement---cause aperiodic
-changes to the reflectivity of the surface. We revisit this point in \S\ref{sec:discussion}.
+changes in the reflectivity of the surface. We revisit this point in \S\ref{sec:discussion}.
 
 \begin{figure}[p!]
     \begin{centering}
