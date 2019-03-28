@@ -12,6 +12,8 @@
 % Begin!
 \begin{document}
 
+%@arxiver{map.pdf}
+
 % Title
 \title{\TESS Photometric Mapping of a Terrestrial Planet in the Habitable Zone: 
        Detection of Clouds, Oceans, and Continents}
@@ -61,32 +63,24 @@ Once these targets are found, much more detailed observational characterization 
 The discovery of surface features including continents and oceans would be a critical hint towards the habitability of an alien world.
 
 The most straightforward method of observing features on a terrestrial exoplanet would be to directly image the planet at sufficient resolution. 
-However, 
+However, such an observation would require an effective telescope aperture orders of magnitude larger than currently available as well as extremely advanced coronagraphic optics, making it a far-future goal. 
 
 Surface mapping can also be done by observing rotational phase-dependent variations of the planetary signal in precise photometric time series. 
-\todo{(summarize how it works)} 
 This is a complex data analysis problem: strong degeneracies are involved when transforming a 1-dimensional time series into a 2-dimensional surface map. 
 Interpretation is also challenging in the face of many potential explanations for a poorly resolved observed feature. 
 
+\todo{(Summary of previous mapping work:)}\citep{Knutson2007,Majeau2012,deWit2012}
 
-\todo{We need to cite} \citep{Berdyugina2017,Cowan2009,Cowan2018,Haggard2018,Kawahara2010,Fujii2012,Lustig-Yaeger2018} and others.
 
-\todo{We need to cite}\citep{Knutson2007,Majeau2012,deWit2012} on the first maps of an exoplanet.
+\todo{(Discussion of expanding this work to terrestrial planets and/or reflected light:)} \citep{Berdyugina2017,Cowan2009,Cowan2018,Haggard2018,Kawahara2010,Fujii2012,Lustig-Yaeger2018} and others.
+
 
 \todo{We need to cite \cite{Sagan1993}!}
 
-%A new source of precise photometry is the Transiting Exoplanet Survey Satellite 
-%\citep[\TESS; ][]{Ricker2015}. 
-%Launched in April 2018, \TESS has... \todo{(summary of \TESS's capabilities, 
-%citations to planet discoveries etc)}
+The \TESS mission promises to deliver thousands of new exoplanets around bright, nearby stars, many of which may be terrestrial worlds potentially suitable for life. 
+In fact, one such world, a planet which we will call Sol d, has already been extensively observed by \TESS.
 
-%One intriguing feature of the \TESS photometric data products is a highly 
-%time-variable signal represented in the diffuse background across virtually 
-%all camera pixels. 
-%\todo{(talk abt Earthshine without naming it)} 
-%The signal has been widely attributed to a planet which we will call Sol d.
-
-Previous attempts to map this planet from the exoplanet community have suggested 
+Previous attempts to map Sol d from the exoplanet community have suggested 
 the presence of localized surface features, but their resolving power has been 
 severely limited by the duration of observations \citep{Cowan2009}. 
 \TESS offers precise 2-minute cadence data spanning a wide range of illumination 
@@ -96,6 +90,7 @@ unprecedented in the history of exoplanet phase mapping.
 Moreover, recent advances in the computational tractability of this data analysis problem 
 have made the reconstruction of detailed maps more feasible than ever. 
 \todo{(describe how STARRY works - fast analytic computation of spherical harmonics)}
+\todo{(also maybe say something about Cowan approach)}
 
 In this work, we build on this methodological foundation to perform 
 reflected-light mapping of planetary surface features on Sol d. 
