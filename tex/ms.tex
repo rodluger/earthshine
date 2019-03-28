@@ -73,6 +73,8 @@ Such mapping can be done by constructing a phase map of the planet using precise
 
 \todo{We need to cite}\citep{Knutson2007,Majeau2012,deWit2012} on the first maps of an exoplanet.
 
+\todo{We need to cite \cite{Sagan1993}!}
+
 A new source of precise photometry is the Transiting Exoplanet Survey Satellite 
 \citep[\TESS; ][]{Ricker2015}. 
 Launched in April 2018, \TESS has... \todo{(summary of \TESS's capabilities, 
@@ -97,15 +99,15 @@ have made the reconstruction of such detailed maps more feasible than ever.
 
 In this work, we build on this methodological foundation to perform 
 reflected-light mapping of planetary surface features on Sol d. 
-We give an overview of the \TESS data used in Section \ref{sec:data}. 
-In Section \ref{sec:methods}, we describe the methods employed to infer a map 
+We give an overview of the \TESS data used in \S\ref{sec:data}. 
+In \S\ref{sec:methods}, we describe the methods employed to infer a map 
 from these data, including the adaptation of the \starry algorithm to reflection 
 mapping, the modeling of spacecraft-related systematics, and the likelihood and 
 priors used. 
-We present results in Section \ref{sec:results} and make comparison of these 
+We present results in \S\ref{sec:results} and make comparison of these 
 findings to state-of-the-art terrestrial planet maps from the literature in 
-Section \ref{sec:discussion}. 
-Finally, we conclude in Section \ref{sec:conclusion} with a look at future 
+\S\ref{sec:discussion}. 
+Finally, we conclude in \S\ref{sec:conclusions} with a look at future 
 prospects for phase-curve mapping of terrestrial exoplanets.
 
 \section{Data}
@@ -117,7 +119,7 @@ As with all \TESS time series data products, the time is given in \TESS Julian D
 We use these background flux measurements from Sectors 1 and 2 as our primary data source in this work. 
 
 For each of the two sectors considered, we downloaded a randomized subsample of 1000 short-cadence lightcurve files corresponding to postage stamps located across the full \TESS field of view and extracted the background flux time series from each. 
-Not all postage stamps are equally informative, since the desired signal from Sol d is inhomogenously spread across the \TESS detectors and manifests differently in different regions (see Section \ref{sec:systematics}). 
+Not all postage stamps are equally informative, since the desired signal from Sol d is inhomogenously spread across the \TESS detectors and manifests differently in different regions (see \S\ref{sec:systematics}). 
 We down-selected our pool of 1000 targets to 75 maximally useful background lightcurves from Sector 1 and 20 from Sector 2. 
 This down-selection was done with several criteria in mind: each lightcurve should contain a significant signal from Sol d; they should be representative of the general background flux modulation seen across the \TESS cameras, rather than containing any truly localized signals from astrophysical background sources; and the sample as a whole should contain the full range of typical behaviors of background across the entire \TESS field of view. 
 To accomplish this, we... \todo{(decide whether it's outlier rejection only or full-on categorization)}
@@ -878,10 +880,11 @@ meaningful about the dynamics of clouds on Sol d.
 \label{sec:otherplanets}
 
 As we discussed above, light curve inversion is a hard problem,
-and we have shown that this is true even when the solution is
+and we have shown that this is true even at high signal-to-noise and 
+when the solution is
 known ahead of time. Presented with the top panel of Figure~\ref{fig:map}
 (without the continent outlines),
-an inhabitant of Sol d would be hard-pressed to identify that
+an inhabitant of Sol d may be hard-pressed to identify that
 as a map of their home planet. This is in part due to the biases
 in our optimization, which we discussed above, but also due to the 
 simple fact that the reflectance of Sol d is dominated---by far---by 
@@ -894,16 +897,32 @@ not possible to tell the difference between highly reflective land
 features (such as ice or vegetation) and stationary clouds.
 
 We should not expect other exoplanets in the habitable zone to be
-any different. 
+any different. Future missions such as LUVOIR or HabEx may enable
+us to collect data on the phase curves of such planets, but that
+data will be of signficantly lower quality and poorer time resolution,
+so the work presented here can be seen as an upper limit on what we may
+be able to infer about exoplanets in the habitable zone with
+next-generation facilities.
 
-\todo{Discuss how this problem is *hard* and how we need
-large time baseline to disentangle clouds from continents, and even
-then there are cloud features that are stationary, so hard to
-tell apart. What we really need is multi-band photometry,
-as suggested in \cite{Cowan2009}.}
+That said, the time baseline considered in this work was fairly
+limited---three weeks in Sector 1 and one week in Sector 2,
+spanning two months in total. Observations taken throughout an entire
+year on Sol d---during which time cloud patterns should change with the
+seasons and the angle between the day/night terminator and the 
+axis of rotation should precess---may help to disambiguate between
+clouds, oceans, and continents. We intend to perform this analysis
+in upcoming work once data from future \tess sectors becomes available.
 
-\section{Conclusion}
-\label{sec:conclusion}
+Alternatively, time-resolved observations in multiple bands could
+also help with this problem. This was discussed in \cite{Cowan2009},
+who showed that multi-band photometry of the Earth enables one to
+disentangle the contributions from oceans, continents, and cloud cover.
+A robust detection of surface features on an exoplanet in the habitable
+zone will likely necessitate both approaches alongside a circumspect
+analysis of the uncertainties and degeneracies at play.
+
+\section{Conclusions}
+\label{sec:conclusions}
 
 \todo{(summarize)}
 \todo{(talk abt prospects for doing this analysis with exoplanets)}
