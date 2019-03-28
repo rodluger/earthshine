@@ -486,9 +486,8 @@ systematics model $\mathbf{p}_n = \mathbf{B}\mathbf{w}_n$ (different for each ta
 the \starry model $\mathbf{s} = \mathbf{A}\mathbf{y}$ (shared by all targets). Since we happen
 to know the exact distance $\mathbf{r}$ between \TESS and Sol d at all times
 (\S\ref{sec:orbit}), we also include the inverse square of $\mathbf{r}$ 
-as a multiplicative term to scale from the intrinsic luminance 
-\todo{(is this the right word??)} of Sol d to 
-the flux observed by \TESS. The model for the flux timeseries
+as a multiplicative term to scale the luminosity 
+of Sol d to the flux observed by \TESS. The model for the flux timeseries
 in the $n^\mathrm{th}$ postage stamp is therefore
 %
 \begin{align}
@@ -707,8 +706,8 @@ The image was produced by analyzing the corrected true color reflectance in the
 I1 (red), M4 (blue), and M3 (green) bands and masking
 all pixels that were either dark or had significant variance among the three
 bands (i.e., inconsistent with a grey spectrum). We then averaged the images
-averaged over the 28 days of data analyzed in this work, smoothed it \todo{(how?)}, 
-and weighted by the \TESS visibility as in the top panel.
+averaged over the 28 days of data analyzed in this work, smoothed it 
+with a Gaussian filter, and weighted by the \TESS visibility as in the top panel.
 
 While the two panels display fundamentally different quantities---an albedo
 and a cloudiness factor---we expect that the signal of Sol d in the \TESS
