@@ -129,7 +129,7 @@ series from each.
 Not all postage stamps are equally informative, since the desired signal from 
 Sol d is inhomogenously spread across the \TESS detectors and manifests 
 differently in different regions (see \S\ref{sec:systematics}). 
-We down-selected our pool of 1000 targets to 75 maximally useful background 
+We down-selected our pool of 1,000 targets to 75 maximally useful background 
 lightcurves from Sector 1 and 20 from Sector 2. 
 This down-selection was done with several criteria in mind: each lightcurve 
 should contain a significant signal from Sol d; they should be representative 
@@ -725,7 +725,7 @@ and other sources of bias in more detail in \S\ref{sec:bias} below.
 Second, while we attempted to adopt agnostic priors on the map coefficients---i.e.,
 we fit for a spectral slope rather than impose one---our inferred map is still 
 heavily prior-dependent. Our choice of regularization strength for the systematics
-was based on trial-and-error and what ``looked good'', as was the choice for the 
+was based on trial-and-error and what ``looked good,'' as was the choice for the 
 hyperprior on the spectral
 slope and the maximum spherical harmonic degree of the map. Although the main
 features of the map (the monsoon over south Asia, the clouds over Africa and
@@ -943,20 +943,34 @@ analysis of the uncertainties and degeneracies at play.
 \section{Conclusions}
 \label{sec:conclusions}
 
-\todo{(summarize)}
-\todo{(talk abt prospects for doing this analysis with exoplanets)}
+We have used \TESS photometry to
+produce a global map of Sol d, a terrestrial planet in the habitable
+zone of a G2 main-sequence star. We adapted the \starry code to 
+generate (and invert) light curves in reflected light, coupling it
+to a variation of pixel level decorrelation to model the systematics
+in the \TESS detector. We detect three large scale bright regions near
+the equator of the planet, associated with persistent cloud structures
+at longitudes of $-60^\circ$, $+30^\circ$, and $+90^\circ$, which
+likely track continents. Pronounced dark features are identified
+at longitudes of $\pm 180^\circ$, $-30^\circ$, and $+60^\circ$ with
+significant latitudinal extent, likely tracking oceans. Because of the
+vantage point of \TESS during Sectors 1 and 2, we are not sensitive to
+high latitudes on the planet, although this may change with upcoming
+sectors.
+
+\todo{A bit more here.}
 
 
 \acknowledgements{\todo{(Artist acknowledgement)} The authors gratefully 
-acknowledge Dan Foreman-Mackey, David W Hogg, Ben Pope, \todo{and ...} 
+acknowledge Dan Foreman-Mackey, David W. Hogg, Ben Pope, \todo{and ...} 
 for useful conversations. Crucial parts of this work were carried out at the 
 TESS Data Workshop, hosted by Space Telescope Science Institute, and the 
 Building Early Science with TESS Workshop, hosted by the University of Chicago.}
 \facility{TESS}
 \software{Astropy, Matplotlib, Numpy, \starry \citep{Luger2019}, 
 TensorFlow \citep{Abadi2015}, \spiceypy \citep{Annex2019}}
+
 % Bibliography
-\pagebreak
 \bibliography{bib}
 
 \end{document}
