@@ -62,28 +62,47 @@ be determined.
 \label{sec:intro}
 
 
-Of the many challenges and opportunities facing the field of exoplanets in the future, the prospect of mapping the surface of a potentially habitable planet is one of the most exciting -- and one of the most difficult. 
-Present-day missions including the Transiting Exoplanet Survey Satellite \citep[\TESS; ][]{Ricker2015} aim to discover small terrestrial planets around bright, nearby stars. 
-Once these targets are found, much more detailed observational characterization must follow to evaluate their suitability for harboring life. 
-The discovery of surface features including continents and oceans would be a critical hint towards the habitability of an alien world.
+Of the many challenges and opportunities facing the field of exoplanets in the future, 
+the prospect of mapping the surface of a potentially habitable planet is one of 
+the most exciting -- and one of the most difficult. 
+Present-day missions including the Transiting Exoplanet Survey Satellite 
+\citep[\TESS; ][]{Ricker2015} aim to discover small terrestrial planets around 
+bright, nearby stars. 
+Once these targets are found, more detailed observational characterization 
+must follow to evaluate their suitability for harboring life. 
+The discovery of surface features such as continents and oceans would be a 
+critical step toward understanding the habitability of an alien world.
 
-The most straightforward method of observing features on a terrestrial exoplanet would be to directly image the planet at sufficient resolution. 
-However, such an observation would require an effective telescope aperture orders of magnitude larger than currently available as well as extremely advanced coronagraphic optics, making it a far-future goal. 
+The most straightforward method of observing features on a terrestrial exoplanet 
+would be to directly image the planet at sufficient resolution. 
+However, such an observation would require an effective telescope aperture many orders 
+of magnitude larger and equipped with far more advanced coronagraphic optics
+than what we have available today.
 
-Surface mapping can also be done by observing rotational phase-dependent variations of the planetary signal in precise photometric time series. 
-This is a complex data analysis problem: strong degeneracies are involved when transforming a 1-dimensional time series into a 2-dimensional surface map. 
-Interpretation is also challenging in the face of many potential explanations for a poorly resolved observed feature. 
-
-\todo{(Summary of previous mapping work:)}\citep{Knutson2007,Majeau2012,deWit2012}
-
+Fortunately, surface mapping can also be done indirectly by observing rotational 
+phase-dependent variations of the planetary signal in precise photometric time series. 
+This is a complex data analysis problem: strong degeneracies are involved when 
+transforming a 1-dimensional time series into a 2-dimensional surface map
+\citep{CowanFuentesHaggard2013}. 
+Interpretation is also challenging in the face of many potential explanations 
+for a poorly resolved surface feature. Nevertheless, this technique has
+already proven successful in the mapping of large dipolar features on the surfaces
+of hot giant planets, most notably the hot Jupiter HD189733b
+\citep{Knutson2007,Majeau2012,deWit2012}. More recently, this technique has also
+been applied to the potentially terrestrial planet 55 Cancri e, suggesting
+a large longitudinal offset in its peak surface emission due to either
+lava flows on the surface or strong atmospheric recirculation
+\citep{Demory2016,Demory2016b,Hammond2017}.
 
 \todo{(Discussion of expanding this work to terrestrial planets and/or reflected light:)} \citep{Berdyugina2017,Cowan2009,Cowan2018,Haggard2018,Kawahara2010,Fujii2012,Lustig-Yaeger2018} and others.
 
 
 \todo{We need to cite \cite{Sagan1993}!}
 
-The \TESS mission promises to deliver thousands of new exoplanets around bright, nearby stars, many of which may be terrestrial worlds potentially suitable for life. 
-In fact, one such world, a planet which we will call Sol d, has already been extensively observed by \TESS.
+The \TESS mission promises to deliver thousands of new exoplanets around bright, 
+nearby stars, many of which may be terrestrial worlds potentially suitable for life. 
+In fact, one such world, a planet which we will call Sol d, has already been 
+extensively observed by \TESS.
 
 Previous attempts to map Sol d from the exoplanet community have suggested 
 the presence of localized surface features, but their resolving power has been 
@@ -449,7 +468,7 @@ systematics model $\mathbf{p}_n = \mathbf{B}\mathbf{w}_n$ (different for each ta
 the \starry model $\mathbf{s} = \mathbf{A}\mathbf{y}$ (shared by all targets). Since we happen
 to know the exact distance $\mathbf{r}$ between \TESS and Sol d at all times
 (\S\ref{sec:orbit}), we also include the inverse square of $\mathbf{r}$ 
-as a multiplicative term. The model for the flux timeseries
+as a multiplicative term. The model for the flux time series
 in the $n^\mathrm{th}$ postage stamp is therefore
 %
 \begin{align}
@@ -694,7 +713,7 @@ is not exact.
 \label{sec:illposed}
 
 The problem of inferring a two-dimensional map from a one-dimensional
-timeseries is famously ill-posed given its large null space and many complex
+time series is famously ill-posed given its large null space and many complex
 degeneracies \citep[e.g.,][]{CowanFuentesHaggard2013}. In fact, for a 
 uniformly illuminated body, its rotational light curve encodes at most
 $2l_\mathrm{max}$ modes (one sine term and one cosine term per frequency), 
