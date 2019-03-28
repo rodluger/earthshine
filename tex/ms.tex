@@ -171,11 +171,12 @@ of the general background flux modulation seen across the \TESS cameras, rather
 than containing any truly localized signals from astrophysical background 
 sources; and the sample as a whole should contain the full range of typical 
 behaviors of background across the entire \TESS field of view. 
-To accomplish this, we interpolated all light curves in Sector 1 onto the same time
-grid, masked all cadences with nonzero \textsf{QUALITY} flags and
+To accomplish this, we applied a categorization and outlier rejection scheme to the ensemble of light curves.
+We interpolated all light curves in Sector 1 onto the same time
+grid, masked all cadences with nonzero \textsf{QUALITY} flags, and masked
 cadences during which Sol d was below the edge of the sunshade.
-During the selection step only, we also normalized them to the same min-max range.
-We then computed the median
+During this selection step only, we also normalized the light curves to the same min-max range.
+We computed the median
 flux at each cadence along with an estimate of the variance based on the
 median absolute deviation (MAD) across all light curves.
 For each light curve, we calculated a score $\chi^2$ equal to the sum of the squares of the
