@@ -4,8 +4,6 @@
 \input{cortex}
 
 \usepackage{xcolor}
-\usepackage{xspace}
-\newcommand{\TESS}{\emph{TESS}\xspace}
 \newcommand{\todo}[1]{\textcolor{red}{#1}}
 
 % Bibliography stuff
@@ -36,17 +34,13 @@
        Institute of Technology, Cambridge, MA}
 
 \begin{abstract}
-\todo{[maybe change first sentences to focus on planet mapping \& give the game 
-away less?]} The Transiting Exoplanet Survey Satellite (\TESS) mission is a 
-targeted effort to detect planets smaller than Neptune around bright, nearby stars. 
-While \TESS is already enjoying great success with the discovery of many new worlds, 
-the strongest signal in its data is typically ignored, as it lurks in the background 
-of every camera pixel. In this work, we extract this signal and demonstrate that 
-it is consistent with a terrestrial planet with a rotation period of 1 day. 
+Multiple exoplanets have now been photometrically mapped using phase-modulated reflection or emission from their surfaces and atmospheres, but the small amplitudes of such signals have limited previous maps almost exclusively to hot gas giant planets. 
+In this work, we uncover a signal using recently released data from the Transiting Exoplanet Survey Satellite (\TESS) which we show corresponds to time-variable reflection from a terrestrial 
+planet with a rotation period of $0.9972696$ days. 
 Using a spherical harmonic-based reflection model developed as an extension of 
 the \starry package, we are able to reconstruct the surface features of this rocky 
 world. We recover a time-variable albedo map of the planet including persistent 
-regions which we interpret as continental features and cloud banks. 
+regions which we interpret as oceans and cloud banks indicative of continental features. 
 We argue that this planet represents the most promising detection of a habitable 
 world to date, although the potential intelligence of any life on it is yet to 
 be determined.
@@ -61,13 +55,19 @@ be determined.
 \label{sec:intro}
 
 
-Of the many challenges and opportunities facing the field of exoplanets in the future, the prospect of mapping the surface of an Earth-like planet is one of the most exciting -- and one of the most difficult. 
+Of the many challenges and opportunities facing the field of exoplanets in the future, the prospect of mapping the surface of a potentially habitable planet is one of the most exciting -- and one of the most difficult. 
 Present-day missions including the Transiting Exoplanet Survey Satellite \citep[\TESS; ][]{Ricker2015} aim to discover small terrestrial planets around bright, nearby stars. 
-Once these targets are found, efforts to characterize them in detail and determine their habitability will begin in earnest. 
-The discovery of surface features including continents and oceans will be a critical hint for the habitability of an alien world.
+Once these targets are found, much more detailed observational characterization must follow to evaluate their suitability for harboring life. 
+The discovery of surface features including continents and oceans would be a critical hint towards the habitability of an alien world.
 
-Such mapping can be done by constructing a phase map of the planet using precise photometry obtained over long periods of time. 
-\todo{(literature background \& citations)}
+The most straightforward method of observing features on a terrestrial exoplanet would be to directly image the planet at sufficient resolution. 
+However, 
+
+Surface mapping can also be done by observing rotational phase-dependent variations of the planetary signal in precise photometric time series. 
+\todo{(summarize how it works)} 
+This is a complex data analysis problem: strong degeneracies are involved when transforming a 1-dimensional time series into a 2-dimensional surface map. 
+Interpretation is also challenging in the face of many potential explanations for a poorly resolved observed feature. 
+
 
 \todo{We need to cite} \citep{Berdyugina2017,Cowan2009,Cowan2018,Haggard2018,Kawahara2010,Fujii2012,Lustig-Yaeger2018} and others.
 
@@ -75,27 +75,27 @@ Such mapping can be done by constructing a phase map of the planet using precise
 
 \todo{We need to cite \cite{Sagan1993}!}
 
-A new source of precise photometry is the Transiting Exoplanet Survey Satellite 
-\citep[\TESS; ][]{Ricker2015}. 
-Launched in April 2018, \TESS has... \todo{(summary of \TESS's capabilities, 
-citations to planet discoveries etc)}
+%A new source of precise photometry is the Transiting Exoplanet Survey Satellite 
+%\citep[\TESS; ][]{Ricker2015}. 
+%Launched in April 2018, \TESS has... \todo{(summary of \TESS's capabilities, 
+%citations to planet discoveries etc)}
 
-One intriguing feature of the \TESS photometric data products is a highly 
-time-variable signal represented in the diffuse background across virtually 
-all camera pixels. 
-\todo{(talk abt Earthshine without naming it)} 
-The signal has been widely attributed to a planet which we will call Sol d.
+%One intriguing feature of the \TESS photometric data products is a highly 
+%time-variable signal represented in the diffuse background across virtually 
+%all camera pixels. 
+%\todo{(talk abt Earthshine without naming it)} 
+%The signal has been widely attributed to a planet which we will call Sol d.
 
 Previous attempts to map this planet from the exoplanet community have suggested 
 the presence of localized surface features, but their resolving power has been 
 severely limited by the duration of observations \citep{Cowan2009}. 
 \TESS offers precise 2-minute cadence data spanning a wide range of illumination 
 phases, enabling a level of spatial and temporal resolving power that is 
-unprecedented in the exoplanetary phase mapping literature. 
+unprecedented in the history of exoplanet phase mapping. 
 
-Moreover, recent advances in fast analytic computation of spherical harmonics 
-have made the reconstruction of such detailed maps more feasible than ever. 
-\todo{(STARRY)}
+Moreover, recent advances in the computational tractability of this data analysis problem 
+have made the reconstruction of detailed maps more feasible than ever. 
+\todo{(describe how STARRY works - fast analytic computation of spherical harmonics)}
 
 In this work, we build on this methodological foundation to perform 
 reflected-light mapping of planetary surface features on Sol d. 
@@ -104,11 +104,10 @@ In \S\ref{sec:methods}, we describe the methods employed to infer a map
 from these data, including the adaptation of the \starry algorithm to reflection 
 mapping, the modeling of spacecraft-related systematics, and the likelihood and 
 priors used. 
-We present results in \S\ref{sec:results} and make comparison of these 
-findings to state-of-the-art terrestrial planet maps from the literature in 
+We present results in \S\ref{sec:results} and make a comparison of these 
+findings to state-of-the-art terrestrial planet maps in 
 \S\ref{sec:discussion}. 
-Finally, we conclude in \S\ref{sec:conclusions} with a look at future 
-prospects for phase-curve mapping of terrestrial exoplanets.
+Finally, we conclude in \S\ref{sec:conclusions}.
 
 \section{Data}
 \label{sec:data}
@@ -116,8 +115,8 @@ prospects for phase-curve mapping of terrestrial exoplanets.
 The \TESS pipeline produces processed lightcurves for all short-cadence targets. 
 Part of this processing is the determination of the localized background flux 
 within each postage stamp, which is provided as an ancillary time series. 
-As with all \TESS time series data products, the time is given in \TESS Julian 
-Days (TJD), defined as $\mathrm{BJD} - 2457000$, and the data are delivered in 27-day 
+As with all \TESS time series data products, the time is given in units of \TESS Julian 
+Date (TJD), defined as $\mathrm{BJD} - 2457000$ \todo{(is this barycentric corrected?)}, and the data are delivered in 27-day 
 parcels corresponding to the varying pointing sectors of \TESS. 
 We use these background flux measurements from Sectors 1 and 2 as our primary 
 data source in this work. 
@@ -948,7 +947,9 @@ produce a global map of Sol d, a terrestrial planet in the habitable
 zone of a G2 main-sequence star. We adapted the \starry code to 
 generate (and invert) light curves in reflected light, coupling it
 to a variation of pixel level decorrelation to model the systematics
-in the \TESS detector. We detect three large scale bright regions near
+in the \TESS detector. 
+
+We detect three large scale bright regions near
 the equator of the planet, associated with persistent cloud structures
 at longitudes of $-60^\circ$, $+30^\circ$, and $+90^\circ$, which
 likely track continents. Pronounced dark features are identified
@@ -960,9 +961,11 @@ sectors.
 
 \todo{A bit more here.}
 
+In conclusion, we have demonstrated that \TESS is an effective addition to NASA's fleet of weather satellites.
+
 
 \acknowledgements{\todo{(Artist acknowledgement)} The authors gratefully 
-acknowledge Dan Foreman-Mackey, David W. Hogg, Ben Pope, \todo{and ...} 
+acknowledge Jonathan Fraine, Dan Foreman-Mackey, David W. Hogg, Ben Montet, and Ben Pope 
 for useful conversations. Crucial parts of this work were carried out at the 
 TESS Data Workshop, hosted by Space Telescope Science Institute, and the 
 Building Early Science with TESS Workshop, hosted by the University of Chicago.}
