@@ -114,19 +114,38 @@ prospects for phase-curve mapping of terrestrial exoplanets.
 \label{sec:data}
 
 The \TESS pipeline produces processed lightcurves for all short-cadence targets. 
-Part of this processing is the determination of the localized background flux within each postage stamp, which is provided as an ancillary time series. 
-As with all \TESS time series data products, the time is given in \TESS Julian Days (TJD), defined as BJD - 2457000, and the data are delivered in 27-day parcels corresponding to the varying pointing sectors of \TESS. 
-We use these background flux measurements from Sectors 1 and 2 as our primary data source in this work. 
+Part of this processing is the determination of the localized background flux 
+within each postage stamp, which is provided as an ancillary time series. 
+As with all \TESS time series data products, the time is given in \TESS Julian 
+Days (TJD), defined as $\mathrm{BJD} - 2457000$, and the data are delivered in 27-day 
+parcels corresponding to the varying pointing sectors of \TESS. 
+We use these background flux measurements from Sectors 1 and 2 as our primary 
+data source in this work. 
 
-For each of the two sectors considered, we downloaded a randomized subsample of 1000 short-cadence lightcurve files corresponding to postage stamps located across the full \TESS field of view and extracted the background flux time series from each. 
-Not all postage stamps are equally informative, since the desired signal from Sol d is inhomogenously spread across the \TESS detectors and manifests differently in different regions (see \S\ref{sec:systematics}). 
-We down-selected our pool of 1000 targets to 75 maximally useful background lightcurves from Sector 1 and 20 from Sector 2. 
-This down-selection was done with several criteria in mind: each lightcurve should contain a significant signal from Sol d; they should be representative of the general background flux modulation seen across the \TESS cameras, rather than containing any truly localized signals from astrophysical background sources; and the sample as a whole should contain the full range of typical behaviors of background across the entire \TESS field of view. 
-To accomplish this, we... \todo{(decide whether it's outlier rejection only or full-on categorization)}
+For each of the two sectors considered, we downloaded a random subsample of 
+1,000 short-cadence lightcurve files corresponding to postage stamps located 
+across the full \TESS field of view and extracted the background flux time 
+series from each. 
+Not all postage stamps are equally informative, since the desired signal from 
+Sol d is inhomogenously spread across the \TESS detectors and manifests 
+differently in different regions (see \S\ref{sec:systematics}). 
+We down-selected our pool of 1000 targets to 75 maximally useful background 
+lightcurves from Sector 1 and 20 from Sector 2. 
+This down-selection was done with several criteria in mind: each lightcurve 
+should contain a significant signal from Sol d; they should be representative 
+of the general background flux modulation seen across the \TESS cameras, rather 
+than containing any truly localized signals from astrophysical background 
+sources; and the sample as a whole should contain the full range of typical 
+behaviors of background across the entire \TESS field of view. 
+To accomplish this, we... \todo{(decide whether it's outlier rejection only or 
+full-on categorization)}
 
-\todo{(masking out epochs without Sol d shine, subtraction of baseline background flux)}
+\todo{(masking out epochs without Sol d shine, subtraction of baseline 
+background flux)}
 
-The final data set to be used consists of 75 Sector 1 background lightcurves and 20 Sector 2 background lightcurves corresponding to the epochs at which Sol d signal was clearly registered by \TESS. 
+The final data set to be used consists of 75 Sector 1 background lightcurves 
+and 20 Sector 2 background lightcurves corresponding to the epochs at which 
+Sol d signal was clearly registered by \TESS. 
 This is 912,605 data points in total. 
 A representative sample of these signals is shown in Figure~\ref{fig:data}.
 
@@ -153,11 +172,11 @@ A representative sample of these signals is shown in Figure~\ref{fig:data}.
 
 We downloaded 
 \footnote{\url{https://archive.stsci.edu/missions/tess/models/}}
-the Solar System and \tess ephemeris data for
+the Solar System and \TESS ephemeris data for
 Sectors 1 and 2 and used \spiceypy \citep{Acton1996, Acton2017, Annex2017}
 to convert the TJD timestamps to 
 ephemeris time (ET). We then used the \textsf{spkezr} utility of \spiceypy to compute
-the relative positions of Sol, Sol d, and \tess for every cadence
+the relative positions of Sol, Sol d, and \TESS for every cadence
 in our dataset in the J2000 equatorial reference frame. In this right-handed
 coordinate frame, Sol d is centered at the origin, the $y$ axis points along the 
 planet's spin axis, and the $x$ axis points toward the vernal equinox. We
@@ -178,7 +197,7 @@ we find $\mathrm{ERA} = 303.4^\circ$, meaning the vernal equinox will be aligned
 the prime meridian $360^\circ - 303.4^\circ = 56.6^\circ = 3.77$ hours past $t_0$.
 %
 Finally, we rotate the frame to align
-\tess with the $+z$ axis, with the spin vector of Sol d along the $y-z$ plane.
+\TESS with the $+z$ axis, with the spin vector of Sol d along the $y-z$ plane.
 We verified our rotations by comparing our results on several days to the
 ephemerides provided by the JPL HORIZONS Web interface%
 \footnote{See \url{https://ssd.jpl.nasa.gov/horizons.cgi} and 
@@ -189,7 +208,7 @@ Jupyter notebook.}}.
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/phases.pdf}
     \caption{\label{fig:phases}
-             \tess view of Sol d on every date in Sectors 1
+             \TESS view of Sol d on every date in Sectors 1
              and 2 that was included in the regression. Each image is
              labeled with the corresponding timestamp in TJD. The images
              shown here correspond to current models of the continental coverage
@@ -199,14 +218,14 @@ Jupyter notebook.}}.
     \end{centering}
 \end{figure}
 
-Figure~\ref{fig:phases} shows the view \tess has of Sol d on each of the dates
+Figure~\ref{fig:phases} shows the view \TESS has of Sol d on each of the dates
 in our dataset; these images were produced by applying the sequences of rotations
 described above. The planet is illuminated by Sol assuming it is a point source,
 and the night side is shaded black. The map of Sol d shown in this figure is 
 based on current models of the actual distribution of continents on the planet.
 Note that although the images are computed an integer number of rotation periods
 apart, the planet appears to slowly rotate over the course of the observation.
-This is because of the orbit of \tess, which changes its vantage point relative
+This is because of the orbit of \TESS, which changes its vantage point relative
 to Sol d over the course of its 13 day orbit.
 
 \subsection{Systematics Modeling}
@@ -217,7 +236,7 @@ extracted lightcurves, its strength is modulated by time-variable systematics
 that are correlated but not identical across all postage stamps, since the
 illumination of the CCD by Sol d is strongly inhomogeneous. A physical
 model of the reflections and scattering that gives rise to the
-signal of Sol d on the \tess detector is beyond the scope of this work. Instead,
+signal of Sol d on the \TESS detector is beyond the scope of this work. Instead,
 we treat this as a de-trending problem, where the signal we wish to fit is
 shared by all postage stamps, but multiplied by a systematic signal that is
 different for each target. This problem is precisely what the technique of
@@ -232,7 +251,7 @@ data, with minimal risk of fitting out astrophysical signals.
 
 We therefore construct a design matrix $\mathbf{B}$ out of the PLD basis. To
 increase the flexibility of the systematics model, we append to $\mathbf{B}$ 5 orthogonal
-polynomials in time for each of the two orbits of \tess in each sector.
+polynomials in time for each of the two orbits of \TESS in each sector.
 The systematics model $\mathbf{p}$ for the $n^\mathrm{th}$ signal is thus
 %
 \begin{align}
@@ -372,7 +391,7 @@ the details will be discussed in more detail in upcoming work.
     \includegraphics[width=\linewidth]{figures/starry_model.pdf}
     \caption{\label{fig:starry_model}
              Normalized surface reflectance versus time for the maximum
-             likelihood \starry model in each of the four orbits of \tess
+             likelihood \starry model in each of the four orbits of \TESS
              in Sectors 1 and 2.
              \codelink{earthshine_S1_S2}
              }
@@ -401,7 +420,7 @@ a maximum surface resolution on the order of $180^\circ/10 \approx 18^\circ$.
 Finally, for reference, in Figure~\ref{fig:starry_model} we plot the
 \starry model for our maximum likelihood fit (\S\ref{sec:results}). The
 sharp rise at the beginning of each orbit in Sector 1 is due to the changing
-vantage point of \tess as Sol d transitions from a thin crescent to full phase.
+vantage point of \TESS as Sol d transitions from a thin crescent to full phase.
 
 \subsection{Full Model and Likelihood Function}
 \label{sec:model}
@@ -409,7 +428,7 @@ vantage point of \tess as Sol d transitions from a thin crescent to full phase.
 Our full model for each light curve is simply the product of the 
 systematics model $\mathbf{p}_n = \mathbf{B}\mathbf{w}_n$ (different for each target) and
 the \starry model $\mathbf{s} = \mathbf{A}\mathbf{y}$ (shared by all targets). Since we happen
-to know the exact distance $\mathbf{r}$ between \tess and Sol d at all times
+to know the exact distance $\mathbf{r}$ between \TESS and Sol d at all times
 (\S\ref{sec:orbit}), we also include the inverse square of $\mathbf{r}$ 
 as a multiplicative term. The model for the flux timeseries
 in the $n^\mathrm{th}$ postage stamp is therefore
@@ -609,7 +628,7 @@ observer vector and the vector normal to the surface of Sol d. This normalizatio
 has the effect of downweighting regions that are either seldom illuminated (such
 as regions near the southern pole of Sol d, as the observations were taken during
 southern winter) or seldom in view (such as regions near the north pole of the planet,
-which during Sectors 1 and 2 were mostly on the opposite side of Sol d than \tess).
+which during Sectors 1 and 2 were mostly on the opposite side of Sol d than \TESS).
 Because there is little data from these regions, their albedo is prior-dominated
 and tends to fluctuate substantially with small changes to the choices we make
 when fitting the data. Conversely, we find that the large scale features close to
@@ -628,10 +647,10 @@ I1 (red), M4 (blue), and M3 (green) bands and masking
 all pixels that were either dark or had significant variance among the three
 bands (i.e., inconsistent with a grey spectrum). We then averaged the images
 averaged over the 28 days of data analyzed in this work, smoothed it, 
-and weighted by the \tess visibility as in the top panel.
+and weighted by the \TESS visibility as in the top panel.
 
 While the two panels display fundamentally different quantities---an albedo
-and a cloudiness factor---we expect that the signal of Sol d in the \tess
+and a cloudiness factor---we expect that the signal of Sol d in the \TESS
 bandpass is dominated by cloud reflectivity, as water clouds have an albedo
 higher than soil, vegetation, or ocean in the optical/near infrared
 \citep[e.g.,][]{Jedlovec2009}. We therefore
@@ -679,9 +698,9 @@ of the degeneracies, which are rooted in the anti-symmetry of many of the spheri
 harmonic modes. Moreover, the discontinuous day/night terminator further
 breaks these degeneracies, as only modes that are anti-symmetric about
 the visible lune of the planet strictly remain in the null space. Second, 
-the changing vantage point of \tess relative to Sol d (and our exact knowledge of it)
+the changing vantage point of \TESS relative to Sol d (and our exact knowledge of it)
 breaks degeneracies that are viewpoint-dependent. In particular, the motion of
-\tess changes the position and shape of the terminator on the projected disk
+\TESS changes the position and shape of the terminator on the projected disk
 of Sol d, enhancing the effect discussed above.
 
 In fact, because of these points, there should actually be \emph{no} null space 
@@ -715,7 +734,7 @@ regardless of the choice of prior, their exact shapes and contrast varied
 significantly under different assumptions.
 
 Third, inspection of Figure~\ref{fig:phases} shows that most of the time, Sol
-d is close to full phase as seen by \tess.
+d is close to full phase as seen by \TESS.
 With the terminator close to the limb
 of the planet, its ability to break degeneracies is considerably lessened.
 We are therefore somewhat limited in our ability to infer in particular the
@@ -743,7 +762,7 @@ come as close as possible to the correct answer. While many of these choices
 correspond to numbers we have explicitly quoted here, such as the prior
 variances on our model terms, several of them are implicit decisions on
 \emph{how} we performed the analysis. For instance, in an early version of 
-the project we used as regressors actual \tess housekeeping variables---such as the angle 
+the project we used as regressors actual \TESS housekeeping variables---such as the angle 
 and elevation of the Earth and the Moon relative to each of the four camera 
 boresights---instead of the PLD basis. However, the systematics model constructed from these quantities
 proved to be too inflexible, judging in part from the poor fidelity of the recovered
@@ -770,10 +789,10 @@ that this constant baseline was the \emph{only} source of additive
 noise. We know this to be strictly untrue, as Sol d is known to
 have a companion (Sol d I), a moon about one-third the diameter of 
 Sol d, whose reflected light should cause periodic modulations
-in the background flux of \tess pixels. Because of its small size and
+in the background flux of \TESS pixels. Because of its small size and
 very low ($\sim 0.1$) albedo, we chose to ignore its effect, but it
 is likely to contaminate our signal at certain points in the orbit
-where \tess is closer to Sol d I than to Sol d. While this will
+where \TESS is closer to Sol d I than to Sol d. While this will
 likely bias the \starry model at those times, the effect is particularly
 concerning because of its impact on the PLD basis. While PLD can be an
 extremely powerful de-trending technique, it is notorious for
@@ -911,7 +930,7 @@ year on Sol d---during which time cloud patterns should change with the
 seasons and the angle between the day/night terminator and the 
 axis of rotation should precess---may help to disambiguate between
 clouds, oceans, and continents. We intend to perform this analysis
-in upcoming work once data from future \tess sectors becomes available.
+in upcoming work once data from future \TESS sectors becomes available.
 
 Alternatively, time-resolved observations in multiple bands could
 also help with this problem. This was discussed in \cite{Cowan2009},
