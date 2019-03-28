@@ -237,8 +237,7 @@ do not apply any light travel correction, as the expected delay is on the order
 of a few seconds.
 
 At any given cadence, we rotate Sol d about its spin axis to the correct phase,
-assuming a rotation period of $0.9972696$ day, the sidereal rotation period
-of the planet. We determine the initial rotation
+assuming a planetary rotation period of $0.9972696$ days. We determine the initial rotation
 phase of Sol d by computing the Sol d Rotation Angle (ERA), given by \citep{Urban2013}
 %
 \begin{align}
@@ -261,11 +260,11 @@ Jupyter notebook.}}.
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/phases.pdf}
     \caption{\label{fig:phases}
-             \TESS view of Sol d on every date in Sectors 1
-             and 2 that was included in the regression. Each image is
-             labeled with the corresponding timestamp in TJD. The images
-             shown here correspond to current models of the continental coverage
-             of Sol d, not to the map inferred in this study.
+             Synthetic images showing \TESS's view of Sol d on every date in 
+             Sectors 1 and 2 that was included in the regression. Each image 
+             is labeled with the corresponding timestamp in TJD. 
+             The dayside features shown here correspond to a hypothetical 
+             model of Sol d, not to the map inferred in this study.
              \codelink{EarthView}
              }
     \end{centering}
@@ -278,7 +277,7 @@ and the night side is shaded black. The map of Sol d shown in this figure is
 based on current models of the actual distribution of continents on the planet.
 Note that although the images are computed an integer number of rotation periods
 apart, the planet appears to slowly rotate over the course of the observation.
-This is because of the orbit of \TESS, which changes its vantage point relative
+This is due to the orbit of \TESS, which changes its vantage point relative
 to Sol d over the course of its 13 day orbit.
 
 \subsection{Systematics Modeling}
@@ -294,17 +293,20 @@ we treat this as a de-trending problem, where the signal we wish to fit is
 shared by all postage stamps, but multiplied by a systematic signal that is
 different for each target. This problem is precisely what the technique of
 pixel-level decorrelation \citep[PLD;][]{Deming2015, Luger2016, Luger2018a}
-seeks to address. In PLD, one computes the sum over all light curves at each
+seeks to address. In PLD, one computes the sum over all $N$ light curves at each
 point in time, and uses this quantity to normalize each of the individual
 light curves. Since (by assumption) each light curve is the product of the astrophysical
 signal and the systematics signal, this procedure divides out the astrophysical
-signal, producing a basis of vectors that contain \emph{only} functions of the
-systematics. This now serves as a ``clean'' basis one can then use to fit the
-data, with minimal risk of fitting out astrophysical signals.
+signal, producing a basis of $N$ vectors that contain \emph{only} functions of the
+systematics. This now serves as a ``clean'' basis one can then use to fit the 
+systematics component of the data, with minimal risk of fitting out astrophysical signals. 
 
-We therefore construct a design matrix $\mathbf{B}$ out of the PLD basis. To
+We use PLD to determine a basis sets for each \TESS sector. 
+We then construct a design matrix $\mathbf{B}$ out of this PLD basis. To
 increase the flexibility of the systematics model, we append to $\mathbf{B}$ 5 orthogonal
-polynomials in time for each of the two orbits of \TESS in each sector.
+polynomials in time for each of the two orbits of \TESS in each sector. 
+\todo{(this is confusing - what order of polynomial? 
+is the design matrix shared for LCs from either sector?)}
 The systematics model $\mathbf{p}$ for the $n^\mathrm{th}$ signal is thus
 %
 \begin{align}
@@ -325,7 +327,7 @@ standard deviation $\sigma_w = 0.05$ (see \S\ref{sec:model}).
 We model the astrophysical component of the signal---the rotational modulation
 of Sol d in reflected light---using the \starry code package \citep{Luger2019}.
 \starry computes phase curves and occultation light curves for bodies whose
-surfaces are expressed as a sum of spherical harmonics. 
+surfaces can be expressed as a sum of spherical harmonics. 
 The algorithm works by first transforming
 from spherical harmonic coefficients to coefficients in the polynomial basis $\tilde{p}$, whose
 terms are of the form $x^i y^j z^k$ for (non-negative) integer $i$ and $j$ 
@@ -338,8 +340,8 @@ easily computed via recursion relations involving factorials. The algorithm is
 thus extremely fast and very precise.
 
 However, in the present work, we are interested in \emph{reflected} light, so we must
-account for the illumination by the star, which varies smoothly
-across the dayside of the planet but whose derivative discontinuously changes at the 
+account for the illumination by the star. This illumination varies smoothly
+across the dayside of the planet, but its derivative discontinuously changes at the 
 terminator, beyond which the illumination is zero everywhere. This requires
 two modifications to the \starry algorithm: we must (1) weight all integrands
 by the illumination function on the dayside, and (2) modify the integration
@@ -452,7 +454,7 @@ the details will be discussed in more detail in upcoming work.
 \end{figure}
 
 As with the systematics model (\S\ref{sec:systematics}), the model
-for the astrophysical signal is \emph{linear}: the signal $\mathbf{s}$ 
+for the astrophysical signal is \emph{linear}. The signal $\mathbf{s}$ 
 is a linear operation on the vector of spherical harmonic coefficients 
 $\mathbf{y}$
 that describes the body's surface:
@@ -464,10 +466,11 @@ that describes the body's surface:
 where $\mathbf{A}$ is the design matrix and $\mathbf{y}$ is the vector of spherical harmonic coefficients. 
 Note that in \cite{Luger2019}, $\mathbf{y}$ describes the emissivity of the surface,
 but here we will use it to represent the \emph{albedo} of the planet.
-We choose a maximum spherical harmonic degree $l_{max} = 10$ for our fits,
-noting that increasing $l_{max}$ above this value 
-leads to a quick rise in the amount of ``ringing'' without substantially
-increasing the quality of our fits. Note that $l = 10$ corresponds to
+
+We chose a maximum spherical harmonic degree $l_{max} = 10$ for our fits.
+Increasing $l_{max}$ above this value 
+leads to a sharp rise in the amount of ``ringing'' without substantially
+increasing the quality of the fit. Note that $l = 10$ corresponds to
 a maximum surface resolution on the order of $180^\circ/10 \approx 18^\circ$.
 
 Finally, for reference, in Figure~\ref{fig:starry_model} we plot the
@@ -483,7 +486,9 @@ systematics model $\mathbf{p}_n = \mathbf{B}\mathbf{w}_n$ (different for each ta
 the \starry model $\mathbf{s} = \mathbf{A}\mathbf{y}$ (shared by all targets). Since we happen
 to know the exact distance $\mathbf{r}$ between \TESS and Sol d at all times
 (\S\ref{sec:orbit}), we also include the inverse square of $\mathbf{r}$ 
-as a multiplicative term. The model for the flux time series
+as a multiplicative term to scale from the intrinsic luminance 
+\todo{(is this the right word??)} of Sol d to 
+the flux observed by \TESS. The model for the flux timeseries
 in the $n^\mathrm{th}$ postage stamp is therefore
 %
 \begin{align}
@@ -589,8 +594,8 @@ of the problem, and we must turn to a non-linear optimizer. We use the
 to maximize Equation~(\ref{eq:nll}). Starting with the values of the
 weights obtained in the first step, we run the \textsf{AdamOptimizer}
 for 1000 iterations, well past convergence. Since \tf automatically
-computes and propagates gradient information, this step is fast
-and also finishes in under three minutes on a laptop.
+computes and propagates gradient information, this step is fast, 
+finishing in under three minutes on a laptop.
 
 \section{Results}
 \label{sec:results}
@@ -607,7 +612,10 @@ and also finishes in under three minutes on a laptop.
              land masses which for specificity we will refer to as (from left to right)
              ``South America,'' ``Africa,'' and ``Asia.''
              The two dark features are associated with the planet's
-             two purported oceans, which we call the ``Pacific'' and the ``Atlantic.''
+             two purported oceans, which we call the ``Pacific'' and the ``Atlantic.'' 
+	     Black contours correspond to supposed coastlines
+             derived from current state-of-the-art models of the surface geography 
+             of Sol d.             
              }
     \end{centering}
 \end{figure}
@@ -616,7 +624,8 @@ Figure~\ref{fig:map_L2} shows the maximum likelihood map inferred
 during the first stage of our optimization procedure. Since the map
 coefficients were heavily regularized, the dynamic range of the albedo
 variations was less than 10\%; we scaled it to span the range [0, 1]
-for better visualization. Furthermore, although the resolution is on 
+for better visualization. Furthermore, although the maximum resolution of
+the spherical harmonic model is on 
 the order of $18^\circ$, features typically span ${\sim}45^\circ$; this is
 also an artefact of our regularization. However, broad features are already
 visible in the map: three bright regions and two dark regions (one of which
@@ -661,9 +670,8 @@ changes to the reflectivity of the surface. We revisit this point in \S\ref{sec:
              \emph{Top:} The maximum likelihood model for the surface albedo
              of Sol d, weighted by the visibility across Sectors 1 and 2. The
              dashed white lines indicate latitudes above/below which the
-             visibility drops below 50\%. Black contours indicate coastlines
-             derived from current state-of-the-art models of the surface geography 
-             of Sol d.
+             visibility drops below 50\%. As in Figure~\ref{fig:map_L2}, coastlines 
+             based on current models from the literature are overplotted as black contours.
              \emph{Bottom:} Approximate cloud coverage map based on corrected
              surface reflectance obtained by the
              \emph{VIIRS} imager, averaged over the same date range and weighted
@@ -675,16 +683,16 @@ changes to the reflectivity of the surface. We revisit this point in \S\ref{sec:
 
 In the top panel of Figure~\ref{fig:map} we show the final,
 maximum likelihood albedo map inferred for Sol d weighted by a visibility function.
-The visibiluty function is computed as the average of the product of the 
+The visibility function is computed as the average of the product of the 
 cosine of the illumination angle and the cosine of the angle between the 
 observer vector and the vector normal to the surface of Sol d. This normalization
 has the effect of downweighting regions that are either seldom illuminated (such
 as regions near the southern pole of Sol d, as the observations were taken during
-southern winter) or seldom in view (such as regions near the north pole of the planet,
-which during Sectors 1 and 2 were mostly on the opposite side of Sol d than \TESS).
+southern winter) or seldom in view (such as regions near the northern pole of the planet,
+which during Sectors 1 and 2 were mostly on the opposite side of Sol d from \TESS).
 Because there is little data from these regions, their albedo is prior-dominated
 and tends to fluctuate substantially with small changes to the choices we make
-when fitting the data. Conversely, we find that the large scale features close to
+when fitting the data. On the other hand, we find that the large scale features close to
 the equator of Sol d are mostly insensitive to our choices of prior. In the Figure,
 we use dashed lines to delineate the regions whose average visibility is larger
 than 0.5.
@@ -699,7 +707,7 @@ The image was produced by analyzing the corrected true color reflectance in the
 I1 (red), M4 (blue), and M3 (green) bands and masking
 all pixels that were either dark or had significant variance among the three
 bands (i.e., inconsistent with a grey spectrum). We then averaged the images
-averaged over the 28 days of data analyzed in this work, smoothed it, 
+averaged over the 28 days of data analyzed in this work, smoothed it \todo{(how?)}, 
 and weighted by the \TESS visibility as in the top panel.
 
 While the two panels display fundamentally different quantities---an albedo
@@ -746,7 +754,7 @@ Fortunately, there are two aspects of the problem at hand that facilitate
 this (seemingly impossible) inversion. First, the surface of Sol d is
 not uniformly illuminated; instead, different parts of the surface are weighted
 by different amounts as the planet rotates and as the angle of incident starlight
-moves over the course of the year. This weighting is sufficient to break many
+moves over the course of the planet's year. This weighting is sufficient to break many
 of the degeneracies, which are rooted in the anti-symmetry of many of the spherical
 harmonic modes. Moreover, the discontinuous day/night terminator further
 breaks these degeneracies, as only modes that are anti-symmetric about
@@ -758,7 +766,7 @@ of Sol d, enhancing the effect discussed above.
 
 In fact, because of these points, there should actually be \emph{no} null space 
 in this particular problem. In practice, however, it is evident from
-Figure~\ref{fig:map} that degenaricies still abound. While we infer a few of the
+Figure~\ref{fig:map} that degenericies still abound. While we infer a few of the
 dominant features of the cloud map of Sol d, several of them are skewed, 
 shifted, or entirely out of place. This is the case, for instance, with
 the cloud bank west of South America, which extends too far westward, and
@@ -783,7 +791,7 @@ hyperprior on the spectral
 slope and the maximum spherical harmonic degree of the map. Although the main
 features of the map (the monsoon over south Asia, the clouds over Africa and
 South America, and dark regions associated with the three major oceans) persist
-regardless of the choice of prior, their exact shapes and contrast varied
+regardless of the choice of prior, their exact shapes and contrast vary
 significantly under different assumptions.
 
 Third, inspection of Figure~\ref{fig:phases} shows that most of the time, Sol
@@ -801,7 +809,7 @@ with no estimate of the uncertainty anywhere on our map. A much better
 approach than simply maximizing the likelihood function is to marginalize
 over the nuisance parameters---such as the systematic model weights and the spectral
 slope. This is more costly, but certainly not intractable, and we will
-pursue this in upcoming work.
+pursue this in future work.
 
 \subsection{Confirmation Bias}
 \label{sec:confirmation}
@@ -824,9 +832,10 @@ must therefore be taken with a grain of salt. That said, we have attempted to
 offset the possibility of confirmation bias by making our model
 (Equation~\ref{eq:model}) as simple as possible in the end (a multiplicative baseline
 and a linear reflectance model) and thus limiting
-the number of knobs we could turn. We also opted to fit for the spectral
-slope of the map rather than use the power spectrum inferred from 
-real imaging data. Moreover, the broad features in the strongly
+the number of knobs we could turn. We also opted to forego any use of 
+real imaging data in our model; for instance, we fit for the spectral
+slope of the map as a free parameter rather than using the true power spectrum 
+of Sol d. Moreover, the broad features in the strongly
 regularized map (Figure~\ref{fig:map_L2})---and in particular the monsoon clouds
 over southeast Asia---are insensitive to most of our model choices.
 
@@ -978,7 +987,7 @@ features (such as ice or vegetation) and stationary clouds.
 We should not expect other exoplanets in the habitable zone to be
 any different. Future missions such as LUVOIR or HabEx may enable
 us to collect data on the phase curves of such planets, but that
-data will be of signficantly lower quality and poorer time resolution,
+data will be of significantly lower quality and poorer time resolution,
 so the work presented here can be seen as an upper limit on what we may
 be able to infer about exoplanets in the habitable zone with
 next-generation facilities.
@@ -992,7 +1001,7 @@ axis of rotation should precess---may help to disambiguate between
 clouds, oceans, and continents. We intend to perform this analysis
 in upcoming work once data from future \TESS sectors becomes available.
 
-Alternatively, time-resolved observations in multiple bands could
+Additionally, time-resolved observations in multiple bands could
 also help with this problem. This was discussed in \cite{Cowan2009},
 who showed that multi-band photometry of the Earth enables one to
 disentangle the contributions from oceans, continents, and cloud cover.
