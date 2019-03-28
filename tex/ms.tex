@@ -167,6 +167,10 @@ For each of the two sectors considered, we downloaded a random subsample of
 across the full \TESS field of view and extracted the background flux time 
 series (\textsf{SAP\_BKG}) and corresponding uncertainties
 (\textsf{SAP\_BKG\_ERR}) from each. 
+We then interpolated all light curves in a given sector onto the same time
+grid, masked all cadences with nonzero \textsf{QUALITY} flags, and masked
+cadences during which Sol d was below the edge of the sunshade.
+
 Not all postage stamps are equally informative, since the desired signal from 
 Sol d is inhomogeneously spread across the \TESS detectors and manifests itself
 differently in different regions (see \S\ref{sec:systematics}). 
@@ -178,10 +182,8 @@ of the general background flux modulation seen across the \TESS cameras, rather
 than containing any truly localized signals from astrophysical background 
 sources; and the sample as a whole should contain the full range of typical 
 behaviors of background across the entire \TESS field of view. 
-To accomplish this, we interpolated all light curves in Sector 1 onto the same time
-grid, masked all cadences with nonzero \textsf{QUALITY} flags and
-cadences during which Sol d was below the edge of the sunshade.
-During the selection step only, we also normalized them to the same min-max range.
+To accomplish this, we applied a categorization and outlier rejection scheme to the ensemble of light curves.
+During this selection step only, we normalized the light curves to the same min-max range.
 We then computed the median
 flux at each cadence along with an estimate of the variance based on the
 median absolute deviation (MAD) across all light curves.
