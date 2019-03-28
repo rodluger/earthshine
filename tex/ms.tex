@@ -115,7 +115,7 @@ The \TESS pipeline produces processed lightcurves for all short-cadence targets.
 Part of this processing is the determination of the localized background flux 
 within each postage stamp, which is provided as an ancillary time series. 
 As with all \TESS time series data products, the time is given in units of \TESS Julian 
-Date (TJD), defined as $\mathrm{BJD} - 2457000$ \todo{(is this barycentric corrected?)}, and the data are delivered in 27-day 
+Date (TJD), defined as $\mathrm{BJD} - 2457000$, and the data are delivered in 27-day 
 parcels corresponding to the varying pointing sectors of \TESS. 
 We use these background flux measurements from Sectors 1 and 2 as our primary 
 data source in this work. 
@@ -138,11 +138,12 @@ sources; and the sample as a whole should contain the full range of typical
 behaviors of background across the entire \TESS field of view. 
 To accomplish this, we interpolated all light curves in Sector 1 onto the same time
 grid, masked all cadences with nonzero \textsf{QUALITY} flags and
-cadences during which Sol d was below the edge of the sunshade, and
-normalized them to the same min-max range. We then computed the median
-flux at each cadence along with an estimate of the variance from the
+cadences during which Sol d was below the edge of the sunshade.
+During the selection step only, we also normalized them to the same min-max range.
+We then computed the median
+flux at each cadence along with an estimate of the variance based on the
 median absolute deviation (MAD) across all light curves.
-For each light curve, we then computed a score $\chi^2$ equal to the sum of the squares of the
+For each light curve, we calculated a score $\chi^2$ equal to the sum of the squares of the
 deviation from the median at each of the $N$ cadences, normalized by the variance.
 We removed all light curves with $\chi^2 < N$ from the pool, placing
 them in a separate group. We repeated these steps several times,
@@ -158,8 +159,12 @@ periodic modulation of the planet. To obtain our final set of light curves,
 we sorted the light curves in each group by the amplitude
 of the signal and kept the first 25 in each of the first three groups in Sector 1
 and the first 20 in the first group in Sector 2 for a total
-of 75 and 20 light curves, respectively. Our final dataset consisted of
-912,605 data points in total. 
+of 75 and 20 light curves, respectively. We then computed an estimate of the
+non-Sol d background flux from the cadences during which the planet was below
+the edge of the sunshade and removed this baseline from the flux.
+Finally, we median-normalized all light curves (as opposed to the min-max
+normalization used for the classification).
+Our final dataset consisted of 912,605 data points in total. 
 A representative sample of these signals is shown in Figure~\ref{fig:data}.
 
 \begin{figure}[t!]
@@ -830,8 +835,15 @@ an east-west bias in the location of the features we identify.
 We also ignored the finite angular size of Sol at Sol d (about $0.5^\circ$),
 treating it instead as a point source. Regions immediately nightward of the 
 terminator should therefore contribute a small amount of flux, which we neglect.
-The effect, however, is below the resolution of our inferred map, so we expect
-it does not introduce significant bias.
+Similarly, we used the timestamps reported in the \tess light curve
+FITS files, which are corrected to the barycenter of the Sol system. Since
+our signal originates from a source that is closer to \tess than the
+barycenter of the system, the timestamps may be wrong by up to 8 minutes,
+the light travel time from \tess to Sol. During 8 minutes, Sol d rotates
+by about $2^\circ$, so there should be a blurring of our inferred map at
+this scale. However, these two effects
+are well below the resolution of our map, so we expect
+them not to introduce significant bias.
 
 Moreover, we implicitly assumed an isotropic prior on the spherical harmonic
 coefficients by imposing a power spectrum in only the degree $l$. This has the
