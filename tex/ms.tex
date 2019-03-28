@@ -146,7 +146,7 @@ Finally, we conclude with a summary of our major findings in \S\ref{sec:conclusi
 \section{Data}
 \label{sec:data}
 
-The \TESS pipeline produces processed lightcurves for all short-cadence targets. 
+The \TESS pipeline produces processed light curves for all short-cadence targets. 
 Part of this processing is the determination of the localized background flux 
 within each postage stamp, which is provided as an ancillary time series. 
 As with all \TESS time series data products, the time is given in units of \TESS Julian 
@@ -156,16 +156,16 @@ We use these background flux measurements from Sectors 1 and 2 as our primary
 data source in this work. 
 
 For each of the two sectors considered, we downloaded a random subsample of 
-1,000 short-cadence lightcurve files corresponding to postage stamps located 
+1,000 short-cadence light curve files corresponding to postage stamps located 
 across the full \TESS field of view and extracted the background flux time 
 series (\textsf{SAP\_BKG}) and corresponding uncertainties
 (\textsf{SAP\_BKG\_ERR}) from each. 
 Not all postage stamps are equally informative, since the desired signal from 
-Sol d is inhomogenously spread across the \TESS detectors and manifests itself
+Sol d is inhomogeneously spread across the \TESS detectors and manifests itself
 differently in different regions (see \S\ref{sec:systematics}). 
 We down-selected our pool of 1,000 targets to 75 maximally useful background 
-lightcurves from Sector 1 and 20 from Sector 2. 
-This down-selection was done with several criteria in mind: each lightcurve 
+light curves from Sector 1 and 20 from Sector 2. 
+This down-selection was done with several criteria in mind: each light curve 
 should contain a significant signal from Sol d; they should be representative 
 of the general background flux modulation seen across the \TESS cameras, rather 
 than containing any truly localized signals from astrophysical background 
@@ -284,7 +284,7 @@ to Sol d over the course of its 13 day orbit.
 \label{sec:systematics}
 
 While the astrophysical signal that we wish to analyze is present in all 
-extracted lightcurves, its strength is modulated by time-variable systematics 
+extracted light curves, its strength is modulated by time-variable systematics 
 that are correlated but not identical across all postage stamps, since the
 illumination of the CCD by Sol d is strongly inhomogeneous. A physical
 model of the reflections and scattering that gives rise to the
@@ -485,7 +485,7 @@ the \starry model $\mathbf{s} = \mathbf{A}\mathbf{y}$ (shared by all targets). S
 to know the exact distance $\mathbf{r}$ between \TESS and Sol d at all times
 (\S\ref{sec:orbit}), we also include the inverse square of $\mathbf{r}$ 
 as a multiplicative term to scale the luminosity 
-of Sol d to the flux observed by \TESS. The model for the flux timeseries
+of Sol d to the flux observed by \TESS. The model for the flux time series
 in the $n^\mathrm{th}$ postage stamp is therefore
 %
 \begin{align}
@@ -763,7 +763,7 @@ of Sol d, enhancing the effect discussed above.
 
 In fact, because of these points, there should actually be \emph{no} null space 
 in this particular problem. In practice, however, it is evident from
-Figure~\ref{fig:map} that degenericies still abound. While we infer a few of the
+Figure~\ref{fig:map} that degeneracies still abound. While we infer a few of the
 dominant features of the cloud map of Sol d, several of them are skewed, 
 shifted, or entirely out of place. This is the case, for instance, with
 the cloud bank west of South America, which extends too far westward, and
