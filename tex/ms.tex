@@ -78,7 +78,7 @@ would be to directly image the planet at sufficient resolution.
 However, such an observation would require an effective telescope aperture many orders 
 of magnitude larger and equipped with far more advanced coronagraphic optics
 than what we have available today.
-
+%
 Fortunately, surface mapping can also be done indirectly by observing rotational 
 phase-dependent variations of the planetary signal in precise photometric time series. 
 This is a complex data analysis problem: strong degeneracies are involved when 
@@ -104,11 +104,11 @@ planets in the habitable zone
 for a review, see \cite{Cowan2018}.
 
 In this work, we show how we can harness photometric data collected by the \TESS mission
-to construct a map of Sol d, a rocky planet ‎with a radius of $6.4\times 10^6$ m
+to construct a map of Sol d, a rocky planet ‎with a radius of $6.4\times 10^6$~m
 orbiting near the inner edge of the habitable zone of its star, a nearby G2 main sequence
-star. Although the \TESS mission promised to deliver a handful of terrestrial planets in 
+star \citep{Sagan1993}. Although the \TESS mission promised to deliver a handful of terrestrial planets in 
 the habitable zone for follow-up with other missions, it came as a great surprise
-to many that data from the spacecraft could be used not only to detect Sol d but to
+that data from the spacecraft could be used not only to detect Sol d but to
 characterize it in detail. This is due primarily to the strong nature of the reflected
 light signal originating from the planet, which 
 because of complex internal optics illuminates the entirety of the \TESS detector 
@@ -116,30 +116,30 @@ during most of Sector 1 and part of Sector 2.
 
 Previous attempts to map Sol d from the exoplanet community have suggested 
 the presence of localized surface features, but their resolving power has been 
-severely limited by the cadence and/or duration of observations \citep{Cowan2009,Jiang2018}. 
+limited by the cadence and/or duration of observations \citep{Cowan2009,Jiang2018}. 
 \TESS offers precise 2-minute cadence data spanning a wide range of illumination 
 phases, enabling a level of spatial and temporal resolving power that is 
 unprecedented in the history of exoplanet phase mapping. 
-
-Moreover, recent advances in the computational tractability of this data analysis problem 
+%
+Moreover, recent advances on the modeling side 
 have made the reconstruction of detailed maps more feasible than ever. 
-\cite{Luger2019} developed a \todo{more more more}
-\cite{Haggard2018}
+\cite{Luger2019} developed an analytic algorithm for generating---and
+inverting---light curves of stars and planets whose surface emission is
+described in terms of spherical harmonics, dubbed \starry. The analyticity of this
+method makes the computation of the model both fast and precise.
+In turn, \cite{Haggard2018} derived similar analytic expressions for the
+analogous case in reflected light, packaged into the 
+\textsf{EARL} code. In this work, we derive similar expressions within
+the \starry framework to perform fast, analytical inversion of the light curve
+of Sol d and thus construct a map of the planet in reflected light.
 
-
-
-\todo{We need to cite \cite{Sagan1993}!}
-
-
-In this work, we build on this methodological foundation to perform 
-reflected-light mapping of planetary surface features on Sol d. 
-We give an overview of the \TESS data used in \S\ref{sec:data}. 
-In \S\ref{sec:methods}, we describe the methods employed to infer a map 
+The paper is organized as follows: we give an overview of the \TESS data used in \S\ref{sec:data},
+and in \S\ref{sec:methods} we describe the methods employed to infer a map 
 from these data, including the adaptation of the \starry algorithm to reflection 
 mapping, the modeling of spacecraft-related systematics, and the likelihood and 
 priors used. 
 We present results in \S\ref{sec:results} and make a comparison of these 
-findings to state-of-the-art terrestrial planet maps in 
+findings to other state-of-the-art maps of Sol d in 
 \S\ref{sec:discussion}. 
 Finally, we conclude with a summary of our major findings in \S\ref{sec:conclusions}.
 
@@ -1018,6 +1018,8 @@ analysis of the uncertainties and degeneracies at play.
 
 \section{Conclusions}
 \label{sec:conclusions}
+
+\todo{Make sure to reference Figure~\ref{fig:artist} here.}
 
 We have used \TESS photometry to
 produce a global map of Sol d, a terrestrial planet in the habitable
