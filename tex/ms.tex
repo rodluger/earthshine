@@ -94,15 +94,27 @@ a large longitudinal offset in its peak surface emission due to either
 lava flows on the surface or strong atmospheric recirculation
 \citep{Demory2016,Demory2016b,Hammond2017}.
 
-\todo{(Discussion of expanding this work to terrestrial planets and/or reflected light:)} \citep{Berdyugina2017,Cowan2009,Cowan2018,Haggard2018,Kawahara2010,Fujii2012,Lustig-Yaeger2018} and others.
+However, obtaining a map of a temperate terrestrial exoplanet is still
+beyond the capabilities of current facilities, as both the thermal and 
+reflected light signals from these planets
+are orders of magnitude below current measurement capabilities. Nevertheless,
+much work has been done on the theoretical front on mapping terrestrial
+planets in the habitable zone
+\citep[e.g.,][]{Kawahara2010,Fujii2012,Berdyugina2017,Haggard2018,Lustig-Yaeger2018};
+for a review, see \cite{Cowan2018}.
 
+In this work, we show how we can harness photometric data collected by the \TESS mission
+to construct a map of Sol d, a rocky planet ‎with a radius of $6.4\times 10^6$ m
+orbiting near the inner edge of the habitable zone of its star, a nearby G2 main sequence
+star. Although the \TESS mission promised to deliver a handful of terrestrial planets in 
+the habitable zone for follow-up with other missions, it came as a great surprise
+to us that data from the spacecraft could be used not only to detect Sol d but to
+characterize it in detal. This is due primarily to the strong nature of the reflected
+light signal originating from the planet, which 
+due to complex internal optics illuminates the entirety of the \TESS detector 
+during most of Sector 1 and part of Sector 2.
 
-\todo{We need to cite \cite{Sagan1993}!}
-
-The \TESS mission promises to deliver thousands of new exoplanets around bright, 
-nearby stars, many of which may be terrestrial worlds potentially suitable for life. 
-In fact, one such world, a planet which we will call Sol d, has already been 
-extensively observed by \TESS.
+\todo{more}
 
 Previous attempts to map Sol d from the exoplanet community have suggested 
 the presence of localized surface features, but their resolving power has been 
@@ -115,6 +127,9 @@ Moreover, recent advances in the computational tractability of this data analysi
 have made the reconstruction of detailed maps more feasible than ever. 
 \todo{(describe how STARRY works - fast analytic computation of spherical harmonics)}
 \todo{(also maybe say something about Cowan approach)}
+
+\todo{We need to cite \cite{Sagan1993}!}
+
 
 In this work, we build on this methodological foundation to perform 
 reflected-light mapping of planetary surface features on Sol d. 
@@ -208,7 +223,7 @@ A representative sample of these signals is shown in Figure~\ref{fig:data}.
 \subsection{Orbital Modeling}
 \label{sec:orbit}
 
-We downloaded 
+We downloaded%
 \footnote{\url{https://archive.stsci.edu/missions/tess/models/}}
 the Solar System and \TESS ephemeris data for
 Sectors 1 and 2 and used \spiceypy \citep{Acton1996, Acton2017, Annex2017}
