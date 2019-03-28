@@ -36,11 +36,12 @@
        Institute of Technology, Cambridge, MA}
 
 \begin{abstract}
-Multiple exoplanets have now been photometrically mapped using phase-modulated 
-reflection or emission from their surfaces and atmospheres, but the small amplitudes 
-of such signals have limited previous maps almost exclusively to hot gas giant planets. 
+To date, a handful of exoplanets have been photometrically mapped using phase-modulated 
+reflection or emission from their surfaces, but the small amplitudes 
+of such signals have limited previous maps almost exclusively to coarse dipolar
+features on hot giant planets. 
 In this work, we uncover a signal using recently released data from the Transiting 
-Exoplanet Survey Satellite (\TESS) which we show corresponds to time-variable reflection 
+Exoplanet Survey Satellite (\TESS), which we show corresponds to time-variable reflection 
 from a terrestrial 
 planet with a rotation period of $0.9972696$ days. 
 Using a spherical harmonic-based reflection model developed as an extension of 
@@ -61,28 +62,47 @@ be determined.
 \label{sec:intro}
 
 
-Of the many challenges and opportunities facing the field of exoplanets in the future, the prospect of mapping the surface of a potentially habitable planet is one of the most exciting -- and one of the most difficult. 
-Present-day missions including the Transiting Exoplanet Survey Satellite \citep[\TESS; ][]{Ricker2015} aim to discover small terrestrial planets around bright, nearby stars. 
-Once these targets are found, much more detailed observational characterization must follow to evaluate their suitability for harboring life. 
-The discovery of surface features including continents and oceans would be a critical hint towards the habitability of an alien world.
+Of the many challenges and opportunities facing the field of exoplanets in the future, 
+the prospect of mapping the surface of a potentially habitable planet is one of 
+the most exciting -- and one of the most difficult. 
+Present-day missions including the Transiting Exoplanet Survey Satellite 
+\citep[\TESS; ][]{Ricker2015} aim to discover small terrestrial planets around 
+bright, nearby stars. 
+Once these targets are found, more detailed observational characterization 
+must follow to evaluate their suitability for harboring life. 
+The discovery of surface features such as continents and oceans would be a 
+critical step toward understanding the habitability of an alien world.
 
-The most straightforward method of observing features on a terrestrial exoplanet would be to directly image the planet at sufficient resolution. 
-However, such an observation would require an effective telescope aperture orders of magnitude larger than currently available as well as extremely advanced coronagraphic optics, making it a far-future goal. 
+The most straightforward method of observing features on a terrestrial exoplanet 
+would be to directly image the planet at sufficient resolution. 
+However, such an observation would require an effective telescope aperture many orders 
+of magnitude larger and equipped with far more advanced coronagraphic optics
+than what we have available today.
 
-Surface mapping can also be done by observing rotational phase-dependent variations of the planetary signal in precise photometric time series. 
-This is a complex data analysis problem: strong degeneracies are involved when transforming a 1-dimensional time series into a 2-dimensional surface map. 
-Interpretation is also challenging in the face of many potential explanations for a poorly resolved observed feature. 
-
-\todo{(Summary of previous mapping work:)}\citep{Knutson2007,Majeau2012,deWit2012}
-
+Fortunately, surface mapping can also be done indirectly by observing rotational 
+phase-dependent variations of the planetary signal in precise photometric time series. 
+This is a complex data analysis problem: strong degeneracies are involved when 
+transforming a 1-dimensional time series into a 2-dimensional surface map
+\citep{CowanFuentesHaggard2013}. 
+Interpretation is also challenging in the face of many potential explanations 
+for a poorly resolved surface feature. Nevertheless, this technique has
+already proven successful in the mapping of large dipolar features on the surfaces
+of hot giant planets, most notably the hot Jupiter HD189733b
+\citep{Knutson2007,Majeau2012,deWit2012}. More recently, this technique has also
+been applied to the potentially terrestrial planet 55 Cancri e, suggesting
+a large longitudinal offset in its peak surface emission due to either
+lava flows on the surface or strong atmospheric recirculation
+\citep{Demory2016,Demory2016b,Hammond2017}.
 
 \todo{(Discussion of expanding this work to terrestrial planets and/or reflected light:)} \citep{Berdyugina2017,Cowan2009,Cowan2018,Haggard2018,Kawahara2010,Fujii2012,Lustig-Yaeger2018} and others.
 
 
 \todo{We need to cite \cite{Sagan1993}!}
 
-The \TESS mission promises to deliver thousands of new exoplanets around bright, nearby stars, many of which may be terrestrial worlds potentially suitable for life. 
-In fact, one such world, a planet which we will call Sol d, has already been extensively observed by \TESS.
+The \TESS mission promises to deliver thousands of new exoplanets around bright, 
+nearby stars, many of which may be terrestrial worlds potentially suitable for life. 
+In fact, one such world, a planet which we will call Sol d, has already been 
+extensively observed by \TESS.
 
 Previous attempts to map Sol d from the exoplanet community have suggested 
 the presence of localized surface features, but their resolving power has been 
@@ -115,7 +135,7 @@ The \TESS pipeline produces processed lightcurves for all short-cadence targets.
 Part of this processing is the determination of the localized background flux 
 within each postage stamp, which is provided as an ancillary time series. 
 As with all \TESS time series data products, the time is given in units of \TESS Julian 
-Date (TJD), defined as $\mathrm{BJD} - 2457000$ \todo{(is this barycentric corrected?)}, and the data are delivered in 27-day 
+Date (TJD), defined as $\mathrm{BJD} - 2457000$, and the data are delivered in 27-day 
 parcels corresponding to the varying pointing sectors of \TESS. 
 We use these background flux measurements from Sectors 1 and 2 as our primary 
 data source in this work. 
@@ -123,9 +143,10 @@ data source in this work.
 For each of the two sectors considered, we downloaded a random subsample of 
 1,000 short-cadence lightcurve files corresponding to postage stamps located 
 across the full \TESS field of view and extracted the background flux time 
-series from each. 
+series (\textsf{SAP\_BKG}) and corresponding uncertainties
+(\textsf{SAP\_BKG\_ERR}) from each. 
 Not all postage stamps are equally informative, since the desired signal from 
-Sol d is inhomogenously spread across the \TESS detectors and manifests 
+Sol d is inhomogenously spread across the \TESS detectors and manifests itself
 differently in different regions (see \S\ref{sec:systematics}). 
 We down-selected our pool of 1,000 targets to 75 maximally useful background 
 lightcurves from Sector 1 and 20 from Sector 2. 
@@ -135,16 +156,35 @@ of the general background flux modulation seen across the \TESS cameras, rather
 than containing any truly localized signals from astrophysical background 
 sources; and the sample as a whole should contain the full range of typical 
 behaviors of background across the entire \TESS field of view. 
-To accomplish this, we... \todo{(decide whether it's outlier rejection only or 
-full-on categorization)}
-
-\todo{(masking out epochs without Sol d shine, subtraction of baseline 
-background flux)}
-
-The final data set to be used consists of 75 Sector 1 background lightcurves 
-and 20 Sector 2 background lightcurves corresponding to the epochs at which 
-Sol d signal was clearly registered by \TESS. 
-This is 912,605 data points in total. 
+To accomplish this, we interpolated all light curves in Sector 1 onto the same time
+grid, masked all cadences with nonzero \textsf{QUALITY} flags and
+cadences during which Sol d was below the edge of the sunshade.
+During the selection step only, we also normalized them to the same min-max range.
+We then computed the median
+flux at each cadence along with an estimate of the variance based on the
+median absolute deviation (MAD) across all light curves.
+For each light curve, we calculated a score $\chi^2$ equal to the sum of the squares of the
+deviation from the median at each of the $N$ cadences, normalized by the variance.
+We removed all light curves with $\chi^2 < N$ from the pool, placing
+them in a separate group. We repeated these steps several times,
+classifying light curves into four groups for Sector 1 and two groups for Sector 2. 
+We found that this
+procedure effectively grouped together light curves with similar features,
+increasing in variation within each group from the first group (most homogeneous) 
+to the last group (most heterogeneous). In practice, we found light curves
+in all but the last group to be dominated by 
+the signal of Sol d, while light
+curves in the last group were dominated by signals other than the
+periodic modulation of the planet. To obtain our final set of light curves, 
+we sorted the light curves in each group by the amplitude
+of the signal and kept the first 25 in each of the first three groups in Sector 1
+and the first 20 in the first group in Sector 2 for a total
+of 75 and 20 light curves, respectively. We then computed an estimate of the
+non-Sol d background flux from the cadences during which the planet was below
+the edge of the sunshade and removed this baseline from the flux.
+Finally, we median-normalized all light curves (as opposed to the min-max
+normalization used for the classification).
+Our final dataset consisted of 912,605 data points in total. 
 A representative sample of these signals is shown in Figure~\ref{fig:data}.
 
 \begin{figure}[t!]
@@ -431,7 +471,8 @@ systematics model $\mathbf{p}_n = \mathbf{B}\mathbf{w}_n$ (different for each ta
 the \starry model $\mathbf{s} = \mathbf{A}\mathbf{y}$ (shared by all targets). Since we happen
 to know the exact distance $\mathbf{r}$ between \TESS and Sol d at all times
 (\S\ref{sec:orbit}), we also include the inverse square of $\mathbf{r}$ 
-as a multiplicative term to scale from the intrinsic luminance \todo{(is this the right word??)} of Sol d to 
+as a multiplicative term to scale from the intrinsic luminance 
+\todo{(is this the right word??)} of Sol d to 
 the flux observed by \TESS. The model for the flux timeseries
 in the $n^\mathrm{th}$ postage stamp is therefore
 %
@@ -680,7 +721,7 @@ is not exact.
 \label{sec:illposed}
 
 The problem of inferring a two-dimensional map from a one-dimensional
-timeseries is famously ill-posed given its large null space and many complex
+time series is famously ill-posed given its large null space and many complex
 degeneracies \citep[e.g.,][]{CowanFuentesHaggard2013}. In fact, for a 
 uniformly illuminated body, its rotational light curve encodes at most
 $2l_\mathrm{max}$ modes (one sine term and one cosine term per frequency), 
@@ -823,8 +864,15 @@ an east-west bias in the location of the features we identify.
 We also ignored the finite angular size of Sol at Sol d (about $0.5^\circ$),
 treating it instead as a point source. Regions immediately nightward of the 
 terminator should therefore contribute a small amount of flux, which we neglect.
-The effect, however, is below the resolution of our inferred map, so we expect
-that it does not introduce significant bias.
+Similarly, we used the timestamps reported in the \tess light curve
+FITS files, which are corrected to the barycenter of the Sol system. Since
+our signal originates from a source that is closer to \tess than the
+barycenter of the system, the timestamps may be wrong by up to 8 minutes,
+the light travel time from \tess to Sol. During 8 minutes, Sol d rotates
+by about $2^\circ$, so there should be a blurring of our inferred map at
+this scale. However, these two effects
+are well below the resolution of our map, so we expect
+them not to introduce significant bias.
 
 Moreover, we implicitly assumed an isotropic prior on the spherical harmonic
 coefficients by imposing a power spectrum in only the degree $l$. This has the
