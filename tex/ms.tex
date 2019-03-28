@@ -301,12 +301,10 @@ signal, producing a basis of $N$ vectors that contain \emph{only} functions of t
 systematics. This now serves as a ``clean'' basis one can then use to fit the 
 systematics component of the data, with minimal risk of fitting out astrophysical signals. 
 
-We use PLD to determine a basis sets for each \TESS sector. 
-We then construct a design matrix $\mathbf{B}$ out of this PLD basis. To
-increase the flexibility of the systematics model, we append to $\mathbf{B}$ 5 orthogonal
-polynomials in time for each of the two orbits of \TESS in each sector. 
-\todo{(this is confusing - what order of polynomial? 
-is the design matrix shared for LCs from either sector?)}
+We use PLD to determine a systematics basis set for each \TESS sector, and
+from this basis we construct a separate design matrix $\mathbf{B}$ for each sector. To
+increase the flexibility of the systematics model, we append to $\mathbf{B}$ a basis of
+fifth order orthogonal polynomials in time.
 The systematics model $\mathbf{p}$ for the $n^\mathrm{th}$ signal is thus
 %
 \begin{align}
@@ -1007,6 +1005,16 @@ disentangle the contributions from oceans, continents, and cloud cover.
 A robust detection of surface features on an exoplanet in the habitable
 zone will likely necessitate both approaches alongside a circumspect
 analysis of the uncertainties and degeneracies at play.
+
+\begin{figure}[t!]
+    \begin{centering}
+    \includegraphics[width=0.5\linewidth]{figures/artist.png}
+    \caption{\label{fig:artist}
+             Artist's conception of Sol d.
+             \emph{Credit: Ian Peng-Sue, age 7.}
+             }
+    \end{centering}
+\end{figure}
 
 \section{Conclusions}
 \label{sec:conclusions}
