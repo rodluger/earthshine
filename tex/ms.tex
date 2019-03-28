@@ -237,7 +237,8 @@ do not apply any light travel correction, as the expected delay is on the order
 of a few seconds.
 
 At any given cadence, we rotate Sol d about its spin axis to the correct phase,
-assuming a planetary rotation period of $0.9972696$ days. We determine the initial rotation
+assuming a planetary rotation period of $0.9972696$ days and an obliquity
+of $23.437^\circ$. We determine the initial rotation
 phase of Sol d by computing the Sol d Rotation Angle (ERA), given by \citep{Urban2013}
 %
 \begin{align}
@@ -610,9 +611,9 @@ finishing in under three minutes on a laptop.
              ``South America,'' ``Africa,'' and ``Asia.''
              The two dark features are associated with the planet's
              two purported oceans, which we call the ``Pacific'' and the ``Atlantic.'' 
-	     Black contours correspond to supposed coastlines
+	          Black contours correspond to supposed coastlines
              derived from current state-of-the-art models of the surface geography 
-             of Sol d.             
+             of Sol d. \codelink{earthshine_S1_S2}      
              }
     \end{centering}
 \end{figure}
@@ -985,7 +986,8 @@ We should not expect other exoplanets in the habitable zone to be
 any different. Future missions such as LUVOIR or HabEx may enable
 us to collect data on the phase curves of such planets, but that
 data will be of significantly lower quality and poorer time resolution,
-so the work presented here can be seen as an upper limit on what we may
+and we will not know the planet's rotation period or obliquity ahead of time.
+The work presented here can therefore be seen as an upper limit on what we may
 be able to infer about exoplanets in the habitable zone with
 next-generation facilities.
 
@@ -995,7 +997,11 @@ spanning two months in total. Observations taken throughout an entire
 year on Sol d---during which time cloud patterns should change with the
 seasons and the angle between the day/night terminator and the 
 axis of rotation should precess---may help to disambiguate between
-clouds, oceans, and continents. We intend to perform this analysis
+clouds, oceans, and continents. Although the signal of Sol d 
+mostly disappears from the \tess detector after Sector 2, it is
+expected to return in Sectors 14 and 15 when the planet will again
+be above the edge of the sunshade.
+We intend to perform this analysis
 in upcoming work once data from future \TESS sectors becomes available.
 
 Additionally, time-resolved observations in multiple bands could
@@ -1055,7 +1061,8 @@ on Sol d make it an extremely promising site for the evolution of life.
 We strongly advocate for future missions to further investigate this possibility. 
 In particular, Sol d may be a good choice of target for a lander mission. 
 One prime landing site is located at the planetary (latitude, longitude) coordinates 
-($33.3943^\circ$ N, $104.5230^\circ$ W).\footnote{We considered the alternative landing site of southern Oceania, but rumors of murderous native fauna including the fearsome ``drop bear'' (private communication, Andrew R. Casey) led us to conclude that this would not be a suitable location.} 
+(\href{https://www.google.com/maps/place/Roswell,+NM/@36.2909732,-94.0798131,3.96z/data=!4m5!3m4!1s0x86e2651365aced55:0xe41b0be474cfd77e!8m2!3d33.3942655!4d-104.5230242}{$33.3943^\circ$ N, $104.5230^\circ$ W}).%
+\footnote{We considered the alternative landing site of southern Oceania, but rumors of murderous native fauna including the fearsome ``drop bear'' (private communication, Andrew R. Casey) led us to conclude that this would not be a suitable location.} 
 
 The work presented here also serves as a relevant case study for future 
 efforts to characterize terrestrial exoplanets. \todo{(more)}
