@@ -90,7 +90,7 @@ def render(map, time, phase0=-56.5, time0=1325.5, res=75, period=0.9972696):
     source = np.dot(R, source)
 
     # Render the image
-    Z = map.render(source=source, res=res)[0]
+    Z = map.render(source=source, res=res)
     map.reset()
     map[:, :, :] = y
     return Z
@@ -233,7 +233,7 @@ def animate(map, time, phase0=-56.5, time0=1325.5, res=75, interval=75, period=0
         source = np.dot(R, source)
 
         # Render the image
-        Z[i] = map.render(t=t[i], source=source, res=res)[0]
+        Z[i] = map.render(t=t[i], source=source, res=res)
 
     # Reset the map
     map[:, :, :] = y

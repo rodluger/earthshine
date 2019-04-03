@@ -3,7 +3,6 @@
 from __future__ import division, print_function, absolute_import
 from setuptools import setup
 
-
 # Setup!
 setup(name='earthshine',
       version="0.0.1",
@@ -19,7 +18,8 @@ setup(name='earthshine',
           'scipy',
           'matplotlib',
           'starry==1.0.0.dev0',
-          'healpy'
+          'healpy',
+          'tqdm'
       ],
       dependency_links=[
         'https://github.com/rodluger/starry/tarball/linear#egg=starry-1.0.0.dev0'

@@ -56,10 +56,17 @@ def ylm_to_alm(ylm, lmax):
 def smooth(map, sigma):
     """Smooth a map in place with a Gaussian kernel."""
     lmax = map.ydeg
-    alm = ylm_to_alm(map.y, lmax)
+    if map._temporal:
+        alm = ylm_to_alm(map[:, :, 0], lmax)
+    else:
+        alm = ylm_to_alm(map[:, :], lmax)
     hp.sphtfunc.smoothalm(alm, sigma=sigma, inplace=True, verbose=False)
     ylm = alm_to_ylm(alm, lmax)
-    map[:, :] = ylm
+    ylm /= ylm[0]
+    if map._temporal:
+        map[:, :, 0] = ylm
+    else:
+        map[:, :] = ylm
     return
 
 
