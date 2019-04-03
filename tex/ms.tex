@@ -15,9 +15,7 @@
 %@arxiver{map.pdf}
 
 % Title
-\title{\TESS Photometric Mapping of a Terrestrial Planet in the Habitable Zone: 
-       Detection of Clouds, Oceans, and Continents}
-%\title{Detection of Continents on a Habitable-Zone Terrestrial Planet with \TESS}
+\title{Observing Earth as an Exoplanet with \TESS: Photometric Mapping of Surface Features in Reflected Light}
 
 % Author list
 \author[0000-0002-0296-3826]{Rodrigo Luger}
@@ -36,6 +34,7 @@
        Institute of Technology, Cambridge, MA}
 
 \begin{abstract}
+\todo{(TO BE CHANGED:)}
 To date, a handful of exoplanets have been photometrically mapped using phase-modulated 
 reflection or emission from their surfaces, but the small amplitudes 
 of such signals have limited previous maps almost exclusively to coarse dipolar
@@ -54,9 +53,8 @@ be determined.
 \href{https://github.com/rodluger/earthshine}{\color{linkcolor}\faGithub}
 \end{abstract}
 
-\keywords{methods: data analysis, techniques: photometric, planets and satellites: 
-          oceans, planets and satellites: surfaces, planets and satellites: 
-          terrestrial planets}
+\keywords{methods: data analysis, techniques: photometric, planets and satellites: surfaces, 
+		Earth}
 
 % Introduction
 \section{Introduction}
@@ -104,18 +102,19 @@ planets in the habitable zone
 \citep[e.g.,][]{Kawahara2010,Fujii2012,Berdyugina2017,Haggard2018,Lustig-Yaeger2018};
 for a review, see \cite{Cowan2018}.
 
+\todo{(THIS PARAGRAPH TO BE CHANGED:)} 
 In this work, we show how we can harness photometric data collected by the \TESS mission
-to construct a map of Sol d, a rocky planet with a radius of $6.4\times 10^6$~m
+to construct a map of Earth, a rocky planet with a radius of $6.4\times 10^6$~m
 orbiting near the inner edge of the habitable zone of its star, a nearby G2 main sequence
 star \citep{Sagan1993}. Although the \TESS mission promised to deliver a handful of terrestrial planets in 
 the habitable zone for follow-up with other missions, it came as a great surprise
-that data from the spacecraft could be used not only to detect Sol d but to
+that data from the spacecraft could be used not only to detect Earth but to
 characterize it in detail. This is due primarily to the strong nature of the reflected
 light signal originating from the planet, which 
 because of complex internal optics illuminates the entirety of the \TESS detector 
 during most of Sector 1 and part of Sector 2.
 
-Previous attempts to map Sol d from the exoplanet community have suggested 
+Previous attempts to map Earth from the exoplanet community have suggested 
 the presence of localized surface features, but their resolving power has been 
 limited by the cadence and/or duration of observations \citep{Cowan2009,Jiang2018}. 
 \TESS offers precise 2-minute cadence data spanning a wide range of illumination 
@@ -132,16 +131,16 @@ In turn, \cite{Haggard2018} derived analytic expressions for the
 analogous case in reflected light, packaged into the 
 \textsf{EARL} code. In this work, we derive similar expressions within
 the \starry framework to perform fast, analytical inversion of the light curve
-of Sol d and thus construct a map of the planet in reflected light.
+of Earth and thus construct a map of the planet in reflected light.
 
 The paper is organized as follows: we give an overview of the \TESS data used in \S\ref{sec:data},
 and in \S\ref{sec:methods} we describe the methods employed to infer a map 
 from these data, including the adaptation of the \starry algorithm to reflection 
 mapping, the modeling of spacecraft-related systematics, and the likelihood and 
 priors used. 
-We present results in \S\ref{sec:results} and make a comparison of these 
-findings to other state-of-the-art maps of Sol d in 
-\S\ref{sec:discussion}. 
+We present results in \S\ref{sec:results}. 
+In \S\ref{sec:discussion}, we assess the accuracy of our map and discuss the relevance 
+of this analysis to future attempts at mapping terrestrial exoplanets.
 Finally, we conclude with a summary of our major findings in \S\ref{sec:conclusions}.
 The code used to generate all the figures in this paper is open source
 and available on GitHub%
@@ -169,15 +168,15 @@ series (\textsf{SAP\_BKG}) and corresponding uncertainties
 (\textsf{SAP\_BKG\_ERR}) from each. 
 We then interpolated all light curves in a given sector onto the same time
 grid, masked all cadences with nonzero \textsf{QUALITY} flags, and masked
-cadences during which Sol d was below the edge of the sunshade.
+cadences during which Earth was below the edge of the sunshade.
 
 Not all postage stamps are equally informative, since the desired signal from 
-Sol d is inhomogeneously spread across the \TESS detectors and manifests itself
+Earth is inhomogeneously spread across the \TESS detectors and manifests itself
 differently in different regions (see \S\ref{sec:systematics}). 
 We down-selected our pool of 1,000 targets to 75 maximally useful background 
 light curves from Sector 1 and 20 from Sector 2. 
 This down-selection was done with several criteria in mind: each light curve 
-should contain a significant signal from Sol d; they should be representative 
+should contain a significant signal from Earth; they should be representative 
 of the general background flux modulation seen across the \TESS cameras, rather 
 than containing any truly localized signals from astrophysical background 
 sources; and the sample as a whole should contain the full range of typical 
@@ -197,14 +196,14 @@ procedure effectively grouped together light curves with similar features,
 increasing in variation within each group from the first group (most homogeneous) 
 to the last group (most heterogeneous). In practice, we found light curves
 in all but the last group to be dominated by 
-the signal of Sol d, while light
+the signal of Earth, while light
 curves in the last group were dominated by signals other than the
 periodic modulation of the planet. To obtain our final set of light curves, 
 we sorted the light curves in each group by the amplitude
 of the signal and kept the first 25 in each of the first three groups in Sector 1
 and the first 20 in the first group in Sector 2 for a total
 of 75 and 20 light curves, respectively. We then computed an estimate of the
-non-Sol d background flux from the cadences during which the planet was below
+non-Earth background flux from the cadences during which the planet was below
 the edge of the sunshade and removed this baseline from the flux.
 Finally, we median-normalized all light curves (as opposed to the min-max
 normalization used for the classification).
@@ -216,7 +215,7 @@ A representative sample of these signals is shown in Figure~\ref{fig:data}.
     \includegraphics[width=\linewidth]{figures/data.pdf}
     \caption{\label{fig:data}
              Normalized background flux in each of ten postage stamps
-             for each of Sectors 1 and 2. Cadences where Sol d was
+             for each of Sectors 1 and 2. Cadences where Earth was
              below or very close to the edge of the sunshade were masked.
              While the planet is in view for the majority of both orbits
              in Sector 1, it is only visible in the data at the very end
@@ -240,17 +239,17 @@ the Solar System and \TESS ephemeris data for
 Sectors 1 and 2 and used \spiceypy \citep{Acton1996, Acton2017, Annex2017}
 to convert the TJD timestamps to 
 ephemeris time (ET). We then used the \textsf{spkezr} utility of \spiceypy to compute
-the relative positions of Sol, Sol d, and \TESS for every cadence
+the relative positions of Sol, Earth, and \TESS for every cadence
 in our dataset in the J2000 equatorial reference frame. In this right-handed
-coordinate frame, Sol d is centered at the origin, the $y$ axis points along the 
+coordinate frame, Earth is centered at the origin, the $y$ axis points along the 
 planet's spin axis, and the $x$ axis points toward the vernal equinox. We
 do not apply any light travel correction, as the expected delay is on the order
 of a few seconds.
 
-At any given cadence, we rotate Sol d about its spin axis to the correct phase,
+At any given cadence, we rotate Earth about its spin axis to the correct phase,
 assuming a planetary rotation period of $0.9972696$ days and an obliquity
 of $23.437^\circ$. We determine the initial rotation
-phase of Sol d by computing the Sol d Rotation Angle (ERA), given by \citep{Urban2013}
+phase of Earth by computing the Earth Rotation Angle (ERA), given by \citep{Urban2013}
 %
 \begin{align}
 \mathrm{ERA} = 360^\circ(0.7790572732640 + 1.00273781191135448 \, t_U) \, \mathrm{mod} \, 360^\circ
@@ -261,7 +260,7 @@ we find $\mathrm{ERA} = 303.4^\circ$, meaning the vernal equinox will be aligned
 the prime meridian $360^\circ - 303.4^\circ = 56.6^\circ = 3.77$ hours past $t_0$.
 %
 Finally, we rotate the frame to align
-\TESS with the $+z$ axis, with the spin vector of Sol d along the $y-z$ plane.
+\TESS with the $+z$ axis, with the spin vector of Earth along the $y-z$ plane.
 We verified our rotations by comparing our results on several days to the
 ephemerides provided by the JPL HORIZONS Web interface%
 \footnote{See \url{https://ssd.jpl.nasa.gov/horizons.cgi} and 
@@ -272,25 +271,25 @@ Jupyter notebook.}}.
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/phases.pdf}
     \caption{\label{fig:phases}
-             Synthetic images showing \TESS's view of Sol d on every date in 
+             Synthetic images showing \TESS's view of Earth on every date in 
              Sectors 1 and 2 that was included in the regression. Each image 
              is labeled with the corresponding timestamp in TJD. 
-             The dayside features shown here correspond to a hypothetical 
-             model of Sol d, not to the map inferred in this study.
+             The dayside features shown here correspond to a 
+             model of Earth, not to the map inferred in this study.
              \codelink{EarthView}
              }
     \end{centering}
 \end{figure}
 
-Figure~\ref{fig:phases} shows the view \TESS has of Sol d on each of the dates
+Figure~\ref{fig:phases} shows the view \TESS has of Earth on each of the dates
 in our dataset; these images were produced by applying the sequences of rotations
 described above. The planet is illuminated by Sol assuming it is a point source,
-and the night side is shaded black. The map of Sol d shown in this figure is 
+and the night side is shaded black. The map of Earth shown in this figure is 
 based on current models of the actual distribution of continents on the planet.
 Note that although the images are computed an integer number of rotation periods
 apart, the planet appears to slowly rotate over the course of the observation.
 This is due to the orbit of \TESS, which changes its vantage point relative
-to Sol d over the course of its 13 day orbit.
+to Earth over the course of its 13 day orbit.
 
 \subsection{Systematics Modeling}
 \label{sec:systematics}
@@ -298,9 +297,9 @@ to Sol d over the course of its 13 day orbit.
 While the astrophysical signal that we wish to analyze is present in all 
 extracted light curves, its strength is modulated by time-variable systematics 
 that are correlated but not identical across all postage stamps, since the
-illumination of the CCD by Sol d is strongly inhomogeneous. A physical
+illumination of the CCD by Earth is strongly inhomogeneous. A physical
 model of the reflections and scattering that gives rise to the
-signal of Sol d on the \TESS detector is beyond the scope of this work. Instead,
+signal of Earth on the \TESS detector is beyond the scope of this work. Instead,
 we treat this as a de-trending problem, where the signal we wish to fit is
 shared by all postage stamps, but multiplied by a systematic signal that is
 different for each target. This problem is precisely what the technique of
@@ -335,7 +334,7 @@ concerning; nevertheless, we impose an L2 prior on the weights to minimize this 
 \label{sec:starry}
 
 We model the astrophysical component of the signal---the rotational modulation
-of Sol d in reflected light---using the \starry code package \citep{Luger2019}.
+of Earth in reflected light---using the \starry code package \citep{Luger2019}.
 \starry computes phase curves and occultation light curves for bodies whose
 surfaces can be expressed as a sum of spherical harmonics. 
 The algorithm works by first transforming
@@ -486,18 +485,18 @@ a maximum surface resolution on the order of $180^\circ/10 \approx 18^\circ$.
 Finally, for reference, in Figure~\ref{fig:starry_model} we plot the
 \starry model for our maximum likelihood fit (\S\ref{sec:results}). The
 sharp rise at the beginning of each orbit in Sector 1 is due to the changing
-vantage point of \TESS as Sol d transitions from a thin crescent to full phase.
+vantage point of \TESS as Earth transitions from a thin crescent to full phase.
 
 \subsection{Full Model and Likelihood Function}
 \label{sec:model}
 
 Our full model for each light curve is simply the product of the 
 systematics model $\mathbf{p}_n = \mathbf{B}\mathbf{w}_n$ (different for each target) and
-the \starry model $\mathbf{s} = \mathbf{A}\mathbf{y}$ (shared by all targets). Since we happen
-to know the exact distance $\mathbf{r}$ between \TESS and Sol d at all times
+the \starry model $\mathbf{s} = \mathbf{A}\mathbf{y}$ (shared by all targets). Since we 
+know the exact distance $\mathbf{r}$ between \TESS and the Earth at all times
 (\S\ref{sec:orbit}), we also include the inverse square of $\mathbf{r}$ 
 as a multiplicative term to scale the luminosity 
-of Sol d to the flux observed by \TESS. The model for the flux time series
+of Earth to the flux observed by \TESS. The model for the flux time series
 in the $n^\mathrm{th}$ postage stamp is therefore
 %
 \begin{align}
@@ -613,18 +612,16 @@ finishing in under one minute on a laptop.
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/map_L2.pdf}
     \caption{\label{fig:map_L2}
-             Maximum likelihood map of Sol d obtained during the first
+             Maximum likelihood map of Earth obtained during the first
              stage of our optimization procedure, in which an iterative
              analytic approach was used to solve the bilinear model, 
              subject to very conservative regularization. Despite the low
-             resolution of this map, the bright features appear to track
-             land masses which for specificity we will refer to as (from left to right)
-             ``South America,'' ``Africa,'' and ``Asia.''
-             The two dark features are associated with the planet's
-             two purported oceans, which we call the ``Pacific'' and the ``Atlantic.'' 
-	          Black contours correspond to supposed coastlines
-             derived from current state-of-the-art models of the surface geography 
-             of Sol d. \codelink{earthshine_S1_S2}      
+             resolution of this map, bright features appear at the 
+             expected locations of South America, Africa, and Asia, 
+             and two dark features appear at Earth's
+             two major oceans, the Pacific and the Atlantic. 
+	          Black contours correspond to known coastlines. 
+	          \codelink{earthshine_S1_S2}      
              }
     \end{centering}
 \end{figure}
@@ -639,12 +636,11 @@ the order of $18^\circ$, features typically span ${\sim}45^\circ$; this is
 also an artefact of our regularization. However, broad features are already
 visible in the map: three bright regions and two dark regions (one of which
 wraps around the antimeridian). Overplotted on the inferred map are
-coastal outlines corresponding to our current best understanding of 
-the geography of Sol d. One can see that the three bright regions roughly
-track, from left to right, continents we shall refer to as ``South America,''
-``Africa,'' and ``Asia,'' in keeping with the literature. The dark regions
-are associated with the two major purported oceans on the planet, the
-``Pacific'' (centered at longitude $\pm180^\circ$) and ``Atlantic''
+coastal outlines of Earth's continents. One can see that the three bright regions roughly
+track, from left to right, the continents  of South America,
+Africa, and Asia. The dark regions
+appear at the locations of Earth's two major oceans, the
+Pacific (centered at longitude $\pm180^\circ$) and the Atlantic
 (centered at longitude $\-45^\circ$).
 
 \begin{figure}[t!]
@@ -668,7 +664,7 @@ The median residuals are shown in the bottom panel; these have
 standard deviation of less than one percent. While there is significant correlated
 structure in the residuals, their power spectrum displays a broad peak extending 
 between about 0.1 and 10 days, with a significant dip at 1.00 day. This
-suggests our model is fitting the rotational variability of Sol d quite well, but
+suggests our model is fitting the rotational variability of Earth quite well, but
 additional temporal variations---most likely due to cloud movement---cause aperiodic
 changes in the reflectivity of the surface. We revisit this point in \S\ref{sec:discussion}.
 
@@ -677,10 +673,10 @@ changes in the reflectivity of the surface. We revisit this point in \S\ref{sec:
     \includegraphics[width=\linewidth]{figures/map.pdf}
     \caption{\label{fig:map}
              \emph{Top:} The maximum likelihood model for the surface albedo
-             of Sol d, weighted by the visibility across Sectors 1 and 2. The
+             of Earth, weighted by the visibility across Sectors 1 and 2. The
              dashed white lines indicate latitudes above/below which the
              visibility drops below 50\%. As in Figure~\ref{fig:map_L2}, coastlines 
-             based on current models from the literature are overplotted as black contours.
+             are overplotted as black contours.
              \emph{Bottom:} Approximate cloud coverage map based on corrected
              surface reflectance obtained by the
              \emph{VIIRS} imager, averaged over the same date range and weighted
@@ -691,23 +687,23 @@ changes in the reflectivity of the surface. We revisit this point in \S\ref{sec:
 \end{figure}
 
 In the top panel of Figure~\ref{fig:map} we show the final,
-maximum likelihood albedo map inferred for Sol d weighted by a visibility function.
+maximum likelihood albedo map inferred for Earth weighted by a visibility function.
 The visibility function is computed as the average of the product of the 
 cosine of the illumination angle and the cosine of the angle between the 
-observer vector and the vector normal to the surface of Sol d. This normalization
+observer vector and the vector normal to the surface of Earth. This normalization
 has the effect of downweighting regions that are either seldom illuminated (such
-as regions near the southern pole of Sol d, as the observations were taken during
+as regions near the southern pole of Earth, as the observations were taken during
 southern winter) or seldom in view (such as regions near the northern pole of the planet,
-which during Sectors 1 and 2 were mostly on the opposite side of Sol d from \TESS).
+which during Sectors 1 and 2 were mostly on the opposite side of the Earth from \TESS).
 Because there is little data from these regions, their albedo is prior-dominated
 and tends to fluctuate substantially with small changes to the choices we make
 when fitting the data. On the other hand, we find that the large scale features close to
-the equator of Sol d are mostly insensitive to our choices of prior. In the Figure,
+the equator are mostly insensitive to our choices of prior. In the Figure,
 we use dashed lines to delineate the regions whose average visibility is larger
 than 0.5.
 
 The bottom panel of Figure~\ref{fig:map} shows an approximate average
-cloud cover map of Sol d based on imagery taken by the
+cloud cover map of Earth based on imagery taken by the
 Visible Infrared Imaging Radiometer Suite (\emph{VIIRS}) instrument aboard the 
 Suomi National Polar-orbiting Partnership (\emph{S-NPP}) satellite%
 \footnote{Data obtained via 
@@ -720,7 +716,7 @@ averaged over the 28 days of data analyzed in this work, smoothed it
 with a Gaussian filter, and weighted by the \TESS visibility as in the top panel.
 
 While the two panels display fundamentally different quantities---an albedo
-and a cloudiness factor---we expect that the signal of Sol d in the \TESS
+and a cloudiness factor---we expect that the signal of Earth in the \TESS
 bandpass is dominated by cloud reflectivity, as water clouds have an albedo
 higher than soil, vegetation, or ocean in the optical/near infrared
 \citep[e.g.,][]{Jedlovec2009}. We therefore
@@ -760,7 +756,7 @@ problem is fundamentally non-invertible, since most of the information
 one wishes to extract never makes it into the light curve in the first place.
 
 Fortunately, there are two aspects of the problem at hand that facilitate
-this (seemingly impossible) inversion. First, the surface of Sol d is
+this (seemingly impossible) inversion. First, the surface of Earth is
 not uniformly illuminated; instead, different parts of the surface are weighted
 by different amounts as the planet rotates and as the angle of incident starlight
 moves over the course of the planet's year. This weighting is sufficient to break many
@@ -768,15 +764,15 @@ of the degeneracies, which are rooted in the anti-symmetry of many of the spheri
 harmonic modes. Moreover, the discontinuous day/night terminator further
 breaks these degeneracies, as only modes that are anti-symmetric about
 the visible lune of the planet strictly remain in the null space. Second, 
-the changing vantage point of \TESS relative to Sol d (and our exact knowledge of it)
+the changing vantage point of \TESS relative to Earth (and our exact knowledge of it)
 breaks degeneracies that are viewpoint-dependent. In particular, the motion of
 \TESS changes the position and shape of the terminator on the projected disk
-of Sol d, enhancing the effect discussed above.
+of Earth, enhancing the effect discussed above.
 
 In fact, because of these points, there should actually be \emph{no} null space 
 in this particular problem. In practice, however, it is evident from
 Figure~\ref{fig:map} that degeneracies still abound. While we infer a few of the
-dominant features of the cloud map of Sol d, several of them are skewed, 
+dominant features of the cloud map of Earth, several of them are skewed, 
 shifted, or entirely out of place. This is the case, for instance, with
 the cloud bank west of South America, which extends too far westward, and
 the northern Atlantic Ocean, which appears to extend into the east coast of
@@ -785,7 +781,7 @@ North America. We identify four broad reasons for this.
 First, many of the issues arise because
 of the finite signal-to-noise of our measurements and various biases in
 our adopted model. While the measurement errors on our data points are
-quite small---since the signal of Sol d is both quite strong and independently
+quite small---since the signal of Earth is both quite strong and independently
 measured at 95 different positions on the detector---our lack of understanding
 of the complex optics (and our
 attempt to na{\"i}vely model it with pixel-level decorrelation) likely
@@ -808,8 +804,8 @@ d is close to full phase as seen by \TESS.
 With the terminator close to the limb
 of the planet, its ability to break degeneracies is considerably lessened.
 We are therefore somewhat limited in our ability to infer in particular the
-latitudinal position of features. Observations of Sol d in upcoming
-sectors may contain longer segments in which Sol d is seen in crescent,
+latitudinal position of features. Observations of Earth in upcoming
+sectors may contain longer segments in which Earth is seen in crescent,
 which should help mitigate these degeneracies.
 
 Fourth, and most importantly, we have not performed actual inference: that is, 
@@ -844,7 +840,7 @@ and a linear reflectance model) and thus limiting
 the number of knobs we could turn. We also opted to forego any use of 
 real imaging data in our model; for instance, we fit for the spectral
 slope of the map as a free parameter rather than using the true power spectrum 
-of Sol d. Moreover, the broad features in the strongly
+of Earth. Moreover, the broad features in the strongly
 regularized map (Figure~\ref{fig:map_L2})---and in particular the monsoon clouds
 over southeast Asia---are insensitive to most of our model choices.
 
@@ -853,17 +849,16 @@ over southeast Asia---are insensitive to most of our model choices.
 
 One of the largest sources of bias is the fact that we assumed our
 systematics model is strictly multiplicative. Although we subtracted
-an estimate of the baseline non-Sol d background flux from each target
+an estimate of the baseline non-Earth background flux from each target
 (measured from the mid-sector portions of the light curve where the
 planet was below the edge of the sunshade), we implicitly assumed
 that this constant baseline was the \emph{only} source of additive
-noise. We know this to be strictly untrue, as Sol d is known to
-have a companion (Sol d I), a moon about one-third the diameter of 
-Sol d, whose reflected light should cause periodic modulations
-in the background flux of \TESS pixels. Because of its small size and
+noise. We know this to be strictly untrue, as reflected light from the Moon 
+should also cause periodic modulations
+in the background flux of \TESS pixels. Because of the Moon's small size and
 very low ($\sim 0.1$) albedo, we chose to ignore its effect, but it
 is likely to contaminate our signal at certain points in the orbit
-where \TESS is closer to Sol d I than to Sol d. While this will
+where \TESS is closer to the Moon than to Earth. While this will
 likely bias the \starry model at those times, the effect is particularly
 concerning because of its impact on the PLD basis. While PLD can be an
 extremely powerful de-trending technique, it is notorious for
@@ -871,7 +866,7 @@ grossly overfitting signals in the presence of uncorrected background
 modulations \citep{Luger2016}. This happens because PLD strictly
 assumes the noise is multiplicative, which is not the case for 
 signals with varying (additive) background levels. In principle, one
-could model the reflectance variability of Sol d I in the same way as
+could model the reflectance variability of the Moon in the same way as
 we did here, but since the optics are not well understood, this 
 may be difficult in practice. 
 
@@ -885,14 +880,14 @@ close to the sub-stellar point, which is on the limb. Limb darkening should
 shift the regions of peak brightness closer to the center of the planet, adding
 an east-west bias in the location of the features we identify.
 
-We also ignored the finite angular size of Sol at Sol d (about $0.5^\circ$),
+We also ignored the finite angular size of the Sun at Earth (about $0.5^\circ$),
 treating it instead as a point source. Regions immediately nightward of the 
 terminator should therefore contribute a small amount of flux, which we neglect.
 Similarly, we used the timestamps reported in the \tess light curve
 FITS files, which are corrected to the barycenter of the Sol system. Since
 our signal originates from a source that is closer to \tess than the
 barycenter of the system, the timestamps may be wrong by up to 8 minutes,
-the light travel time from \tess to Sol. Over the course of 8 minutes, Sol d rotates
+the light travel time from \tess to the Sun. Over the course of 8 minutes, Earth rotates
 by about $2^\circ$, so there should be a blurring of our inferred map at
 this scale. However, these two effects
 are well below the resolution of our map, so we expect
@@ -903,12 +898,12 @@ coefficients by imposing a power spectrum in only the degree $l$. This has the
 effect of lessening the extent to which features can be confined to certain
 latitudes. In particular, our prior implicitly disfavors banded cloud structure,
 which one may \emph{a priori} expect on a rapidly rotating planet such as 
-Sol d. The bottom panel of Figure~\ref{fig:map} shows such banded structure
+Earth. The bottom panel of Figure~\ref{fig:map} shows such banded structure
 at the equator and at mid-latitudes due to the combined effects of 
 north-south circulation and deflection by the Coriolis force.
 
 Finally, and perhaps more importantly, our model assumed a \emph{static}
-map for the surface of Sol d. We also know this to be incorrect, since
+map for the surface of Earth. We also know this to be incorrect, since
 clouds form and move on timescales of hours to days. We discuss this in
 detail in the following section.
 
@@ -919,7 +914,7 @@ As we mentioned in \S\ref{sec:results}, the residuals about our maximum
 likelihood fit show correlated structure with power at a large range
 of periods ranging from 0.1 up to 10 days. This is likely due to 
 the fact that rotational variability is not the sole source of the
-signal of Sol d: additionally, there is temporal variation in the 
+signal of Earth: additionally, there is temporal variation in the 
 albedo of certain parts of the map, most probably due to cloud movement.
 In order to test this, we used \starry to construct a time-variable
 spherical harmonic map, defined by a vector of spherical harmonic coefficients
@@ -971,7 +966,7 @@ differences are evident, although the residuals improved by ${\sim}30\%$
 and contain significantly less power on timescales longer than 1 day.
 We conclude that while this is evidence for cloud variability on these
 timescales, a more detailed investigation is warranted to say anything
-meaningful about the dynamics of clouds on Sol d.
+meaningful about the dynamics of clouds on Earth.
 
 \subsection{Implication for Future Observations}
 \label{sec:otherplanets}
@@ -981,11 +976,11 @@ and we have shown that this is true even at high signal-to-noise and
 when the solution is
 known ahead of time. Presented with the top panel of Figure~\ref{fig:map}
 (without the continent outlines),
-an inhabitant of Sol d may be hard-pressed to identify that
+an inhabitant of Earth may be hard-pressed to identify that
 as a map of their home planet. This is in part due to the biases
 in our optimization, which we discussed above, but also due to the 
-simple fact that the reflectance of Sol d is dominated---by far---by 
-time-variable clouds. While stationary cloud features on Sol d are
+simple fact that the reflectance of Earth is dominated---by far---by 
+time-variable clouds. While stationary cloud features on Earth are
 typically associated with continents (the most pronounced cloud features
 being over South America, Africa, and south Asia), persistent cloud
 cover can occur over open ocean, as seen in the north Pacific
@@ -1005,10 +1000,10 @@ next-generation facilities.
 That said, the time baseline considered in this work was fairly
 limited---three weeks in Sector 1 and one week in Sector 2,
 spanning two months in total. Observations taken throughout an entire
-year on Sol d---during which time cloud patterns should change with the
+year on Earth---during which time cloud patterns should change with the
 seasons and the angle between the day/night terminator and the 
 axis of rotation should precess---may help to disambiguate between
-clouds, oceans, and continents. Although the signal of Sol d 
+clouds, oceans, and continents. Although the signal of Earth 
 mostly disappears from the \tess detector after Sector 2, it is
 expected to return in Sectors 14 and 15 when the planet will again
 be above the edge of the sunshade.
@@ -1027,8 +1022,8 @@ analysis of the uncertainties and degeneracies at play.
 \label{sec:conclusions}
 
 We have used \TESS photometry to
-produce a global map of Sol d, a terrestrial planet in the habitable
-zone of a G2 main-sequence star. We adapted the \starry code to 
+produce a global map of the Earth, treating it as an exoplanet with unknown
+surface features. We adapted the \starry code to 
 generate (and invert) light curves in reflected light, coupling it
 to a variation of pixel level decorrelation to model the systematics
 in the \TESS detector. 
@@ -1043,54 +1038,31 @@ vantage point of \TESS during Sectors 1 and 2, we are not sensitive to
 high latitudes on the planet, although this may change with upcoming
 sectors. 
 
-We fit Sol d with both static and time-variable albedo maps. 
-We find tentative evidence for variability in Sol d's cloud coverage over 
+We fit Earth with both static and time-variable albedo maps. 
+We find tentative evidence for variability in Earth's cloud coverage over 
 the course of Sector 1 observations. 
 Upcoming observations with \TESS will yield further information on 
-the time variability of surface features on Sol d on a variety of timescales.
-
-\begin{figure}[t!]
-    \begin{centering}
-    \includegraphics[width=0.4\linewidth]{figures/artist.png}
-    \caption{\label{fig:artist}
-             Artist's conception of Sol d.
-             \emph{Credit: Ian Peng-Sue, age 7.}
-             }
-    \end{centering}
-\end{figure}
+the time variability of surface features on Earth on a variety of timescales.
 
 To summarize, we have robustly detected surface features from \TESS 
-light curves of Sol d. While the resolution of the map we obtain is limited, 
-it is clear that surface features including low-albedo oceanic regions and 
-high-albedo cloud banks or land masses are present on this terrestrial 
-world. An artist's impression of the planet is shown in Figure~\ref{fig:artist}. 
-While somewhat fanciful and rather far-fetched, this artistic interpretation 
-is nevertheless broadly consistent with the data.
+light curves of Earth. While the resolution of the map we obtain is limited, 
+we do unambiguously detect surface features including low-albedo oceanic regions and 
+high-albedo cloud banks or land masses. 
 
-The likely prevalence of continents, oceans, and complex weather patterns 
-on Sol d make it an extremely promising site for the evolution of life. 
-We strongly advocate for future missions to further investigate this possibility. 
-In particular, Sol d may be a good choice of target for a lander mission. 
-One prime landing site is located at the planetary (latitude, longitude) coordinates 
-(\href{https://www.google.com/maps/place/Roswell,+NM/@36.2909732,-94.0798131,3.96z/data=!4m5!3m4!1s0x86e2651365aced55:0xe41b0be474cfd77e!8m2!3d33.3942655!4d-104.5230242}{$33.3943^\circ$ N, $104.5230^\circ$ W}).%
-\footnote{We considered the alternative landing site of southern Oceania, but rumors of murderous native fauna including the fearsome ``drop bear'' (Andrew R. Casey, personal communication) led us to conclude that this would not be a suitable location.} 
-
-The work presented here also serves as a relevant case study for future 
+The work presented here serves as a relevant case study for future 
 efforts to characterize terrestrial exoplanets. While the circumstances of \TESS's 
-observations of Sol d will not be replicated exactly for other planets, similar 
+observations of Earth will not be replicated exactly for other planets, similar 
 rotationally-modulated phase curves of reflected light may be feasible in the future. 
 We show that a fast, analytic linear model can be successfully applied to such data. 
 We also underscore the importance of high cadence \emph{and} long duration for 
 these observations, and we advocate for multi-wavelength coverage to 
 help disentangle the photometric signatures of continents and persistent cloud features.
 
-In conclusion, we have demonstrated that \TESS is an effective addition to NASA's fleet of weather satellites.
 
 \vspace{0.5in}
 
 \acknowledgements{%
-Our heartfelt thanks go to Ian Peng-Sue and his agent Stephanie Tonnesen for 
-Figure~\ref{fig:artist}. We also gratefully acknowledge Jonathan Fraine, Dan Foreman-Mackey, 
+We gratefully acknowledge Jonathan Fraine, Dan Foreman-Mackey, 
 David W. Hogg, Ben Montet, and Ben Pope for useful conversations. 
 Crucial parts of this work were carried out at the 
 TESS Data Workshop, hosted by Space Telescope Science Institute, and the 
