@@ -38,14 +38,15 @@ To date, a handful of exoplanets have been photometrically mapped using phase-mo
 reflection or emission from their surfaces, but the small amplitudes 
 of such signals have limited previous maps almost exclusively to coarse dipolar
 features on hot giant planets. 
-With future instruments, more detailed mapping of terrestrial planets may become possible, 
+Future instruments may enable more detailed mapping of terrestrial planets, including
+those in the habitable zone,
 but significant challenges will remain in analyzing and interpreting these data. 
 In this work, we extract a rotationally-modulated reflected light curve of the Earth 
 from the time-variable background flux in data from the Transiting Exoplanet Survey Satellite (\TESS).
-We treat these data as an unknown exoplanet and reconstruct surface features  
+We treat these data as that of an unknown exoplanet and reconstruct surface features  
 using a spherical harmonic-based reflection model developed as an extension of 
 the \starry package. We recover a time-variable albedo map including persistent 
-regions indicative of Earth's major oceans and cloud banks. 
+regions indicative of the Earth's major oceans and cloud banks. 
 Our results suggest that the recovery of surface features on a terrestrial exoplanet
 from reflected-light photometric monitoring will be possible, but will require
 a considerable investment of observing time to achieve the high cadence and 
@@ -160,7 +161,7 @@ In turn, \cite{Haggard2018} derived analytic expressions for the
 analogous case in reflected light, packaged into the 
 \textsf{EARL} code. In this work, we derive similar expressions within
 the \starry framework to perform fast, analytical inversion of the light curve
-of Earth and thus construct a map of the planet in reflected light.
+of the Earth and thus construct a map of the planet in reflected light.
 
 The paper is organized as follows: we give an overview of the \TESS data used in \S\ref{sec:data},
 and in \S\ref{sec:methods} we describe the methods employed to infer a map 
@@ -225,7 +226,7 @@ procedure effectively grouped together light curves with similar features,
 increasing in variation within each group from the first group (most homogeneous) 
 to the last group (most heterogeneous). In practice, we found light curves
 in all but the last group to be dominated by 
-the signal of Earth, while light
+the signal of the Earth, while light
 curves in the last group were dominated by signals other than the
 periodic modulation of the planet. To obtain our final set of light curves, 
 we sorted the light curves in each group by the amplitude
@@ -244,7 +245,7 @@ A representative sample of these signals is shown in Figure~\ref{fig:data}.
     \includegraphics[width=\linewidth]{figures/data.pdf}
     \caption{\label{fig:data}
              Normalized background flux in each of ten postage stamps
-             for each of Sectors 1 and 2. Cadences where Earth was
+             for each of Sectors 1 and 2. Cadences where the Earth was
              below or very close to the edge of the sunshade were masked.
              While the planet is in view for the majority of both orbits
              in Sector 1, it is only visible in the data at the very end
@@ -253,8 +254,6 @@ A representative sample of these signals is shown in Figure~\ref{fig:data}.
              }
     \end{centering}
 \end{figure}
-
-\pagebreak
 
 \section{Methods}%
 \label{sec:methods}%
@@ -276,20 +275,21 @@ do not apply any light travel correction, as the expected delay is on the order
 of a few seconds.
 
 At any given cadence, we rotate the Earth about its spin axis to the correct phase,
-assuming a planetary rotation period of $0.9972696$ days and an obliquity
+assuming a planetary rotation period of $0.9972696$ days (the Earth's sidereal 
+rotation period) and an obliquity
 of $23.437^\circ$. We determine the initial rotation
-phase of Earth by computing the Earth Rotation Angle (ERA), given by \citep{Urban2013}
+phase of the Earth by computing the Earth Rotation Angle (ERA), given by \citep{Urban2013}
 %
 \begin{align}
 \mathrm{ERA} = 360^\circ(0.7790572732640 + 1.00273781191135448 \, t_U) \, \mathrm{mod} \, 360^\circ
 \end{align}
 %
 where $t_U = t - 2451545.0$. At $t = t_0 = 2458325.5$, the first timestamp in our dataset,
-we find $\mathrm{ERA} = 303.4^\circ$, meaning the vernal equinox will be aligned with
+we find $\mathrm{ERA} = 303.4^\circ$, meaning the vernal equinox is aligned with
 the prime meridian $360^\circ - 303.4^\circ = 56.6^\circ = 3.77$ hours past $t_0$.
 %
 Finally, we rotate the frame to align
-\TESS with the $+z$ axis, with the spin vector of Earth along the $y-z$ plane.
+\TESS with the $+z$ axis, with the spin vector of the Earth along the $y-z$ plane.
 We verified our rotations by comparing our results on several days to the
 ephemerides provided by the JPL HORIZONS Web interface%
 \footnote{See \url{https://ssd.jpl.nasa.gov/horizons.cgi} and 
@@ -304,7 +304,7 @@ Jupyter notebook.}}.
              Sectors 1 and 2 that was included in the regression. Each image 
              is labeled with the corresponding timestamp in TJD. 
              The dayside features shown here correspond to a simple continental
-             model of Earth, not to the map inferred in this study.
+             model of the Earth, not to the map inferred in this study.
              \codelink{EarthView}
              }
     \end{centering}
@@ -641,16 +641,16 @@ finishing in under one minute on a laptop.
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/map_L2.pdf}
     \caption{\label{fig:map_L2}
-             Maximum likelihood map of Earth obtained during the first
+             Maximum likelihood map of the Earth obtained during the first
              stage of our optimization procedure, in which an iterative
              analytic approach was used to solve the bilinear model, 
              subject to very conservative regularization. Despite the low
              resolution of this map, bright features appear at the 
              expected locations of South America, Africa, and Asia, 
-             and two dark features appear at Earth's
-             two major oceans, the Pacific and the Atlantic. 
-	          Black contours correspond to known coastlines. 
-	          \codelink{earthshine_S1_S2}      
+             and two dark features appear at locations consistent with
+             the Pacific and Atlantic oceans. Note that the colors correspond
+             to a \emph{normalized} albedo, scaled such that the dynamic
+             range of the image spans [0, 1]. \codelink{earthshine_S1_S2}      
              }
     \end{centering}
 \end{figure}
@@ -665,12 +665,12 @@ the order of $18^\circ$, features typically span ${\sim}45^\circ$; this is
 also an artefact of our regularization. However, broad features are already
 visible in the map: three bright regions and two dark regions (one of which
 wraps around the antimeridian). Overplotted on the inferred map are
-coastal outlines of Earth's continents. One can see that the three bright regions roughly
+coastal outlines of the Earth's continents. One can see that the three bright regions roughly
 track, from left to right, the continents  of South America,
 Africa, and Asia. The dark regions
-appear at the locations of Earth's two major oceans, the
-Pacific (centered at longitude $\pm180^\circ$) and the Atlantic
-(centered at longitude $\-45^\circ$).
+appear at the locations of the
+Pacific ocean (centered at longitude $\pm180^\circ$) and the Atlantic
+ocean (centered at longitude $-45^\circ$).
 
 \begin{figure}[t!]
     \begin{centering}
@@ -693,7 +693,7 @@ The median residuals are shown in the bottom panel; these have
 standard deviation of less than one percent. While there is significant correlated
 structure in the residuals, their power spectrum displays a broad peak extending 
 between about 0.1 and 10 days, with a significant dip at 1.00 day. This
-suggests our model is fitting the rotational variability of Earth quite well, but
+suggests our model is fitting the rotational variability of the Earth quite well, but
 additional temporal variations---most likely due to cloud movement---cause aperiodic
 changes in the reflectivity of the surface. We revisit this point in \S\ref{sec:discussion}.
 
@@ -702,7 +702,7 @@ changes in the reflectivity of the surface. We revisit this point in \S\ref{sec:
     \includegraphics[width=\linewidth]{figures/map.pdf}
     \caption{\label{fig:map}
              \emph{Top:} The maximum likelihood model for the surface albedo
-             of Earth, weighted by the visibility across Sectors 1 and 2. The
+             of the Earth, weighted by the visibility across Sectors 1 and 2. The
              dashed white lines indicate latitudes above/below which the
              visibility drops below 50\%. As in Figure~\ref{fig:map_L2}, coastlines 
              are overplotted as black contours.
@@ -719,9 +719,9 @@ In the top panel of Figure~\ref{fig:map} we show the final,
 maximum likelihood albedo map inferred for Earth weighted by a visibility function.
 The visibility function is computed as the average of the product of the 
 cosine of the illumination angle and the cosine of the angle between the 
-observer vector and the vector normal to the surface of Earth. This normalization
+observer vector and the vector normal to the surface of the Earth. This normalization
 has the effect of downweighting regions that are either seldom illuminated (such
-as regions near the southern pole of Earth, as the observations were taken during
+as regions near the southern pole of the Earth, as the observations were taken during
 southern winter) or seldom in view (such as regions near the northern pole of the planet,
 which during Sectors 1 and 2 were mostly on the opposite side of the Earth from \TESS).
 Because there is little data from these regions, their albedo is prior-dominated
@@ -729,10 +729,13 @@ and tends to fluctuate substantially with small changes to the choices we make
 when fitting the data. On the other hand, we find that the large scale features close to
 the equator are mostly insensitive to our choices of prior. In the Figure,
 we use dashed lines to delineate the regions whose average visibility is larger
-than 0.5.
+than 0.5. Note that as before, the albedo is scaled to span the range [0, 1]. We emphasize
+that because of the unknown throughput of the optics that give rise to the Earthshine
+signal in \TESS, the absolute scaling of the albedo cannot be inferred from the
+dataset alone.
 
 The bottom panel of Figure~\ref{fig:map} shows an approximate average
-cloud cover map of Earth based on imagery taken by the
+cloud cover map of the Earth based on imagery taken by the
 Visible Infrared Imaging Radiometer Suite (\emph{VIIRS}) instrument aboard the 
 Suomi National Polar-orbiting Partnership (\emph{S-NPP}) satellite%
 \footnote{Data obtained via 
@@ -741,11 +744,11 @@ The image was produced by analyzing the corrected true color reflectance in the
 I1 (red), M4 (blue), and M3 (green) bands and masking
 all pixels that were either dark or had significant variance among the three
 bands (i.e., inconsistent with a grey spectrum). We then averaged the images
-averaged over the 28 days of data analyzed in this work, smoothed it 
-with a Gaussian filter, and weighted by the \TESS visibility as in the top panel.
+over the 28 days of data analyzed in this work, smoothed it 
+with a Gaussian filter, and weighted it by the \TESS visibility as in the top panel.
 
-While the two panels display fundamentally different quantities---an albedo
-and a cloudiness factor---we expect that the signal of Earth in the \TESS
+While the two panels display fundamentally different quantities---a scaled albedo
+and a cloudiness factor---we expect that the signal of the Earth in the \TESS
 bandpass is dominated by cloud reflectivity, as water clouds have an albedo
 higher than soil, vegetation, or ocean in the optical/near infrared
 \citep[e.g.,][]{Jedlovec2009}. We therefore
@@ -785,7 +788,7 @@ problem is fundamentally non-invertible, since most of the information
 one wishes to extract never makes it into the light curve in the first place.
 
 Fortunately, there are two aspects of the problem at hand that facilitate
-this (seemingly impossible) inversion. First, the surface of Earth is
+this (seemingly impossible) inversion. First, the surface of the Earth is
 not uniformly illuminated; instead, different parts of the surface are weighted
 by different amounts as the planet rotates and as the angle of incident starlight
 moves over the course of the planet's year. This weighting is sufficient to break many
@@ -796,12 +799,12 @@ the visible lune of the planet strictly remain in the null space. Second,
 the changing vantage point of \TESS relative to Earth (and our exact knowledge of it)
 breaks degeneracies that are viewpoint-dependent. In particular, the motion of
 \TESS changes the position and shape of the terminator on the projected disk
-of Earth, enhancing the effect discussed above.
+of the Earth, enhancing the effect discussed above.
 
 In fact, because of these points, there should actually be \emph{no} null space 
 in this particular problem. In practice, however, it is evident from
 Figure~\ref{fig:map} that degeneracies still abound. While we infer a few of the
-dominant features of the cloud map of Earth, several of them are skewed, 
+dominant features of the cloud map of the Earth, several of them are skewed, 
 shifted, or entirely out of place. This is the case, for instance, with
 the cloud bank west of South America, which extends too far westward, and
 the northern Atlantic Ocean, which appears to extend into the east coast of
@@ -810,7 +813,7 @@ North America. We identify four broad reasons for this.
 First, many of the issues arise because
 of the finite signal-to-noise of our measurements and various biases in
 our adopted model. While the measurement errors on our data points are
-quite small---since the signal of Earth is both quite strong and independently
+quite small---since the signal of the Earth is both quite strong and independently
 measured at 95 different positions on the detector---our lack of understanding
 of the complex optics (and our
 attempt to na{\"i}vely model it with pixel-level decorrelation) likely
@@ -828,20 +831,20 @@ South America, and dark regions associated with the three major oceans) persist
 regardless of the choice of prior, their exact shapes and contrast vary
 significantly under different assumptions.
 
-Third, inspection of Figure~\ref{fig:phases} shows that most of the time, Sol
-d is close to full phase as seen by \TESS.
+Third, inspection of Figure~\ref{fig:phases} shows that most of the time, the Earth
+is close to full phase as seen by \TESS.
 With the terminator close to the limb
 of the planet, its ability to break degeneracies is considerably lessened.
 We are therefore somewhat limited in our ability to infer in particular the
-latitudinal position of features. Observations of Earth in upcoming
-sectors may contain longer segments in which Earth is seen in crescent,
+latitudinal position of features. Observations of the Earth in upcoming
+sectors may contain longer segments in which the planet is seen in crescent,
 which should help mitigate these degeneracies.
 
-Fourth, and most importantly, we have not performed actual inference: that is, 
+Fourth, and most importantly, we have not performed Bayesian inference: that is, 
 we simply found the maximum likelihood solution (subject to our constraints),
 with no estimate of the uncertainty anywhere on our map. A much better
 approach than simply maximizing the likelihood function is to marginalize
-over the nuisance parameters---such as the systematic model weights and the spectral
+over the nuisance parameters---such as the systematics model weights and the spectral
 slope. This is more costly, but certainly not intractable, and we will
 pursue this in future work.
 
@@ -869,7 +872,7 @@ and a linear reflectance model) and thus limiting
 the number of knobs we could turn. We also opted to forego any use of 
 real imaging data in our model; for instance, we fit for the spectral
 slope of the map as a free parameter rather than using the true power spectrum 
-of Earth. Moreover, the broad features in the strongly
+of the Earth. Moreover, the broad features in the strongly
 regularized map (Figure~\ref{fig:map_L2})---and in particular the monsoon clouds
 over southeast Asia---are insensitive to most of our model choices.
 
@@ -913,7 +916,7 @@ We also ignored the finite angular size of the Sun at Earth (about $0.5^\circ$),
 treating it instead as a point source. Regions immediately nightward of the 
 terminator should therefore contribute a small amount of flux, which we neglect.
 Similarly, we used the timestamps reported in the \tess light curve
-FITS files, which are corrected to the barycenter of the Sol system. Since
+FITS files, which are corrected to the barycenter of the Solar System. Since
 our signal originates from a source that is closer to \tess than the
 barycenter of the system, the timestamps may be wrong by up to 8 minutes,
 the light travel time from \tess to the Sun. Over the course of 8 minutes, Earth rotates
@@ -926,13 +929,12 @@ Moreover, we implicitly assumed an isotropic prior on the spherical harmonic
 coefficients by imposing a power spectrum in only the degree $l$. This has the
 effect of lessening the extent to which features can be confined to certain
 latitudes. In particular, our prior implicitly disfavors banded cloud structure,
-which one may \emph{a priori} expect on a rapidly rotating planet such as 
-Earth. The bottom panel of Figure~\ref{fig:map} shows such banded structure
+which is quite common on Earth. The bottom panel of Figure~\ref{fig:map} shows such banded structure
 at the equator and at mid-latitudes due to the combined effects of 
 north-south circulation and deflection by the Coriolis force.
 
 Finally, and perhaps more importantly, our model assumed a \emph{static}
-map for the surface of Earth. We also know this to be incorrect, since
+map for the surface of the Earth. We also know this to be incorrect, since
 clouds form and move on timescales of hours to days. We discuss this in
 detail in the following section.
 
@@ -943,9 +945,9 @@ As we mentioned in \S\ref{sec:results}, the residuals about our maximum
 likelihood fit show correlated structure with power at a large range
 of periods ranging from 0.1 up to 10 days. This is likely due to 
 the fact that rotational variability is not the sole source of the
-signal of Earth: additionally, there is temporal variation in the 
-albedo of certain parts of the map, most probably due to cloud movement.
-In order to test this, we used \starry to construct a time-variable
+signal of the Earth: additionally, there is temporal variation in the 
+albedo of certain parts of the map  due to cloud movement.
+In order to model this, we used \starry to construct a time-variable
 spherical harmonic map, defined by a vector of spherical harmonic coefficients
 that varies slowly over time:
 %
@@ -995,7 +997,7 @@ differences are evident, although the residuals improved by ${\sim}30\%$
 and contain significantly less power on timescales longer than 1 day.
 We conclude that while this is evidence for cloud variability on these
 timescales, a more detailed investigation is warranted to say anything
-meaningful about the dynamics of clouds on Earth.
+meaningful about the dynamics of clouds on Earth from \TESS observations.
 
 \subsection{Implication for Future Observations}
 \label{sec:otherplanets}
@@ -1005,10 +1007,10 @@ and we have shown that this is true even at high signal-to-noise and
 when the solution is
 known ahead of time. Presented with the top panel of Figure~\ref{fig:map}
 (without the continent outlines),
-an inhabitant of Earth may be hard-pressed to identify that
-as a map of their home planet. This is in part due to the biases
+one may be hard-pressed to identify that
+as a map of our home planet. This is in part due to the biases
 in our optimization, which we discussed above, but also due to the 
-simple fact that the reflectance of Earth is dominated---by far---by 
+simple fact that the reflectance of the Earth is dominated---by far---by 
 time-variable clouds. While stationary cloud features on Earth are
 typically associated with continents (the most pronounced cloud features
 being over South America, Africa, and south Asia), persistent cloud
@@ -1032,7 +1034,7 @@ spanning two months in total. Observations taken throughout an entire
 year on Earth---during which time cloud patterns should change with the
 seasons and the angle between the day/night terminator and the 
 axis of rotation should precess---may help to disambiguate between
-clouds, oceans, and continents. Although the signal of Earth 
+clouds, oceans, and continents. Although the signal of the Earth 
 mostly disappears from the \tess detector after Sector 2, it is
 expected to return in Sectors 14 and 15 when the planet will again
 be above the edge of the sunshade.
@@ -1054,7 +1056,7 @@ We have used \TESS photometry to
 produce a global map of the Earth, treating it as an exoplanet with unknown
 surface features. We adapted the \starry code to 
 generate (and invert) light curves in reflected light, coupling it
-to a variation of pixel level decorrelation to model the systematics
+to a variant of pixel level decorrelation to model the systematics
 in the \TESS detector. 
 
 We detect three large scale bright regions near
@@ -1076,14 +1078,14 @@ the course of Sector 1 observations.
 Upcoming observations with \TESS will yield further information on 
 the time variability of surface features on Earth on a variety of timescales.
 
-To summarize, we have robustly detected surface features from \TESS 
-light curves of Earth. While the resolution of the map we obtain is limited, 
-we do unambiguously detect surface features including low-albedo oceanic regions and 
-high-albedo cloud banks or land masses. 
+%To summarize, we have robustly detected surface features from \TESS 
+%light curves of the Earth. While the resolution of the map we obtain is limited, 
+%we do unambiguously detect surface features including low-albedo oceanic regions and 
+%high-albedo cloud banks or land masses. 
 
 The work presented here serves as a relevant case study for future 
 efforts to characterize terrestrial exoplanets. While the circumstances of \TESS's 
-observations of Earth will not be replicated exactly for other planets, similar 
+observations of the Earth will not be replicated exactly for other planets, similar 
 rotationally-modulated phase curves of reflected light may be feasible in the future. 
 We show that a fast, analytic linear model can be successfully applied to such data. 
 We also underscore the importance of high cadence \emph{and} long duration for 
@@ -1095,7 +1097,7 @@ help disentangle the photometric signatures of continents and persistent cloud f
 
 \acknowledgements{%
 We gratefully acknowledge Jonathan Fraine, Dan Foreman-Mackey, 
-David W. Hogg, Ben Montet, and Ben Pope for useful conversations. 
+David W. Hogg, Ben Montet, Ben Pope, and Wolfgang Kerzendorf for useful conversations. 
 Crucial parts of this work were carried out at the 
 TESS Data Workshop, hosted by Space Telescope Science Institute, and the 
 Building Early Science with TESS Workshop, hosted by the University of Chicago.}
