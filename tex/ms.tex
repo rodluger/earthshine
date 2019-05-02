@@ -100,7 +100,7 @@ are orders of magnitude below current measurement capabilities. Nevertheless,
 much work has been done on the theoretical front on mapping terrestrial
 planets in the habitable zone
 \citep[e.g.,][]{Ford2001,Tinetti2006a,Tinetti2006b,WilliamsGaidos2008,Palle2008,
-Kawahara2010,Fujii2012,Berdyugina2017,Haggard2018,Lustig-Yaeger2018};
+Kawahara2010,Fujii2012,Berdyugina2017,Haggard2018,Farr2018,Lustig-Yaeger2018};
 for a review, see \cite{Cowan2018}. In particular, several works
 have harnessed space-based observations of the Earth in proof-of-concept
 studies aimed at shedding light on the opportunities and challenges future
@@ -111,25 +111,44 @@ spectroscopic observations and spatially-resolved images of the planet at high
 resolution. \cite{Goode2001} and \cite{Woolf2002} used unresolved measurements of
 Earthshine reflecting off the face of the Moon to infer the planet's
 seasonally-variable albedo and its atmospheric transmission spectrum,
-respectively. \cite{Cowan2009} used unresolved images of the Earth taken
+respectively. Similarly, \cite{Hasinoff2011} presented a method to infer
+the two-dimensional map of the Earth from single-pixel measurements of the
+planet's diffuse reflectance on the Moon.
+\cite{Cowan2009} used unresolved images of the Earth taken
 by the EPOXI spacecraft to construct low resolution albedo maps, recovering
-approximate longitudinal distributions of oceans continents on the planet. More
-recently, \cite{Jiang2018} made use of daily images of the fully-illuminated
+approximate longitudinal distributions of oceans continents on the planet. 
+More recently, \cite{Jiang2018} made use of daily images of the fully-illuminated
 disk of the Earth taken by the Deep Space Climate Observatory (DSCOVR) to recover
 the planet's rotation rate and seasonal albedo variations.
 
-In all of these studies, ...
+In all of these studies, the resolution and fidelity of the inferred maps of the
+Earth have been strongly limited by the cadence and/or baseline of observations.
+Inferring high spatial resolution features necessitates observations at 
+high temporal resolution, while long baselines spanning different seasons
+on the planet are required to break the degeneracies inherent to the 
+mapping problem.
 
-resolving power has been 
-limited by the cadence and/or duration of observations
-\TESS offers precise 2-minute cadence data spanning a wide range of illumination 
-phases, enabling a level of spatial and temporal resolving power that is 
-unprecedented in the history of exoplanet phase mapping. 
+In this work we use scattered light present in the background of
+detectors aboard the \TESS spacecraft to infer a map of the surface of the Earth.
+Although \TESS was designed as an all-sky photometric exoplanet survey,
+significant levels of
+scattered light from the Earth (``Earthshine'') are present across the \TESS detector
+during several of the mission's observing sectors. Despite the presence
+of a sunshade and a lens hood to limit this kind of contamination,
+Earthshine is a dominant background signal particularly during
+sectors 1 and 2, when the Earth spent a significant fraction of the
+time above the edge of the \TESS sunshade. Although the Earth is never
+directly in the field of view of the \TESS cameras, Earthshine reflects 
+off the inside of the lens hoods, illuminating each of the four cameras
+with a signal that is both spatially and temporally variable due to 
+the complex optics at play. For more information, refer to the
+\TESS Instrument Handbook\footnote{\url{https://archive.stsci.edu/missions/tess/doc/TESS_Instrument_Handbook_v0.1.pdf}}.
 
-
-\citep{Sagan1993}.
-
-
+Although the Earthshine signal in \TESS is convolved with complicated systematics,
+this dataset offers an unprecedented opportunity to tackle the mapping problem, given
+its extremely high cadence (observations recorded every 2 minutes in short cadence mode) 
+and the long observing baseline of \TESS (a 2 year primary mission, with the Earth in view
+for several months of the year).
 %
 Moreover, recent advances on the modeling side 
 have made the reconstruction of detailed maps more feasible than ever. 
@@ -181,7 +200,7 @@ grid, masked all cadences with nonzero \textsf{QUALITY} flags, and masked
 cadences during which Earth was below the edge of the sunshade.
 
 Not all postage stamps are equally informative, since the desired signal from 
-Earth is inhomogeneously spread across the \TESS detectors and manifests itself
+the Earth is inhomogeneously spread across the \TESS detectors and manifests itself
 differently in different regions (see \S\ref{sec:systematics}). 
 We down-selected our pool of 1,000 targets to 75 maximally useful background 
 light curves from Sector 1 and 20 from Sector 2. 
@@ -249,14 +268,14 @@ the Solar System and \TESS ephemeris data for
 Sectors 1 and 2 and used \spiceypy \citep{Acton1996, Acton2017, Annex2017}
 to convert the TJD timestamps to 
 ephemeris time (ET). We then used the \textsf{spkezr} utility of \spiceypy to compute
-the relative positions of Sol, Earth, and \TESS for every cadence
+the relative positions of the Sun, the Earth, and \TESS for every cadence
 in our dataset in the J2000 equatorial reference frame. In this right-handed
-coordinate frame, Earth is centered at the origin, the $y$ axis points along the 
+coordinate frame, the Earth is centered at the origin, the $y$ axis points along the 
 planet's spin axis, and the $x$ axis points toward the vernal equinox. We
 do not apply any light travel correction, as the expected delay is on the order
 of a few seconds.
 
-At any given cadence, we rotate Earth about its spin axis to the correct phase,
+At any given cadence, we rotate the Earth about its spin axis to the correct phase,
 assuming a planetary rotation period of $0.9972696$ days and an obliquity
 of $23.437^\circ$. We determine the initial rotation
 phase of Earth by computing the Earth Rotation Angle (ERA), given by \citep{Urban2013}
@@ -281,25 +300,25 @@ Jupyter notebook.}}.
     \begin{centering}
     \includegraphics[width=\linewidth]{figures/phases.pdf}
     \caption{\label{fig:phases}
-             Synthetic images showing \TESS's view of Earth on every date in 
+             Synthetic images showing \TESS's view of the Earth on every date in 
              Sectors 1 and 2 that was included in the regression. Each image 
              is labeled with the corresponding timestamp in TJD. 
-             The dayside features shown here correspond to a 
+             The dayside features shown here correspond to a simple continental
              model of Earth, not to the map inferred in this study.
              \codelink{EarthView}
              }
     \end{centering}
 \end{figure}
 
-Figure~\ref{fig:phases} shows the view \TESS has of Earth on each of the dates
+Figure~\ref{fig:phases} shows the view \TESS has of the Earth on each of the dates
 in our dataset; these images were produced by applying the sequences of rotations
-described above. The planet is illuminated by Sol assuming it is a point source,
-and the night side is shaded black. The map of Earth shown in this figure is 
-based on current models of the actual distribution of continents on the planet.
-Note that although the images are computed an integer number of rotation periods
+described above. The planet is illuminated by the Sun assuming it is a point source,
+and the night side is shaded black. Note that the map of the Earth shown in this figure is
+purely illustrative and does not correspond tot he map inferred in this study.
+Note also that although the images are computed an integer number of rotation periods
 apart, the planet appears to slowly rotate over the course of the observation.
 This is due to the orbit of \TESS, which changes its vantage point relative
-to Earth over the course of its 13 day orbit.
+to the Earth over the course of its 13 day orbit.
 
 \subsection{Systematics Modeling}
 \label{sec:systematics}
@@ -307,9 +326,9 @@ to Earth over the course of its 13 day orbit.
 While the astrophysical signal that we wish to analyze is present in all 
 extracted light curves, its strength is modulated by time-variable systematics 
 that are correlated but not identical across all postage stamps, since the
-illumination of the CCD by Earth is strongly inhomogeneous. A physical
+illumination of the CCD by the Earth is strongly inhomogeneous. A physical
 model of the reflections and scattering that gives rise to the
-signal of Earth on the \TESS detector is beyond the scope of this work. Instead,
+signal of the Earth on the \TESS detector is beyond the scope of this work. Instead,
 we treat this as a de-trending problem, where the signal we wish to fit is
 shared by all postage stamps, but multiplied by a systematic signal that is
 different for each target. This problem is precisely what the technique of
@@ -344,7 +363,7 @@ concerning; nevertheless, we impose an L2 prior on the weights to minimize this 
 \label{sec:starry}
 
 We model the astrophysical component of the signal---the rotational modulation
-of Earth in reflected light---using the \starry code package \citep{Luger2019}.
+of the Earth in reflected light---using the \starry code package \citep{Luger2019}.
 \starry computes phase curves and occultation light curves for bodies whose
 surfaces can be expressed as a sum of spherical harmonics. 
 The algorithm works by first transforming
@@ -359,7 +378,7 @@ easily computed via recursion relations involving factorials. The algorithm is
 thus extremely fast and very precise.
 
 However, in the present work, we are interested in \emph{reflected} light, so we must
-account for the illumination by the star. This illumination varies smoothly
+account for the illumination by the Sun. This illumination varies smoothly
 across the dayside of the planet, but its derivative discontinuously changes at the 
 terminator, beyond which the illumination is zero everywhere. This requires
 two modifications to the \starry algorithm: we must (1) weight all integrands
@@ -495,7 +514,7 @@ a maximum surface resolution on the order of $180^\circ/10 \approx 18^\circ$.
 Finally, for reference, in Figure~\ref{fig:starry_model} we plot the
 \starry model for our maximum likelihood fit (\S\ref{sec:results}). The
 sharp rise at the beginning of each orbit in Sector 1 is due to the changing
-vantage point of \TESS as Earth transitions from a thin crescent to full phase.
+vantage point of \TESS as the Earth transitions from a thin crescent to full phase.
 
 \subsection{Full Model and Likelihood Function}
 \label{sec:model}
@@ -506,7 +525,7 @@ the \starry model $\mathbf{s} = \mathbf{A}\mathbf{y}$ (shared by all targets). S
 know the exact distance $\mathbf{r}$ between \TESS and the Earth at all times
 (\S\ref{sec:orbit}), we also include the inverse square of $\mathbf{r}$ 
 as a multiplicative term to scale the luminosity 
-of Earth to the flux observed by \TESS. The model for the flux time series
+of the Earth to the flux observed by \TESS. The model for the flux time series
 in the $n^\mathrm{th}$ postage stamp is therefore
 %
 \begin{align}
