@@ -22,7 +22,7 @@ setup(name='earthshine',
           'tqdm'
       ],
       dependency_links=[
-        'https://github.com/rodluger/starry/tarball/linear#egg=starry-1.0.0.dev0'
+        'https://github.com/rodluger/starry/tarball/fd0ce1edab6a3e83cc3231411e2406bb02df6096#egg=starry-1.0.0.dev0'
       ],
       include_package_data=False,
       zip_safe=False
