@@ -34,22 +34,22 @@
        Institute of Technology, Cambridge, MA}
 
 \begin{abstract}
-\todo{(TO BE CHANGED:)}
 To date, a handful of exoplanets have been photometrically mapped using phase-modulated 
 reflection or emission from their surfaces, but the small amplitudes 
 of such signals have limited previous maps almost exclusively to coarse dipolar
 features on hot giant planets. 
-In this work, we uncover a signal using recently released data from the Transiting 
-Exoplanet Survey Satellite (\TESS), which we show corresponds to time-variable reflection 
-from a terrestrial 
-planet with a rotation period of $0.9972696$ days. 
-Using a spherical harmonic-based reflection model developed as an extension of 
-the \starry package, we are able to reconstruct the surface features of this rocky 
-world. We recover a time-variable albedo map of the planet including persistent 
-regions which we interpret as oceans and cloud banks indicative of continental features. 
-We argue that this planet represents the most promising detection of a habitable 
-world to date, although the potential intelligence of any life on it is yet to 
-be determined.
+With future instruments, more detailed mapping of terrestrial planets may become possible, 
+but significant challenges will remain in analyzing and interpreting these data. 
+In this work, we extract a rotationally-modulated reflected light curve of the Earth 
+from the time-variable background flux in data from the Transiting Exoplanet Survey Satellite (\TESS).
+We treat these data as an unknown exoplanet and reconstruct surface features  
+using a spherical harmonic-based reflection model developed as an extension of 
+the \starry package. We recover a time-variable albedo map including persistent 
+regions indicative of Earth's major oceans and cloud banks. 
+Our results suggest that the recovery of surface features on a terrestrial exoplanet
+from reflected-light photometric monitoring will be possible, but will require
+a considerable investment of observing time to achieve the high cadence and 
+long time baseline needed.
 \href{https://github.com/rodluger/earthshine}{\color{linkcolor}\faGithub}
 \end{abstract}
 
@@ -1039,16 +1039,19 @@ to a variation of pixel level decorrelation to model the systematics
 in the \TESS detector. 
 
 We detect three large scale bright regions near
-the equator of the planet, associated with persistent cloud structures
-at longitudes of $-60^\circ$, $+30^\circ$, and $+90^\circ$, which
-likely track continents. Pronounced dark features are identified
+the equator of the planet at longitudes of 
+$-60^\circ$, $+30^\circ$, and $+90^\circ$, 
+which we interpret as persistent cloud structures 
+near the Andes, sub-Saharan Africa, and the South Asian monsoon. 
+Pronounced dark features are identified
 at longitudes of $\pm 180^\circ$, $-30^\circ$, and $+60^\circ$ with
-significant latitudinal extent, likely corresponding to oceans. Because of the
+significant latitudinal extent, likely corresponding to 
+the Pacific, Atlantic, and Indian Oceans. Because of the
 vantage point of \TESS during Sectors 1 and 2, we are not sensitive to
 high latitudes on the planet, although this may change with upcoming
 sectors. 
 
-We fit Earth with both static and time-variable albedo maps. 
+We fit Earth's light curve with both static and time-variable albedo maps. 
 We find tentative evidence for variability in Earth's cloud coverage over 
 the course of Sector 1 observations. 
 Upcoming observations with \TESS will yield further information on 
