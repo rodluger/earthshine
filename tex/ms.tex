@@ -94,7 +94,7 @@ a large longitudinal offset in its peak surface emission due to either
 lava flows on the surface or strong atmospheric recirculation
 \citep{Demory2016,Demory2016b,Hammond2017}.
 
-However, obtaining a map of a temperate terrestrial exoplanet is still
+Obtaining a map of a temperate terrestrial exoplanet is still
 beyond the capabilities of current facilities, as both the thermal and 
 reflected light signals from these planets
 are orders of magnitude below current measurement capabilities. Nevertheless,
@@ -107,9 +107,10 @@ have harnessed space-based observations of the Earth in proof-of-concept
 studies aimed at shedding light on the opportunities and challenges future
 exoplanet mapping missions may bring. Perhaps the most well-known of these
 is the work of \cite{Sagan1993}, who used observations from the Galileo probe
-to infer the existence of life on Earth. However, this study made use of both
+to infer the existence of life on Earth. This study made use of both
 spectroscopic observations and spatially-resolved images of the planet at high
-resolution. \cite{Goode2001} and \cite{Woolf2002} used unresolved measurements of
+resolution, neither of which will necessarily be available for an analogous exoplanet. 
+For a more exoplanet-like approach, \cite{Goode2001} and \cite{Woolf2002} used unresolved measurements of
 Earthshine reflecting off the face of the Moon to infer the planet's
 seasonally-variable albedo and its atmospheric transmission spectrum,
 respectively. Similarly, \cite{Hasinoff2011} presented a method to infer
@@ -146,7 +147,7 @@ the complex optics at play. For more information, refer to the
 \TESS Instrument Handbook\footnote{\url{https://archive.stsci.edu/missions/tess/doc/TESS_Instrument_Handbook_v0.1.pdf}}.
 
 Although the Earthshine signal in \TESS is convolved with complicated systematics,
-this dataset offers an unprecedented opportunity to tackle the mapping problem, given
+this dataset offers an unprecedented opportunity to tackle the mapping problem in detail, given
 its extremely high cadence (observations recorded every 2 minutes in short cadence mode) 
 and the long observing baseline of \TESS (a 2 year primary mission, with the Earth in view
 for several months of the year).
@@ -648,7 +649,7 @@ finishing in under one minute on a laptop.
              resolution of this map, bright features appear at the 
              expected locations of South America, Africa, and Asia, 
              and two dark features appear at locations consistent with
-             the Pacific and Atlantic oceans. Note that the colors correspond
+             the Pacific and Atlantic oceans. The colors correspond
              to a \emph{normalized} albedo, scaled such that the dynamic
              range of the image spans [0, 1]. \codelink{earthshine_S1_S2}      
              }
@@ -702,7 +703,8 @@ changes in the reflectivity of the surface. We revisit this point in \S\ref{sec:
     \includegraphics[width=\linewidth]{figures/map.pdf}
     \caption{\label{fig:map}
              \emph{Top:} The maximum likelihood model for the surface albedo
-             of the Earth, weighted by the visibility across Sectors 1 and 2. The
+             of the Earth, weighted by the visibility across Sectors 1 and 2 and
+			 normalized. The
              dashed white lines indicate latitudes above/below which the
              visibility drops below 50\%. As in Figure~\ref{fig:map_L2}, coastlines 
              are overplotted as black contours.
@@ -812,8 +814,8 @@ North America. We identify four broad reasons for this.
 
 First, many of the issues arise because
 of the finite signal-to-noise of our measurements and various biases in
-our adopted model. While the measurement errors on our data points are
-quite small---since the signal of the Earth is both quite strong and independently
+our adopted model. While the measurement errors on our data points are 
+small---since the signal of the Earth is both quite strong and independently
 measured at 95 different positions on the detector---our lack of understanding
 of the complex optics (and our
 attempt to na{\"i}vely model it with pixel-level decorrelation) likely
@@ -836,7 +838,7 @@ is close to full phase as seen by \TESS.
 With the terminator close to the limb
 of the planet, its ability to break degeneracies is considerably lessened.
 We are therefore somewhat limited in our ability to infer in particular the
-latitudinal position of features. Observations of the Earth in upcoming
+latitudinal position of features. The Earthshine present in upcoming
 sectors may contain longer segments in which the planet is seen in crescent,
 which should help mitigate these degeneracies.
 
@@ -860,7 +862,7 @@ come as close as possible to the correct answer. While many of these choices
 correspond to numbers we have explicitly quoted here, such as the prior
 variances on our model terms, several of them are implicit decisions on
 \emph{how} we performed the analysis. For instance, in an early version of 
-the project we used as regressors actual \TESS housekeeping variables---such as the angle 
+the analysis we used as regressors actual \TESS housekeeping variables---such as the angle 
 and elevation of the Earth and the Moon relative to each of the four camera 
 boresights---instead of the PLD basis. However, the systematics model constructed from these quantities
 proved to be too inflexible, judging in part from the poor fidelity of the recovered
