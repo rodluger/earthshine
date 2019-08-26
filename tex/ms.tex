@@ -1,5 +1,8 @@
 \documentclass[modern]{aastex62}
 
+% Edited text for revision
+\newcommand{\edited}[1]{\textcolor{blue}{#1}}
+
 % Load the corTeX style definitions
 \input{cortex}
 
@@ -213,14 +216,32 @@ than containing any truly localized signals from astrophysical background
 sources; and the sample as a whole should contain the full range of typical 
 behaviors of background across the entire \TESS field of view. 
 To accomplish this, we applied a categorization and outlier rejection scheme to the ensemble of light curves.
-During this selection step only, we normalized the light curves to the same min-max range.
-We then computed the median
-flux at each cadence along with an estimate of the variance based on the
-median absolute deviation (MAD) across all light curves.
-For each light curve, we calculated a score $\chi^2$ equal to the sum of the squares of the
-deviation from the median at each of the $N$ cadences, normalized by the variance.
-We removed all light curves with $\chi^2 < N$ from the pool, placing
-them in a separate group. We repeated these steps several times,
+\edited{%
+During this selection step only, we normalized each light curve $\mathbf{f}_n$ to have
+flux in the range 0--1:
+\begin{align}
+    \mathbf{f\,'}_n = \frac{\mathbf{f}_n - f_{n,0.05}}{f_{n,0.95} - f_{n,0.05}} \quad,
+\end{align}
+where $f_{n,0.05}$ and $f_{n,0.95}$ represent the 5$^\mathrm{th}$ and 95$^\mathrm{th}$ 
+percentile values of the flux in the $n^\mathrm{th}$ light curve, respectively.
+We then computed the median value of $\mathbf{f\,'}_n$ at each cadence 
+across all light curves,
+along with an estimate of the standard deviation based on the
+median absolute deviation across all light curves:
+\begin{align}
+    \boldsymbol{\mu} &= \mathrm{median}\left( \{\mathbf{f}\,'_n\} \right) \nonumber\\
+    \sigma &= 1.4826 \times \mathrm{median}\left( \big\{ \big| \mathbf{f}\,'_n - \boldsymbol{\mu} \big| \big\} \right)
+\end{align}
+For each light curve, we then calculated a score indicative of its similarity
+to the median light curve:
+\begin{align}
+    \chi^2_n = \frac{1}{K} \sum_{k=0}^K \frac{(f'_{n,k} - \mu_k)^2}{\sigma^2} \quad,
+\end{align}
+where $K$ is the number of cadences in the light curve.
+We removed all light curves with $\chi^2_n < N$ from the pool, placing
+them in a separate group. 
+}
+We repeated these steps several times,
 classifying light curves into four groups for Sector 1 and two groups for Sector 2. 
 We found that this
 procedure effectively grouped together light curves with similar features,
@@ -233,11 +254,14 @@ periodic modulation of the planet. To obtain our final set of light curves,
 we sorted the light curves in each group by the amplitude
 of the signal and kept the first 25 in each of the first three groups in Sector 1
 and the first 20 in the first group in Sector 2 for a total
-of 75 and 20 light curves, respectively. We then computed an estimate of the
+of 75 and 20 light curves, respectively. 
+\edited{%
+We then median-normalized all light curves (as opposed to the
+normalization used for the classification discussed above). Finally,
+we computed an estimate of the
 non-Earth background flux from the cadences during which the planet was below
 the edge of the sunshade and removed this baseline from the flux.
-Finally, we median-normalized all light curves (as opposed to the min-max
-normalization used for the classification).
+}
 Our final dataset consisted of 912,605 data points in total. 
 A representative sample of these signals is shown in Figure~\ref{fig:data}.
 
@@ -251,7 +275,7 @@ A representative sample of these signals is shown in Figure~\ref{fig:data}.
              While the planet is in view for the majority of both orbits
              in Sector 1, it is only visible in the data at the very end
              of each orbit in Sector 2.
-             \codelink{earthshine_S1_S2}
+             \codelink{Earthshine}
              }
     \end{centering}
 \end{figure}
@@ -315,7 +339,7 @@ Figure~\ref{fig:phases} shows the view \TESS has of the Earth on each of the dat
 in our dataset; these images were produced by applying the sequences of rotations
 described above. The planet is illuminated by the Sun assuming it is a point source,
 and the night side is shaded black. Note that the map of the Earth shown in this figure is
-purely illustrative and does not correspond tot he map inferred in this study.
+purely illustrative and does not correspond \edited{to the} map inferred in this study.
 Note also that although the images are computed an integer number of rotation periods
 apart, the planet appears to slowly rotate over the course of the observation.
 This is due to the orbit of \TESS, which changes its vantage point relative
@@ -324,7 +348,7 @@ to the Earth over the course of its 13 day orbit.
 \subsection{Systematics Modeling}
 \label{sec:systematics}
 
-While the astrophysical signal that we wish to analyze is present in all 
+While the \edited{signal of Earth} that we wish to analyze is present in all 
 extracted light curves, its strength is modulated by time-variable systematics 
 that are correlated but not identical across all postage stamps, since the
 illumination of the CCD by the Earth is strongly inhomogeneous. A physical
@@ -346,12 +370,13 @@ We use PLD to determine a systematics basis set for each \TESS sector, and
 from this basis we construct a separate design matrix $\mathbf{B}$ for each sector. To
 increase the flexibility of the systematics model, we append to $\mathbf{B}$ a basis of
 fifth order orthogonal polynomials in time for each of the two orbits in each sector.
-The systematics model $\mathbf{p}$ for the $n^\mathrm{th}$ signal is thus
+The systematics model \edited{$\boldsymbol{\psi}$} for the $n^\mathrm{th}$ signal is thus
 %
+\edited{%
 \begin{align}
-\mathbf{p}_n = \mathbf{B} \mathbf{w}_n
+\boldsymbol{\psi}_n = \mathbf{B} \mathbf{w}_n
 \end{align}
-%
+}%
 where $\mathbf{w}_n$ are the weights of each regressor.
 Since we solve for different weights for each of the 75 light curves in Sector 1
 and 20 light curves in Sector 2, our systematics model has
@@ -406,15 +431,20 @@ limits to truncate the integrals at the day/night terminator.
 Let us consider a right-handed coordinate frame in which the planet has unit 
 radius and is located at the origin, the illumination source is along the $y-z$
 plane, and the sub-stellar point is on the $+y$ axis at $x = 0$
-(see Figure~\ref{fig:geometry}). In this frame, the terminator is a segment of
+(see Figure~\ref{fig:geometry}). In this frame, the terminator %
+\edited{projected onto the $x-y$ plane }%
+is a segment of
 an ellipse, with semi-major axis $a=1$ aligned with the $x$ axis and
-semi-minor axis $b$. It is straightforward to show that the sub-stellar point
+semi-minor axis $b$ %
+\edited{aligned with the $y$ axis}.
+It is straightforward to show that the sub-stellar point
 is located at $y=\sqrt{1 - b^2}$ and the illumination is given by
 %
+\edited{%
 \begin{align}
     I(b; x, y) &= 
     \begin{dcases}
-        \sqrt{1 - b^2}y - bz & 
+        \sqrt{1 - b^2}y + bz & 
             \quad\quad\quad\quad\quad\quad\quad\quad\quad\quad 
             y \geq -b \sqrt{1 - x^2}
         \\
@@ -425,8 +455,8 @@ is located at $y=\sqrt{1 - b^2}$ and the illumination is given by
     \quad ,
     \label{eq:illum}
 \end{align}
-%
-where $z = \sqrt{1 - x^2 - y^2}$.
+}%
+where \edited{$z = +\sqrt{1 - x^2 - y^2}$}.
 %
 Since the illumination function is just a polynomial in $x$, $y$, and $z$,
 weighting the terms in $\tilde{p}$ by this function keeps all terms within the
@@ -477,8 +507,8 @@ trigonometric functions involving $b$. Moreover, it is straightforward to
 derive recursion relations for $J_{ijk}(b)$, making its evaluation extremely fast.
 We implemented the algorithm for computing $J_{ijk}(b)$ in the development version
 of \starry
-\footnote{\url{https://github.com/rodluger/starry/tree/linear}};
-the details will be discussed in more detail in upcoming work.
+\footnote{\url{https://github.com/rodluger/starry/releases/tag/earthshine}};
+the details will be discussed \edited{further} in upcoming work.
 
 \begin{figure}[t!]
     \begin{centering}
@@ -521,7 +551,9 @@ vantage point of \TESS as the Earth transitions from a thin crescent to full pha
 \label{sec:model}
 
 Our full model for each light curve is simply the product of the 
-systematics model $\mathbf{p}_n = \mathbf{B}\mathbf{w}_n$ (different for each target) and
+systematics model 
+\edited{$\boldsymbol{\psi}_n = \mathbf{B}\mathbf{w}_n$}
+ (different for each target) and
 the \starry model $\mathbf{s} = \mathbf{A}\mathbf{y}$ (shared by all targets). Since we 
 know the exact distance $\mathbf{r}$ between \TESS and the Earth at all times
 (\S\ref{sec:orbit}), we also include the inverse square of $\mathbf{r}$ 
