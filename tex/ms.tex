@@ -568,12 +568,18 @@ in the $n^\mathrm{th}$ postage stamp is therefore
 %
 where $\circ$ denotes the element-wise product of two vectors.
 
-We solve Equation~(\ref{eq:model}) for the weights $\mathbf{w}_n$ and $\mathbf{y}$
-by maximizing the negative log likelihood function in two separate steps. In the
-first step, we take advantage of the linearity of the problem to perform a fast,
-semi-analytical optimization to obtain a starting guess for the weights. In the
-second step, we apply additional constraints to prevent overfitting and ensure
+\edited{%
+Equation~(\ref{eq:model}) is linear in $\mathbf{w}_n$ and in $\mathbf{y}$
+individually, but not in both simultaneously. To find the true optimum for
+both vectors, we must therefore perform a nonlinear optimization. However, we find that 
+the dimensionality of the problem is so large that unless we initialize the 
+optimizer with a good initial guess, it is unable to converge on a good solution.
+Fortunately, we are able to obtain an initial guess by exploiting the
+linearity of the problem and alternating between linear optimization of $\mathbf{w}_n$
+and linear optimization of $\mathbf{y}$. Then, in a second step, we run a
+nonlinear optimizer, applying additional nonlinear constraints to prevent overfitting and ensure
 an albedo in the range $[0, 1]$ everywhere on the surface.
+}
 
 In the first step, we initialize the \starry model to unity and iteratively
 solve for $\mathbf{w}_n$ and $\mathbf{y}$ by solving the L2-regularized
@@ -622,10 +628,24 @@ underfits the data. In the second step, we remove our L2 prior on the spherical
 harmonic coefficients and instead regularize the actual surface albedo, which
 we compute on a uniform spherical grid with 50,000 points. We enforce a 
 uniform prior in the range $[0, 1]$, with a small amount of Gaussian smoothing on either 
-side. We additionally impose a constraint on the power spectrum of the
+side. 
+\edited{%
+Note that while the lower bound of this range corresponds to a true physical
+constraint---non-negative surface albedo---the upper bound of unity is
+somewhat \emph{ad hoc}, since the true normalization of the flux is
+unknown. We find that varying this upper bound (or removing it entirely) 
+does not significantly change our results, since we only report ``normalized''
+albedos; we discuss this further below.
+}%
+
+We additionally impose a constraint on the power spectrum of the
 inferred map, requiring that it be drawn from a distribution whose mean
 is a decaying power law in the spherical harmonic degree $l$ in order
 to suppress ringing and spurious high order features.
+\edited{%
+In practice, however, we find that this constraint is negligible compared
+to our prior on the albedo.
+}%
 Our full negative log likelihood function in this step is therefore
 %
 \begin{align}
@@ -945,6 +965,10 @@ In the absence of limb darkening, the brightest regions on the planet are those
 close to the sub-stellar point, which is on the limb. Limb darkening should
 shift the regions of peak brightness closer to the center of the planet, adding
 an east-west bias in the location of the features we identify.
+\edited{%
+Similarly, Rayleigh scattering and anisotropic scattering by clouds probably cause 
+similar biases, as could specular reflection off the oceans (glint).
+}
 
 We also ignored the finite angular size of the Sun at Earth (about $0.5^\circ$),
 treating it instead as a point source. Regions immediately nightward of the 
@@ -1017,9 +1041,9 @@ power spectrum priors separately at each of these points.
     \caption{\label{fig:map_temporal}
              The inferred mean map when allowing for slight temporal
              variations in the spherical harmonic coefficients. Compare
-             to Figure~\ref{fig:map}. An animated version of this figure
-             is available on 
-             \href{https://github.com/rodluger/earthshine/blob/master/tex/figures/map_temporal.mp4}{GitHub}.
+             to Figure~\ref{fig:map}. An 3 second animated version of the 
+             top panel is available in the HTML version of this article, showing
+             the inferred cloud movement during sectors 1 and 2.
              \codelink{earthshine_S1_S2}
              }
     \end{centering}
@@ -1076,8 +1100,9 @@ We intend to perform this analysis
 in upcoming work once data from future \TESS sectors becomes available.
 
 Additionally, time-resolved observations in multiple bands could
-also help with this problem. This was discussed in \cite{Cowan2009},
-who showed that multi-band photometry of the Earth enables one to
+also help with this problem. This was discussed in \cite{Cowan2009}%
+\edited{, \cite{Kawahara2011}, and \cite{Fujii2012}, all of which showed }%
+that multi-band photometry of the Earth enables one to
 disentangle the contributions from oceans, continents, and cloud cover.
 A robust detection of surface features on an exoplanet in the habitable
 zone will likely necessitate both approaches alongside a circumspect
@@ -1136,7 +1161,11 @@ Crucial parts of this work were carried out at the
 TESS Data Workshop, hosted by Space Telescope Science Institute, and the 
 Building Early Science with TESS Workshop, hosted by the University of Chicago.}
 \facility{TESS}
-\software{Astropy, Matplotlib, Numpy, \starry \citep{Luger2019}, 
+\software{%
+\edited{%
+Astropy \citep{astropy1,astropy2}, Matplotlib \citep{matplotlib}, Numpy \citep{numpy}, 
+}%
+\starry \citep{Luger2019}, 
 TensorFlow \citep{Abadi2015}, \spiceypy \citep{Annex2019}}
 
 \newpage
