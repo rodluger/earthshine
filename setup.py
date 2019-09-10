@@ -23,7 +23,7 @@ setup(
         "tqdm",
     ],
     dependency_links=[
-        "https://github.com/rodluger/starry/tarball/earthshine#egg=starry-1.0.3.dev0"
+        "https://github.com/rodluger/starry/tarball/earthshine#egg=starry-1.0.0.dev3"
     ],
     include_package_data=False,
     zip_safe=False,

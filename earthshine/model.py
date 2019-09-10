@@ -8,9 +8,9 @@ from scipy.linalg import cho_factor, cho_solve
 import starry
 from packaging import version
 
-assert version.parse(starry.__version__) >= version.parse(
+assert version.parse(starry.__version__) == version.parse(
     "1.0.0.dev3"
-), "This code requires `starry` version >= 1.0.0.dev3. Install it from GitHub: https://github.com/rodluger/starry/tree/earthshine."
+), "This code requires `starry` version 1.0.0.dev3. Install it from GitHub: https://github.com/rodluger/starry/tree/earthshine."
 
 # Constants
 REARTH = 1.0 / 6371.0
